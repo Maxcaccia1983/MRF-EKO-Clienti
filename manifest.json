@@ -1,0 +1,15 @@
+{
+  "name": "MRF EKO Clienti",
+  "short_name": "MRF EKO",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f4f7f9",
+  "theme_color": "#55b800",
+  "icons": [
+    {
+      "src": "icon-eko.png",
+      "sizes": "1024x1024",
+      "type": "image/png"
+    }
+  ]
+}
