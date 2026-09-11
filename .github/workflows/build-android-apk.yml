@@ -3,6 +3,7 @@ name: Build MRF EKO Android APK
 on:
   push:
     branches:
+      - main
       - android-apk-v1
     paths:
       - 'android-app/**'
