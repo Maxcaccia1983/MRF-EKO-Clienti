@@ -1,0 +1,60 @@
+name: Build MRF EKO Android APK
+
+on:
+  push:
+    branches:
+      - android-apk-v1
+    paths:
+      - 'android-app/**'
+      - 'icon-eko-512.png'
+      - '.github/workflows/build-android-apk.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK components
+        run: |
+          yes | sdkmanager --licenses >/dev/null || true
+          sdkmanager "platforms;android-35" "build-tools;35.0.0"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+
+      - name: Prepare EKO app icon
+        run: |
+          mkdir -p android-app/app/src/main/res/drawable
+          cp icon-eko-512.png android-app/app/src/main/res/drawable/app_icon.png
+
+      - name: Build installable test APK
+        run: gradle -p android-app :app:assembleDebug --no-daemon
+
+      - name: Rename APK
+        run: cp android-app/app/build/outputs/apk/debug/app-debug.apk MRF-EKO-Clienti-test.apk
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: MRF-EKO-Clienti-test-APK
+          path: MRF-EKO-Clienti-test.apk
+          if-no-files-found: error
+          retention-days: 30
