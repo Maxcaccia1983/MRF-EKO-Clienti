@@ -81,6 +81,48 @@
 .telefono:hover {
   opacity: 0.9;
 }
+    .box-assistenza {
+  display: none;
+  margin-top: 15px;
+  padding: 18px;
+  background: #f4f7f9;
+  border-radius: 12px;
+  text-align: left;
+}
+
+.box-assistenza label {
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 6px;
+  font-weight: bold;
+}
+.box-assistenza input,
+.box-assistenza select,
+.box-assistenza textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.box-assistenza textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.box-assistenza button {
+  width: 100%;
+  margin-top: 15px;
+  padding: 14px;
+  border: 0;
+  border-radius: 10px;
+  background: #3485b8;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+}
 </style>
 </head>
 
@@ -102,15 +144,118 @@
     <a href="https://clienti.eko-360.it/">
       ACCEDI ALLA TUA AREA EKO
     </a>
-<a class="assistenza" href="mailto:mrf2024srl@gmail.com?subject=Richiesta%20assistenza%20MRF%20EKO&body=Buongiorno%2C%20sono%20un%20cliente%20MRF%20EKO%20e%20avrei%20bisogno%20di%20assistenza.">
+    
+<a class="assistenza" href="#" onclick="mostraAssistenza(event)">
   ✉️ RICHIEDI ASSISTENZA VIA EMAIL
 </a>
 
+<div id="boxAssistenza" class="box-assistenza">
+<label for="nomeCliente">
+  Nome e cognome
+</label>
+
+<input
+  type="text"
+  id="nomeCliente"
+  placeholder="Inserisci nome e cognome"
+>
+
+<label for="codiceUtenza">
+  POD / PDR (facoltativo)
+</label>
+
+<input
+  type="text"
+  id="codiceUtenza"
+  placeholder="Inserisci POD o PDR se disponibile"
+>
+  <label for="tipoAssistenza">
+    Tipologia richiesta
+  </label>
+
+  <select id="tipoAssistenza">
+    <option value="Bolletta luce">Bolletta luce</option>
+    <option value="Bolletta gas">Bolletta gas</option>
+    <option value="Pagamenti">Pagamenti</option>
+    <option value="Accesso Area Clienti">Accesso Area Clienti</option>
+    <option value="Modifica dati o anagrafica">Modifica dati / anagrafica</option>
+    <option value="Voltura o Subentro">Voltura / Subentro</option>
+    <option value="Problema tecnico">Problema tecnico</option>
+    <option value="Altro">Altro</option>
+  </select>
+
+  <label for="dettagliAssistenza">
+    Descrivi brevemente il problema
+  </label>
+
+  <textarea
+    id="dettagliAssistenza"
+    placeholder="Scrivi qui la tua richiesta..."
+  ></textarea>
+
+  <button type="button" onclick="inviaAssistenza()">
+    APRI EMAIL
+  </button>
+
+</div>
 <a class="telefono" href="tel:0831094337">
   📞 CHIAMA ASSISTENZA
 </a>
   </div>
+<script>
+function mostraAssistenza(event) {
+  event.preventDefault();
 
+  const box = document.getElementById("boxAssistenza");
+
+  if (box.style.display === "block") {
+    box.style.display = "none";
+  } else {
+    box.style.display = "block";
+  }
+}
+
+function inviaAssistenza() {
+  const nome = document.getElementById("nomeCliente").value.trim();
+  const codice = document.getElementById("codiceUtenza").value.trim();
+  const tipo = document.getElementById("tipoAssistenza").value;
+  const dettagli = document.getElementById("dettagliAssistenza").value.trim();
+
+  if (nome === "") {
+    alert("Inserisci nome e cognome.");
+    return;
+  }
+
+  if (dettagli === "") {
+    alert("Descrivi brevemente la richiesta di assistenza.");
+    return;
+  }
+
+  const destinatario = "mrf2024srl@gmail.com";
+
+  const oggetto =
+    "Richiesta assistenza MRF EKO - " + tipo;
+
+  let corpo =
+    "Buongiorno,\n\n" +
+    "sono un cliente MRF EKO e richiedo assistenza.\n\n" +
+    "Nome e cognome: " + nome + "\n" +
+    "Tipologia richiesta: " + tipo + "\n";
+
+  if (codice !== "") {
+    corpo += "POD / PDR: " + codice + "\n";
+  }
+
+  corpo +=
+    "\nDescrizione:\n" + dettagli + "\n\n" +
+    "Grazie.";
+
+  window.location.href =
+    "mailto:" + destinatario +
+    "?subject=" + encodeURIComponent(oggetto) +
+    "&body=" + encodeURIComponent(corpo);
+}
+</script>
 </body>
 
 </html>
