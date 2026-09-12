@@ -125,6 +125,75 @@
 }.box-assistenza .annulla {
   background: #777;
   margin-top: 10px;
+}.servizi-mrf {
+  background: linear-gradient(135deg, #6a35c9, #ff7a00);
+  color: white;
+  margin-top: 14px;
+  box-shadow: 0 6px 18px rgba(106, 53, 201, 0.28);
+  animation: pulseMRF 2.4s infinite;
+}
+
+.servizi-mrf:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+
+@keyframes pulseMRF {
+  0% {
+    box-shadow: 0 0 0 0 rgba(106, 53, 201, 0.35);
+  }
+
+  70% {
+    box-shadow: 0 0 0 10px rgba(106, 53, 201, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(106, 53, 201, 0);
+  }
+}
+    .box-servizi-mrf {
+  display: none;
+  margin-top: 16px;
+  padding: 20px;
+  background: linear-gradient(145deg, #ffffff, #f7f2ff);
+  border: 1px solid #e4d9ff;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(106, 53, 201, 0.12);
+  text-align: left;
+}
+
+.box-servizi-mrf h3 {
+  margin: 0 0 6px 0;
+  color: #6a35c9;
+  text-align: center;
+}
+
+.testo-servizi {
+  margin: 0 0 14px 0;
+  text-align: center;
+  font-size: 14px;
+}
+
+.voce-servizio {
+  padding: 13px 14px;
+  margin-top: 9px;
+  background: white;
+  border-radius: 10px;
+  border: 1px solid #eee;
+  font-weight: bold;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+}
+
+.chiudi-servizi {
+  width: 100%;
+  margin-top: 16px;
+  padding: 12px;
+  border: 0;
+  border-radius: 10px;
+  background: #777;
+  color: white;
+  font-weight: bold;
+  font-size: 15px;
 }
 </style>
 </head>
@@ -147,7 +216,28 @@
     <a href="https://clienti.eko-360.it/">
       ACCEDI ALLA TUA AREA EKO
     </a>
-    
+    <a class="servizi-mrf" href="#" onclick="apriServiziMRF(event)">
+  ✨ ACCEDI AI SERVIZI MRF
+</a>
+    <div id="boxServiziMRF" class="box-servizi-mrf">
+
+  <h3>Scopri i servizi MRF</h3>
+
+  <p class="testo-servizi">
+    Scegli il servizio che ti interessa.
+  </p>
+
+  <div class="voce-servizio">⚡ Luce e Gas</div>
+  <div class="voce-servizio">🌐 Fibra e Telefonia</div>
+  <div class="voce-servizio">🛡️ Sicurezza</div>
+  <div class="voce-servizio">💧 Depurazione acqua</div>
+  <div class="voce-servizio">🤝 Consulenza MRF</div>
+
+  <button type="button" class="chiudi-servizi" onclick="chiudiServiziMRF()">
+    CHIUDI
+  </button>
+
+</div>
 <a class="assistenza" href="#" onclick="mostraAssistenza(event)">
   ✉️ RICHIEDI ASSISTENZA VIA EMAIL
 </a>
@@ -218,6 +308,22 @@ function mostraAssistenza(event) {
   } else {
     box.style.display = "block";
   }
+  }
+  function apriServiziMRF(event) {
+  event.preventDefault();
+
+  const box = document.getElementById("boxServiziMRF");
+
+  if (box.style.display === "block") {
+    box.style.display = "none";
+  } else {
+    box.style.display = "block";
+  }
+  }
+
+function chiudiServiziMRF() {
+  document.getElementById("boxServiziMRF").style.display = "none";
+
 }
   function annullaAssistenza() {
   document.getElementById("nomeCliente").value = "";
