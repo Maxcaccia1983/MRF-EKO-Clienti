@@ -122,6 +122,9 @@
   color: white;
   font-weight: bold;
   font-size: 16px;
+}.box-assistenza .annulla {
+  background: #777;
+  margin-top: 10px;
 }
 </style>
 </head>
@@ -196,7 +199,9 @@
   <button type="button" onclick="inviaAssistenza()">
     APRI EMAIL
   </button>
-
+<button type="button" class="annulla" onclick="annullaAssistenza()">
+  ANNULLA
+</button>
 </div>
 <a class="telefono" href="tel:0831094337">
   📞 CHIAMA ASSISTENZA
@@ -213,6 +218,13 @@ function mostraAssistenza(event) {
   } else {
     box.style.display = "block";
   }
+}
+  function annullaAssistenza() {
+  document.getElementById("nomeCliente").value = "";
+  document.getElementById("codiceUtenza").value = "";
+  document.getElementById("tipoAssistenza").selectedIndex = 0;
+  document.getElementById("dettagliAssistenza").value = "";
+  document.getElementById("boxAssistenza").style.display = "none";
 }
 
 function inviaAssistenza() {
