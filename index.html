@@ -195,6 +195,60 @@
   font-weight: bold;
   font-size: 15px;
 }
+    #boxConsulentiMRF {
+  margin-top: 14px;
+}
+
+.scheda-consulente {
+  background: white;
+  border-radius: 16px;
+  padding: 16px;
+  text-align: center;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.10);
+  border: 1px solid #eee;
+}
+
+.scheda-consulente img {
+  width: 100%;
+  max-width: 300px;
+  height: 240px;
+  object-fit: cover;
+  object-position: center 35%;
+  border-radius: 14px;
+  margin-bottom: 12px;
+}
+
+.scheda-consulente h3 {
+  margin: 6px 0;
+  color: #263238;
+  font-size: 20px;
+}
+
+.scheda-consulente p {
+  margin: 5px 0 14px;
+  font-size: 15px;
+}
+
+.scheda-consulente a {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 9px;
+  padding: 13px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.scheda-consulente a[href^="tel:"] {
+  background: #22a447;
+  color: white;
+}
+
+.scheda-consulente a[href^="mailto:"] {
+  background: #3485b8;
+  color: white;
+}
 </style>
 </head>
 
@@ -231,7 +285,34 @@
   <div class="voce-servizio">🌐 Fibra e Telefonia</div>
   <div class="voce-servizio">🛡️ Sicurezza</div>
   <div class="voce-servizio">💧 Depurazione acqua</div>
-  <div class="voce-servizio">🤝 Parla con un consulente MRF</div>
+  <div class="voce-servizio" onclick="apriConsulentiMRF()" style="cursor:pointer;">
+  🤝 Parla con un consulente MRF
+</div>
+
+<div id="boxConsulentiMRF" style="display:none;">
+
+  <div class="scheda-consulente">
+
+    <img
+      src="4E2BCC6A-2009-418F-BF46-2E5E0D4E2F38.png"
+      alt="Massimiliano Caccia"
+    >
+
+    <h3>Massimiliano Caccia</h3>
+
+    <p>Consulente di sicurezza Verisure</p>
+
+    <a href="tel:3208288536">
+      📞 CHIAMA
+    </a>
+
+    <a href="mailto:Massimiliano.caccia@verisure.it">
+      ✉️ EMAIL
+    </a>
+
+  </div>
+
+</div>
 
   <button type="button" class="chiudi-servizi" onclick="chiudiServiziMRF()">
     CHIUDI
@@ -324,6 +405,15 @@ function mostraAssistenza(event) {
 function chiudiServiziMRF() {
   document.getElementById("boxServiziMRF").style.display = "none";
 
+}
+  function apriConsulentiMRF() {
+  const box = document.getElementById("boxConsulentiMRF");
+
+  if (box.style.display === "block") {
+    box.style.display = "none";
+  } else {
+    box.style.display = "block";
+  }
 }
   function annullaAssistenza() {
   document.getElementById("nomeCliente").value = "";
