@@ -331,6 +331,38 @@
   background: #3485b8;
   color: white;
 }
+    validita-convenzione {
+  margin: 8px 0 14px;
+  padding: 10px 12px;
+  background: #fff3f3;
+  border: 1px solid #efcaca;
+  border-radius: 10px;
+  color: #b71c1c;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+}
+    .convenzione-scaduta {
+  margin: 14px 0;
+  padding: 16px;
+  background: #fff3f3;
+  border: 2px solid #c62828;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.convenzione-scaduta strong {
+  display: block;
+  color: #c62828;
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.convenzione-scaduta p {
+  margin: 8px 0 14px;
+  font-size: 14px;
+  color: #444;
+}
 </style>
 </head>
 
@@ -372,7 +404,30 @@
 <div id="boxSicurezzaMRF" class="box-sicurezza-mrf" style="display:none;">
 
   <h3>Convenzione MRF 2024 × Verisure</h3>
+<div class="validita-convenzione">
+  📅 Validità convenzione: dal 12 giugno 2026 al 12 giugno 2027
+</div>
+  <div id="convenzioneScaduta" class="convenzione-scaduta" style="display:none;">
 
+  <strong>⚠️ Convenzione scaduta</strong>
+
+  <p>
+    Le condizioni economiche precedentemente indicate non sono più valide.
+    Contatta il consulente dedicato MRF × Verisure per conoscere
+    le nuove condizioni disponibili.
+  </p>
+
+  <a
+    class="cta-whatsapp"
+    href="https://wa.me/393208288536?text=Buongiorno%20Massimiliano%2C%20sono%20un%20cliente%20MRF%202024%20e%20vorrei%20conoscere%20le%20nuove%20condizioni%20della%20convenzione%20MRF%20x%20Verisure."
+    target="_blank"
+  >
+    💬 RICHIEDI LE NUOVE CONDIZIONI
+  </a>
+
+</div>
+
+<div id="contenutoConvenzioneAttiva">
   <p class="testo-sicurezza">
     In qualità di cliente MRF 2024 puoi accedere a condizioni riservate
     dedicate alla sicurezza della tua casa e della tua attività.
@@ -414,7 +469,7 @@
   >
     ✉️ SCRIVI A MASSIMILIANO
   </a>
-
+</div>
   <button type="button" class="chiudi-servizi" onclick="chiudiSicurezzaMRF()">
     CHIUDI SICUREZZA
   </button>
@@ -602,12 +657,40 @@ function chiudiServiziMRF() {
 
 }
   function apriSicurezzaMRF() {
+
+  verificaValiditaConvenzione();
+
   const box = document.getElementById("boxSicurezzaMRF");
 
   if (box.style.display === "block") {
     box.style.display = "none";
   } else {
     box.style.display = "block";
+  }
+}
+
+function verificaValiditaConvenzione() {
+
+  const oggi = new Date();
+
+  // Convenzione valida fino a tutto il 12 giugno 2027
+  const scadenza = new Date(2027, 5, 13, 0, 0, 0);
+
+  const contenutoAttivo =
+    document.getElementById("contenutoConvenzioneAttiva");
+
+  const messaggioScaduto =
+    document.getElementById("convenzioneScaduta");
+
+  if (oggi >= scadenza) {
+
+    contenutoAttivo.style.display = "none";
+    messaggioScaduto.style.display = "block";
+
+  } else {
+
+    contenutoAttivo.style.display = "block";
+    messaggioScaduto.style.display = "none";
   }
 }
 
