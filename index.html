@@ -1215,6 +1215,17 @@ async function avviaAnalisiBollettaMRF() {
       }
 
       testoCompleto += " " + testoOCR;
+      const caratteriOCR =
+  testoOCR.replace(/\s+/g, " ").trim().length;
+
+if (caratteriOCR < 80) {
+  risultato.innerHTML =
+    "⚠️ OCR eseguito, ma il documento ha prodotto solo " +
+    caratteriOCR +
+    " caratteri leggibili.<br><br>" +
+    "Dobbiamo aumentare la qualità della lettura OCR.";
+  return;
+}
     }
 
     analizzaTestoBollettaMRF(testoCompleto);
