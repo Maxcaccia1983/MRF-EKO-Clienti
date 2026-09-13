@@ -638,7 +638,56 @@
   </div>
 
   <div id="risultatoComparatoreMRF" style="display:none;"></div>
+<div
+  id="diagnosticaOcrMRF"
+  style="
+    display:none;
+    margin-top:14px;
+    padding:14px;
+    background:#fff8e1;
+    border:1px solid #e0b84f;
+    border-radius:10px;
+    text-align:left;
+  "
+>
+  <strong>🧪 DIAGNOSTICA LETTURA BOLLETTA</strong>
 
+  <div style="margin-top:12px;">
+    <strong>Testo PDF nativo:</strong>
+    <pre
+      id="testoNativoMRF"
+      style="
+        white-space:pre-wrap;
+        word-break:break-word;
+        max-height:220px;
+        overflow:auto;
+        padding:10px;
+        background:white;
+        border:1px solid #ddd;
+        border-radius:8px;
+        font-size:12px;
+      "
+    ></pre>
+  </div>
+
+  <div style="margin-top:12px;">
+    <strong>Testo OCR grezzo - prima pagina:</strong>
+    <pre
+      id="testoOcrPrimaPaginaMRF"
+      style="
+        white-space:pre-wrap;
+        word-break:break-word;
+        max-height:300px;
+        overflow:auto;
+        padding:10px;
+        background:white;
+        border:1px solid #ddd;
+        border-radius:8px;
+        font-size:12px;
+      "
+    ></pre>
+  </div>
+</div>
   <button
     type="button"
     class="chiudi-servizi"
@@ -1135,7 +1184,28 @@ async function avviaAnalisiBollettaMRF() {
 
     const testoPulito =
       testoCompleto.replace(/\s+/g, " ").trim();
+const diagnostica =
+  document.getElementById("diagnosticaOcrMRF");
 
+const testoNativoBox =
+  document.getElementById("testoNativoMRF");
+
+const testoOcrPrimaPaginaBox =
+  document.getElementById("testoOcrPrimaPaginaMRF");
+
+if (testoNativoBox) {
+  testoNativoBox.textContent =
+    testoCompleto.trim() || "Nessun testo nativo rilevato.";
+}
+
+if (testoOcrPrimaPaginaBox) {
+  testoOcrPrimaPaginaBox.textContent =
+    "OCR non ancora eseguito.";
+}
+
+if (diagnostica) {
+  diagnostica.style.display = "block";
+}
     let analisiPreliminare = null;
 
     if (window.MRFBollettaParser) {
@@ -1206,7 +1276,6 @@ async function avviaAnalisiBollettaMRF() {
                     Math.round(
                       messaggio.progress * 100
                     );
-
                   risultato.innerHTML =
                     "🔎 Lettura OCR automatica...<br>" +
                     "Pagina " + pagina +
@@ -1218,15 +1287,27 @@ async function avviaAnalisiBollettaMRF() {
             }
           );
 
-        testoOCR +=
-          " " +
-          (
-            riconoscimento.data &&
-            riconoscimento.data.text
-              ? riconoscimento.data.text
-              : ""
-          );
+    const testoPaginaOCR =
+  riconoscimento.data &&
+  riconoscimento.data.text
+    ? riconoscimento.data.text
+    : "";
 
+if (pagina === 1) {
+
+  const boxOCR =
+    document.getElementById(
+      "testoOcrPrimaPaginaMRF"
+    );
+
+  if (boxOCR) {
+    boxOCR.textContent =
+      testoPaginaOCR ||
+      "Nessun testo riconosciuto nella prima pagina.";
+  }
+}
+
+testoOCR += " " + testoPaginaOCR;
         // Verifica dopo ogni pagina se abbiamo già
         // tutti i dati necessari.
         if (window.MRFBollettaParser) {
