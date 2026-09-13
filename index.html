@@ -1041,19 +1041,130 @@ function bollettaSelezionata(event) {
   risultato.style.display = "none";
 }
 
-function avviaAnalisiBollettaMRF() {
+async function avviaAnalisiBollettaMRF() {
+
   if (!bollettaMRFSelezionata) {
     alert("Carica prima la bolletta completa in PDF.");
     return;
   }
 
-  const risultato = document.getElementById("risultatoComparatoreMRF");
+  const risultato =
+    document.getElementById("risultatoComparatoreMRF");
 
   risultato.style.display = "block";
+  risultato.innerHTML = "⏳ Analisi della bolletta in corso...";
+
+  try {
+
+    const pdfjsLib = await import(
+      "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/6.3.289/pdf.min.mjs"
+    );
+
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/6.3.289/pdf.worker.min.mjs";
+
+    const buffer = await bollettaMRFSelezionata.arrayBuffer();
+
+    const pdf = await pdfjsLib.getDocument({
+      data: new Uint8Array(buffer)
+    }).promise;
+
+    let testoCompleto = "";
+
+    for (let pagina = 1; pagina <= pdf.numPages; pagina++) {
+
+      const page = await pdf.getPage(pagina);
+      const contenuto = await page.getTextContent();
+
+      const testoPagina = contenuto.items
+        .map(item => item.str)
+        .join(" ");
+
+      testoCompleto += " " + testoPagina;
+    }
+
+    analizzaTestoBollettaMRF(testoCompleto);
+
+  } catch (errore) {
+
+    console.error(errore);
+
+    risultato.innerHTML =
+      "⚠️ Non è stato possibile leggere automaticamente questo PDF.<br><br>" +
+      "Potrebbe trattarsi di una bolletta scansionata o fotografata.";
+  }
+}
+  function analizzaTestoBollettaMRF(testo) {
+
+  const risultato =
+    document.getElementById("risultatoComparatoreMRF");
+
+  const testoPulito = testo.replace(/\s+/g, " ");
+
+  let tipo = "Non riconosciuto";
+
+  if (
+    /energia elettrica/i.test(testoPulito) ||
+    /\bkWh\b/i.test(testoPulito)
+  ) {
+    tipo = "⚡ Energia elettrica";
+  }
+
+  if (
+    /gas naturale/i.test(testoPulito) ||
+    /\bSmc\b/i.test(testoPulito)
+  ) {
+    tipo = "🔥 Gas naturale";
+  }
+
+  let periodo = "Non rilevato";
+
+  const matchPeriodo = testoPulito.match(
+    /periodo oggetto di fatturazione\s+dal\s+(\d{2}\/\d{2}\/\d{4})\s+al\s+(\d{2}\/\d{2}\/\d{4})/i
+  );
+
+  if (matchPeriodo) {
+    periodo = matchPeriodo[1] + " – " + matchPeriodo[2];
+  }
+
+  let consumo = "Non rilevato";
+
+  const matchConsumo = testoPulito.match(
+    /(?:consumo totale fatturato.*?|totale consumi fatturati)\s+([\d.,]+)\s*(kWh|Smc)/i
+  );
+
+  if (matchConsumo) {
+    consumo = matchConsumo[1] + " " + matchConsumo[2];
+  }
+
+  let totale = "Non rilevato";
+
+  const matchTotale = testoPulito.match(
+    /(?:importo totale da pagare|totale bolletta)\s*(?:=)?\s*€?\s*([\d.,]+)/i
+  );
+
+  if (matchTotale) {
+    totale = "€ " + matchTotale[1];
+  }
+
+  let prezzoEnergia = "Non rilevato";
+
+  const matchPrezzo = testoPulito.match(
+    /di cui spesa per la vendita energia elettrica\s+([\d.,]+)\s*€\/kWh/i
+  );
+
+  if (matchPrezzo) {
+    prezzoEnergia = matchPrezzo[1] + " €/kWh";
+  }
 
   risultato.innerHTML =
-    "<strong>✅ PDF acquisito correttamente.</strong><br><br>" +
-    "Il documento è pronto per il motore di analisi MRF.";
+    "<strong>📊 ANALISI MRF DELLA BOLLETTA</strong><br><br>" +
+    "<strong>Fornitura:</strong> " + tipo + "<br>" +
+    "<strong>Periodo:</strong> " + periodo + "<br>" +
+    "<strong>Consumo:</strong> " + consumo + "<br>" +
+    "<strong>Totale bolletta:</strong> " + totale + "<br>" +
+    "<strong>Costo vendita energia:</strong> " + prezzoEnergia +
+    "<br><br>✅ Lettura automatica completata.";
 }
 function chiudiServiziMRF() {
   document.getElementById("boxServiziMRF").style.display = "none";
