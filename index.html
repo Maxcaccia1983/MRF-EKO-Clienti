@@ -363,6 +363,82 @@
   font-size: 14px;
   color: #444;
 }
+    .box-luce-gas-mrf {
+  display: none;
+  margin-top: 14px;
+  padding: 18px;
+  background: linear-gradient(145deg, #ffffff, #f3fbff);
+  border: 1px solid #d7eaf5;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(52,133,184,0.12);
+  text-align: left;
+}
+
+.box-luce-gas-mrf h3 {
+  margin: 0 0 10px;
+  color: #3485b8;
+  text-align: center;
+}
+
+.testo-luce-gas {
+  margin: 0 0 14px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.servizio-energia {
+  margin-top: 10px;
+  padding: 13px;
+  background: white;
+  border: 1px solid #e4eef3;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+}
+
+.servizio-energia strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.servizio-energia span {
+  display: block;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #555;
+}
+
+.mini-consulente {
+  margin-top: 10px;
+  padding: 13px;
+  background: white;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.mini-consulente strong,
+.mini-consulente span {
+  display: block;
+}
+
+.mini-consulente span {
+  margin: 5px 0 8px;
+  font-size: 13px;
+  color: #555;
+}
+
+.mini-consulente a {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 8px;
+  padding: 12px;
+  background: #22a447;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 10px;
+}
 </style>
 </head>
 
@@ -395,7 +471,92 @@
     Scegli il servizio che ti interessa.
   </p>
 
-  <div class="voce-servizio">⚡ Luce e Gas</div>
+ <div class="voce-servizio" onclick="apriLuceGasMRF()" style="cursor:pointer;">
+  ⚡ Luce e Gas
+</div>
+
+<div id="boxLuceGasMRF" class="box-luce-gas-mrf" style="display:none;">
+
+  <h3>⚡ Luce e Gas MRF</h3>
+
+  <p class="testo-luce-gas">
+    Scopri le soluzioni dedicate ai clienti MRF e richiedi gratuitamente
+    una verifica della tua fornitura.
+  </p>
+
+  <div class="servizio-energia">
+    📄 <strong>Analisi gratuita della bolletta</strong>
+    <span>Verifichiamo costi, consumi e condizioni della tua attuale offerta.</span>
+  </div>
+
+  <div class="servizio-energia">
+    💡 <strong>Confronto offerte Luce e Gas</strong>
+    <span>Valutiamo insieme la soluzione più adatta alle tue esigenze.</span>
+  </div>
+
+  <div class="servizio-energia">
+    🔄 <strong>Voltura e Subentro</strong>
+    <span>Assistenza nella gestione delle pratiche sulla fornitura.</span>
+  </div>
+
+  <div class="servizio-energia">
+    🏠 <strong>Nuova attivazione</strong>
+    <span>Supporto per l'attivazione di nuove utenze luce e gas.</span>
+  </div>
+
+  <h3 style="margin-top:18px;">Consulenti dedicati</h3>
+<div class="mini-consulente">
+  <strong>Massimiliano Caccia</strong>
+  <span>Consulente forniture Luce e Gas</span>
+  <a href="tel:3208288536">📞 CHIAMA MASSIMILIANO</a>
+  <a
+  href="https://wa.me/393208288536?text=Buongiorno%20Massimiliano%2C%20sono%20un%20cliente%20MRF%202024.%20Vorrei%20richiedere%20un%27analisi%20gratuita%20della%20mia%20bolletta%20Luce%20o%20Gas.%20Ti%20invio%20qui%20la%20bolletta."
+  target="_blank"
+>
+  📸 INVIA BOLLETTA SU WHATSAPP
+</a>
+</div>
+  <div class="mini-consulente">
+    <strong>Fernando Romano</strong>
+    <span>Consulente Luce, Gas e Telefonia</span>
+    <a href="tel:3926222212">📞 CHIAMA FERNANDO</a>
+    <a
+  href="https://wa.me/393926222212?text=Buongiorno%20Fernando%2C%20sono%20un%20cliente%20MRF%202024.%20Vorrei%20richiedere%20un%27analisi%20gratuita%20della%20mia%20bolletta%20Luce%20o%20Gas.%20Ti%20invio%20qui%20la%20bolletta."
+  target="_blank"
+>
+  📸 INVIA BOLLETTA SU WHATSAPP
+</a>
+  </div>
+
+  <div class="mini-consulente">
+    <strong>Raffaele Leone Milli</strong>
+    <span>Consulente Luce, Gas e Telefonia</span>
+    <a href="tel:3883413623">📞 CHIAMA RAFFAELE</a>
+    <a
+  href="https://wa.me/393883413623?text=Buongiorno%20Raffaele%2C%20sono%20un%20cliente%20MRF%202024.%20Vorrei%20richiedere%20un%27analisi%20gratuita%20della%20mia%20bolletta%20Luce%20o%20Gas.%20Ti%20invio%20qui%20la%20bolletta."
+  target="_blank"
+>
+  📸 INVIA BOLLETTA SU WHATSAPP
+</a>
+  </div>
+
+  <div class="mini-consulente">
+    <strong>Valentina D'Ambrosio</strong>
+    <span>Consulente Luce, Gas</span>
+    <a href="tel:3926717747">📞 CHIAMA VALENTINA</a>
+    <a
+  href="https://wa.me/393926717747?text=Buongiorno%20Valentina%2C%20sono%20un%20cliente%20MRF%202024.%20Vorrei%20richiedere%20un%27analisi%20gratuita%20della%20mia%20bolletta%20Luce%20o%20Gas.%20Ti%20invio%20qui%20la%20bolletta."
+  target="_blank"
+>
+  📸 INVIA BOLLETTA SU WHATSAPP
+</a>
+  </div>
+
+  <button type="button" class="chiudi-servizi" onclick="chiudiLuceGasMRF()">
+    CHIUDI LUCE E GAS
+  </button>
+
+</div>
       <div class="voce-servizio">☀️ Fotovoltaico</div>
   <div class="voce-servizio">🌐 Fibra e Telefonia</div>
   <div class="voce-servizio" onclick="apriSicurezzaMRF()" style="cursor:pointer;">
@@ -652,7 +813,19 @@ function mostraAssistenza(event) {
     box.style.display = "block";
   }
   }
+function apriLuceGasMRF() {
+  const box = document.getElementById("boxLuceGasMRF");
 
+  if (box.style.display === "block") {
+    box.style.display = "none";
+  } else {
+    box.style.display = "block";
+  }
+}
+
+function chiudiLuceGasMRF() {
+  document.getElementById("boxLuceGasMRF").style.display = "none";
+}
 function chiudiServiziMRF() {
   document.getElementById("boxServiziMRF").style.display = "none";
 
