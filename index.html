@@ -2,6 +2,7 @@
 <html lang="it">
 <head>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="parser-bolletta.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="manifest" href="manifest.json">
@@ -1104,88 +1105,57 @@ pdfjsLib.GlobalWorkerOptions.workerSrc =
   const risultato =
     document.getElementById("risultatoComparatoreMRF");
 
-  const testoPulito = testo.replace(/\s+/g, " ");
-
-  let tipo = "Non riconosciuto";
-
-  if (
-    /energia elettrica/i.test(testoPulito) ||
-    /\bkWh\b/i.test(testoPulito)
-  ) {
-    tipo = "⚡ Energia elettrica";
+  if (!window.MRFBollettaParser) {
+    risultato.innerHTML =
+      "⚠️ Motore universale MRF non disponibile.";
+    return;
   }
 
-  if (
-    /gas naturale/i.test(testoPulito) ||
-    /\bSmc\b/i.test(testoPulito)
-  ) {
-    tipo = "🔥 Gas naturale";
+  const dati = window.MRFBollettaParser.analizza(testo);
+
+  let statoAffidabilita = "🟢 Alta";
+
+  if (dati.affidabilita < 75) {
+    statoAffidabilita = "🟡 Da verificare";
   }
 
-  let periodo = "Non rilevato";
-
-  const matchPeriodo = testoPulito.match(
-    /periodo oggetto di fatturazione\s+dal\s+(\d{2}\/\d{2}\/\d{4})\s+al\s+(\d{2}\/\d{2}\/\d{4})/i
-  );
-
-  if (matchPeriodo) {
-    periodo = matchPeriodo[1] + " – " + matchPeriodo[2];
+  if (dati.affidabilita < 50) {
+    statoAffidabilita = "🔴 Bassa";
   }
 
-  let consumo = "Non rilevato";
+  let avvisiHTML = "";
 
-  const matchConsumo = testoPulito.match(
-    /(?:consumo totale fatturato.*?|totale consumi fatturati)\s+([\d.,]+)\s*(kWh|Smc)/i
-  );
-
-  if (matchConsumo) {
-  consumo = matchConsumo[1] + " " + matchConsumo[2];
-
-  const unita = matchConsumo[2].toLowerCase();
-
-  if (unita === "kwh") {
-    tipo = "⚡ Energia elettrica";
-  }
-
-  if (unita === "smc") {
-    tipo = "🔥 Gas naturale";
-  }
-}
-
-  let totale = "Non rilevato";
-
-  const matchTotale = testoPulito.match(
-    /(?:importo totale da pagare|totale bolletta)\s*(?:=)?\s*€?\s*([\d.,]+)/i
-  );
-
-  if (matchTotale) {
-    totale = "€ " + matchTotale[1];
-  }
-
-  let prezzoEnergia = "Non rilevato";
-
-  let matchPrezzo = testoPulito.match(
-  /spesa\s+per\s+la\s+vendita\s+energia\s+elettrica.{0,100}?([\d]+[.,]\d+)\s*€?\s*\/?\s*kWh/i
-);
-
-if (!matchPrezzo) {
-  matchPrezzo = testoPulito.match(
-    /([\d]+[.,]\d{4,6})\s*€?\s*\/?\s*kWh/i
-  );
-}
-
-  if (matchPrezzo) {
-    prezzoEnergia = matchPrezzo[1] + " €/kWh";
+  if (dati.avvisi.length > 0) {
+    avvisiHTML =
+      "<br><br><strong>Controlli automatici:</strong><br>" +
+      dati.avvisi.map(a => "• " + a).join("<br>");
   }
 
   risultato.innerHTML =
     "<strong>📊 ANALISI MRF DELLA BOLLETTA</strong><br><br>" +
-    "<strong>Fornitura:</strong> " + tipo + "<br>" +
-    "<strong>Periodo:</strong> " + periodo + "<br>" +
-    "<strong>Consumo:</strong> " + consumo + "<br>" +
-    "<strong>Totale bolletta:</strong> " + totale + "<br>" +
-    "<strong>Costo vendita energia:</strong> " + prezzoEnergia +
-    "<br><br>✅ Lettura automatica completata.";
+
+    "<strong>Fornitura:</strong> " +
+    dati.tipo.tipo + "<br>" +
+
+    "<strong>Periodo:</strong> " +
+    dati.periodo.valore + "<br>" +
+
+    "<strong>Consumo:</strong> " +
+    dati.consumo.valore + "<br>" +
+
+    "<strong>Totale bolletta:</strong> " +
+    dati.totale.valore + "<br>" +
+
+    "<strong>Costo energia/gas:</strong> " +
+    dati.prezzoEnergia.valore + "<br><br>" +
+
+    "<strong>Affidabilità lettura:</strong> " +
+    dati.affidabilita + "% - " +
+    statoAffidabilita +
+
+    avvisiHTML +
+
+    "<br><br>✅ Lettura universale completata.";
 }
 function chiudiServiziMRF() {
   document.getElementById("boxServiziMRF").style.display = "none";
