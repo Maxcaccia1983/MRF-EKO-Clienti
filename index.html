@@ -1135,7 +1135,111 @@ function bollettaSelezionata(event) {
   area.style.display = "block";
   risultato.style.display = "none";
 }
+function preprocessaCanvasMRF(canvas) {
 
+  const context = canvas.getContext("2d", {
+    willReadFrequently: true
+  });
+
+  const imageData = context.getImageData(
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+
+  const data = imageData.data;
+
+  // Istogramma grayscale per calcolare
+  // automaticamente la soglia migliore
+  const histogram = new Array(256).fill(0);
+
+  for (let i = 0; i < data.length; i += 4) {
+
+    const gray = Math.round(
+      0.299 * data[i] +
+      0.587 * data[i + 1] +
+      0.114 * data[i + 2]
+    );
+
+    histogram[gray]++;
+  }
+
+  const totalePixel =
+    canvas.width * canvas.height;
+
+  let sommaTotale = 0;
+
+  for (let i = 0; i < 256; i++) {
+    sommaTotale += i * histogram[i];
+  }
+
+  let sommaSfondo = 0;
+  let pesoSfondo = 0;
+  let varianzaMax = 0;
+  let soglia = 180;
+
+  for (let t = 0; t < 256; t++) {
+
+    pesoSfondo += histogram[t];
+
+    if (pesoSfondo === 0) continue;
+
+    const pesoTesto =
+      totalePixel - pesoSfondo;
+
+    if (pesoTesto === 0) break;
+
+    sommaSfondo +=
+      t * histogram[t];
+
+    const mediaSfondo =
+      sommaSfondo / pesoSfondo;
+
+    const mediaTesto =
+      (sommaTotale - sommaSfondo) /
+      pesoTesto;
+
+    const varianza =
+      pesoSfondo *
+      pesoTesto *
+      Math.pow(
+        mediaSfondo - mediaTesto,
+        2
+      );
+
+    if (varianza > varianzaMax) {
+      varianzaMax = varianza;
+      soglia = t;
+    }
+  }
+
+  // Applica grayscale + binarizzazione
+  for (let i = 0; i < data.length; i += 4) {
+
+    const gray =
+      0.299 * data[i] +
+      0.587 * data[i + 1] +
+      0.114 * data[i + 2];
+
+    const valore =
+      gray < soglia
+        ? 0
+        : 255;
+
+    data[i] = valore;
+    data[i + 1] = valore;
+    data[i + 2] = valore;
+  }
+
+  context.putImageData(
+    imageData,
+    0,
+    0
+  );
+
+  return canvas;
+}
 async function avviaAnalisiBollettaMRF() {
 
   if (!bollettaMRFSelezionata) {
@@ -1259,7 +1363,7 @@ if (diagnostica) {
           canvasContext: context,
           viewport: viewport
         }).promise;
-
+preprocessaCanvasMRF(canvas);
         const riconoscimento =
           await Tesseract.recognize(
             canvas,
