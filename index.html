@@ -249,6 +249,88 @@
   background: #3485b8;
   color: white;
 }
+    .box-sicurezza-mrf {
+  margin-top: 14px;
+  padding: 18px;
+  background: linear-gradient(145deg, #ffffff, #fff8f8);
+  border: 1px solid #f1d7d7;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+  text-align: left;
+}
+
+.box-sicurezza-mrf h3 {
+  margin: 0 0 8px 0;
+  color: #c62828;
+  text-align: center;
+}
+
+.testo-sicurezza {
+  margin: 0 0 14px 0;
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.riepilogo-offerta {
+  background: #ffffff;
+  border: 1px solid #f0caca;
+  border-left: 5px solid #c62828;
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 12px;
+  line-height: 1.7;
+  font-size: 15px;
+}
+
+.nota-sicurezza {
+  margin: 10px 0 14px;
+  font-size: 13px;
+  color: #555;
+  text-align: center;
+}
+
+.viewer-convenzione {
+  margin-top: 12px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  overflow: hidden;
+  background: white;
+}
+
+.viewer-convenzione iframe {
+  width: 100%;
+  height: 520px;
+  border: 0;
+  background: white;
+}
+
+.box-sicurezza-mrf a {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 10px;
+  padding: 14px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: bold;
+  text-align: center;
+}
+
+.cta-whatsapp {
+  background: #25d366;
+  color: white;
+}
+
+.cta-telefono {
+  background: #263238;
+  color: white;
+}
+
+.cta-email {
+  background: #3485b8;
+  color: white;
+}
 </style>
 </head>
 
@@ -518,6 +600,19 @@ function mostraAssistenza(event) {
 function chiudiServiziMRF() {
   document.getElementById("boxServiziMRF").style.display = "none";
 
+}
+  function apriSicurezzaMRF() {
+  const box = document.getElementById("boxSicurezzaMRF");
+
+  if (box.style.display === "block") {
+    box.style.display = "none";
+  } else {
+    box.style.display = "block";
+  }
+}
+
+function chiudiSicurezzaMRF() {
+  document.getElementById("boxSicurezzaMRF").style.display = "none";
 }
   function apriConsulentiMRF() {
   const box = document.getElementById("boxConsulentiMRF");
