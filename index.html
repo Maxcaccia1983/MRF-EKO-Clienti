@@ -439,6 +439,93 @@
   font-weight: bold;
   border-radius: 10px;
 }
+    .box-comparatore-mrf {
+  margin-top: 12px;
+  padding: 18px;
+  background: linear-gradient(145deg, #ffffff, #f5fbff);
+  border: 2px solid #3485b8;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(52,133,184,0.12);
+}
+
+.box-comparatore-mrf h3 {
+  margin: 0 0 10px;
+  color: #3485b8;
+  text-align: center;
+}
+
+.testo-comparatore {
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.privacy-comparatore {
+  margin: 14px 0;
+  padding: 12px;
+  background: #f1f8f4;
+  border: 1px solid #cde4d4;
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.carica-bolletta {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 15px;
+  padding: 15px;
+  background: #3485b8;
+  color: white;
+  border-radius: 10px;
+  text-align: center;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.info-bolletta {
+  margin-top: 10px;
+  padding: 10px;
+  background: white;
+  border: 1px dashed #bbb;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 13px;
+  color: #555;
+}
+
+.stato-analisi {
+  margin-top: 12px;
+  padding: 10px;
+  background: #eefaf1;
+  border: 1px solid #b9dfc2;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.avvia-analisi-mrf {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+  padding: 14px;
+  border: 0;
+  border-radius: 10px;
+  background: #22a447;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+#risultatoComparatoreMRF {
+  margin-top: 14px;
+  padding: 14px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+}
 </style>
 </head>
 
@@ -484,10 +571,79 @@
     una verifica della tua fornitura.
   </p>
 
-  <div class="servizio-energia">
-    📄 <strong>Analisi gratuita della bolletta</strong>
-    <span>Verifichiamo costi, consumi e condizioni della tua attuale offerta.</span>
+ <div
+  class="servizio-energia comparatore-trigger"
+  onclick="apriComparatoreMRF()"
+  style="cursor:pointer;"
+>
+  📊 <strong>Analisi gratuita della bolletta</strong>
+  <span>
+    Carica la tua bolletta completa e confronta il costo della materia
+    energia con il mercato italiano nello stesso periodo.
+  </span>
+</div>
+
+<div id="boxComparatoreMRF" class="box-comparatore-mrf" style="display:none;">
+
+  <h3>📊 Comparatore MRF</h3>
+
+  <p class="testo-comparatore">
+    Carica la tua <strong>bolletta completa in formato PDF</strong>.
+    Il sistema analizzerà periodo, consumi e componente energia
+    per confrontarli con i dati ufficiali del mercato italiano GME
+    riferiti allo stesso periodo.
+  </p>
+
+  <div class="privacy-comparatore">
+    🔒 <strong>Privacy:</strong>
+    il documento viene selezionato dal tuo dispositivo.
+    Nome, indirizzo, codice fiscale, POD/PDR e altri dati personali
+    non saranno utilizzati per il confronto.
   </div>
+
+  <label for="bollettaPdf" class="carica-bolletta">
+    📎 CARICA LA TUA BOLLETTA COMPLETA IN PDF
+  </label>
+
+  <input
+    type="file"
+    id="bollettaPdf"
+    accept="application/pdf,.pdf"
+    onchange="bollettaSelezionata(event)"
+    style="display:none;"
+  >
+
+  <div id="infoBolletta" class="info-bolletta">
+    Nessuna bolletta selezionata
+  </div>
+
+  <div id="areaAnalisiMRF" style="display:none;">
+
+    <div class="stato-analisi">
+      ✅ Bolletta pronta per l'analisi
+    </div>
+
+    <button
+      type="button"
+      class="avvia-analisi-mrf"
+      onclick="avviaAnalisiBollettaMRF()"
+    >
+      🔍 ANALIZZA E CONFRONTA CON GME
+    </button>
+
+  </div>
+
+  <div id="risultatoComparatoreMRF" style="display:none;"></div>
+
+  <button
+    type="button"
+    class="chiudi-servizi"
+    onclick="chiudiComparatoreMRF()"
+  >
+    CHIUDI COMPARATORE
+  </button>
+
+</div>
 
   <div class="servizio-energia">
     💡 <strong>Confronto offerte Luce e Gas</strong>
@@ -825,6 +981,79 @@ function apriLuceGasMRF() {
 
 function chiudiLuceGasMRF() {
   document.getElementById("boxLuceGasMRF").style.display = "none";
+}
+  let bollettaMRFSelezionata = null;
+
+function apriComparatoreMRF() {
+  const box = document.getElementById("boxComparatoreMRF");
+
+  if (box.style.display === "block") {
+    box.style.display = "none";
+  } else {
+    box.style.display = "block";
+  }
+}
+
+function chiudiComparatoreMRF() {
+  document.getElementById("boxComparatoreMRF").style.display = "none";
+}
+
+function bollettaSelezionata(event) {
+  const file = event.target.files[0];
+  const info = document.getElementById("infoBolletta");
+  const area = document.getElementById("areaAnalisiMRF");
+  const risultato = document.getElementById("risultatoComparatoreMRF");
+
+  if (!file) {
+    bollettaMRFSelezionata = null;
+    info.innerHTML = "Nessuna bolletta selezionata";
+    area.style.display = "none";
+    risultato.style.display = "none";
+    return;
+  }
+
+  if (!file.name.toLowerCase().endsWith(".pdf")) {
+    bollettaMRFSelezionata = null;
+    info.innerHTML = "⚠️ Seleziona una bolletta in formato PDF.";
+    area.style.display = "none";
+    event.target.value = "";
+    return;
+  }
+
+  const dimensioneMB = file.size / (1024 * 1024);
+
+  if (dimensioneMB > 20) {
+    bollettaMRFSelezionata = null;
+    info.innerHTML = "⚠️ Il PDF supera il limite di 20 MB.";
+    area.style.display = "none";
+    event.target.value = "";
+    return;
+  }
+
+  bollettaMRFSelezionata = file;
+
+  info.innerHTML =
+    "📄 <strong>" + file.name + "</strong><br>" +
+    "Dimensione: " + dimensioneMB.toFixed(2) + " MB<br>" +
+    "✅ Documento caricato localmente";
+
+  area.style.display = "block";
+  risultato.style.display = "none";
+}
+
+function avviaAnalisiBollettaMRF() {
+  if (!bollettaMRFSelezionata) {
+    alert("Carica prima la bolletta completa in PDF.");
+    return;
+  }
+
+  const risultato = document.getElementById("risultatoComparatoreMRF");
+
+  risultato.style.display = "block";
+
+  risultato.innerHTML =
+    "<strong>✅ PDF acquisito correttamente.</strong><br><br>" +
+    "Il documento è pronto per il motore di analisi MRF.";
 }
 function chiudiServiziMRF() {
   document.getElementById("boxServiziMRF").style.display = "none";
