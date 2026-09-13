@@ -241,19 +241,18 @@
         : "Smc";
 
     const start =
-      Math.max(0, m.index - 180);
+  Math.max(0, m.index - 180);
 
-    const end =
-      Math.min(
-        testo.length,
-        regex.lastIndex + 120
-      );
+const end =
+  Math.min(
+    testo.length,
+    regex.lastIndex + 120
+  );
 
-    const contesto =
-      testo.slice(start, end).toLowerCase();
+const contesto =
+  testo.slice(start, end).toLowerCase();
 
-    let score = 20;
-
+let score = 20;
     // Indicazioni molto forti
     if (
       /consumo\s+totale|totale\s+consumi|consumo\s+fatturato|consumi\s+fatturati/.test(contesto)
@@ -503,17 +502,17 @@ function trovaCandidatiTotale(testo) {
       continue;
     }
 
-    const start =
-      Math.max(0, m.index - 240);
+  const start =
+  Math.max(0, m.index - 90);
 
-    const end =
-      Math.min(
-        testo.length,
-        regex.lastIndex + 160
-      );
+const end =
+  Math.min(
+    testo.length,
+    regex.lastIndex + 30
+  );
 
-    const contesto =
-      testo.slice(start, end).toLowerCase();
+const contesto =
+  testo.slice(start, end).toLowerCase();
 
     let score = 20;
 
