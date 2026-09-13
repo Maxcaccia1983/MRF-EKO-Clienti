@@ -3,6 +3,7 @@
 <head>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="parser-bolletta.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="manifest" href="manifest.json">
@@ -1061,14 +1062,15 @@ async function avviaAnalisiBollettaMRF() {
 
     const pdfjsLib = window.pdfjsLib;
 
-if (!pdfjsLib) {
-  throw new Error("PDF.js non è stato caricato.");
-}
+    if (!pdfjsLib) {
+      throw new Error("PDF.js non è stato caricato.");
+    }
 
-pdfjsLib.GlobalWorkerOptions.workerSrc =
-  "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
 
-    const buffer = await bollettaMRFSelezionata.arrayBuffer();
+    const buffer =
+      await bollettaMRFSelezionata.arrayBuffer();
 
     const pdf = await pdfjsLib.getDocument({
       data: new Uint8Array(buffer)
@@ -1076,6 +1078,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc =
 
     let testoCompleto = "";
 
+    // PRIMO LIVELLO: lettura testo normale del PDF
     for (let pagina = 1; pagina <= pdf.numPages; pagina++) {
 
       const page = await pdf.getPage(pagina);
@@ -1088,15 +1091,144 @@ pdfjsLib.GlobalWorkerOptions.workerSrc =
       testoCompleto += " " + testoPagina;
     }
 
+    const testoPulito =
+      testoCompleto.replace(/\s+/g, " ").trim();
+
+    let analisiPreliminare = null;
+
+    if (window.MRFBollettaParser) {
+      analisiPreliminare =
+        window.MRFBollettaParser.analizza(testoPulito);
+    }
+
+    const testoInsufficiente =
+      testoPulito.length < 180;
+
+    const affidabilitaInsufficiente =
+      !analisiPreliminare ||
+      analisiPreliminare.affidabilita < 45;
+
+    // SECONDO LIVELLO: OCR AUTOMATICO
+    if (testoInsufficiente || affidabilitaInsufficiente) {
+
+      if (!window.Tesseract) {
+        throw new Error("Motore OCR non disponibile.");
+      }
+
+      let testoOCR = "";
+
+      for (let pagina = 1; pagina <= pdf.numPages; pagina++) {
+
+        risultato.innerHTML =
+          "🔎 Lettura OCR automatica...<br>" +
+          "Pagina " + pagina + " di " + pdf.numPages;
+
+        const page =
+          await pdf.getPage(pagina);
+
+        const viewport =
+          page.getViewport({ scale: 1.6 });
+
+        const canvas =
+          document.createElement("canvas");
+
+        const context =
+          canvas.getContext("2d", {
+            willReadFrequently: true
+          });
+
+        canvas.width =
+          Math.ceil(viewport.width);
+
+        canvas.height =
+          Math.ceil(viewport.height);
+
+        await page.render({
+          canvasContext: context,
+          viewport: viewport
+        }).promise;
+
+        const riconoscimento =
+          await Tesseract.recognize(
+            canvas,
+            "ita",
+            {
+              logger: messaggio => {
+
+                if (
+                  messaggio.status === "recognizing text" &&
+                  typeof messaggio.progress === "number"
+                ) {
+
+                  const percentuale =
+                    Math.round(
+                      messaggio.progress * 100
+                    );
+
+                  risultato.innerHTML =
+                    "🔎 Lettura OCR automatica...<br>" +
+                    "Pagina " + pagina +
+                    " di " + pdf.numPages +
+                    "<br>" +
+                    percentuale + "%";
+                }
+              }
+            }
+          );
+
+        testoOCR +=
+          " " +
+          (
+            riconoscimento.data &&
+            riconoscimento.data.text
+              ? riconoscimento.data.text
+              : ""
+          );
+
+        // Verifica dopo ogni pagina se abbiamo già
+        // tutti i dati necessari.
+        if (window.MRFBollettaParser) {
+
+          const analisiParziale =
+            window.MRFBollettaParser.analizza(
+              testoCompleto + " " + testoOCR
+            );
+
+          const datiCompleti =
+            analisiParziale.tipo.codice !== "unknown" &&
+            analisiParziale.periodo.valore !== "Non rilevato" &&
+            analisiParziale.consumo.valore !== "Non rilevato" &&
+            analisiParziale.totale.valore !== "Non rilevato" &&
+            analisiParziale.prezzoEnergia.valore !== "Non rilevato";
+
+          if (
+            datiCompleti &&
+            analisiParziale.affidabilita >= 80
+          ) {
+            break;
+          }
+        }
+
+        // libera memoria dell'iPad
+        canvas.width = 1;
+        canvas.height = 1;
+      }
+
+      testoCompleto += " " + testoOCR;
+    }
+
     analizzaTestoBollettaMRF(testoCompleto);
 
-    } catch (errore) {
+  } catch (errore) {
 
-    console.error(errore);
+  console.error(errore);
 
-    risultato.innerHTML =
-      "⚠️ Non è stato possibile leggere automaticamente questo PDF.<br><br>" +
-      "<small>Errore tecnico: " + errore.message + "</small>";
+  risultato.innerHTML =
+    "⚠️ Non è stato possibile completare " +
+    "la lettura automatica.<br><br>" +
+    "<small>Errore tecnico: " +
+    errore.message +
+    "</small>";
   }
 }
 
