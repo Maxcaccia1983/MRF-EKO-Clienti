@@ -9,12 +9,35 @@
   const NON_RILEVATO = "Non rilevato";
 
   function normalizzaTesto(testo) {
-    return String(testo || "")
-      .replace(/\u00a0/g, " ")
-      .replace(/[–—]/g, "-")
-      .replace(/\s+/g, " ")
-      .trim();
-  }
+  return String(testo || "")
+    .replace(/\u00a0/g, " ")
+    .replace(/[–—]/g, "-")
+
+    // Correzioni tipiche OCR sulle unità
+    .replace(/\bk\s*w\s*h\b/gi, "kWh")
+    .replace(/\bs\s*m\s*c\b/gi, "Smc")
+
+    // Correzioni tipiche OCR sui codici utenza
+    .replace(/\bp\s*o\s*d\b/gi, "POD")
+    .replace(/\bp\s*d\s*r\b/gi, "PDR")
+
+    // Ricompone numeri spezzati dall'OCR
+    .replace(/(\d)\s*,\s*(\d)/g, "$1,$2")
+    .replace(/(\d)\s*\.\s*(\d)/g, "$1.$2")
+
+    // Ricompone date con spazi
+    .replace(
+      /(\d{1,2})\s*[\/\-\.]\s*(\d{1,2})\s*[\/\-\.]\s*(\d{2,4})/g,
+      "$1/$2/$3"
+    )
+
+    // Uniforma euro e unità
+    .replace(/€\s*\/\s*kwh/gi, "€/kWh")
+    .replace(/€\s*\/\s*smc/gi, "€/Smc")
+
+    .replace(/\s+/g, " ")
+    .trim();
+}
 
   function normalizzaNumero(valore) {
     if (valore == null) return null;
@@ -103,54 +126,211 @@
   }
 
   function estraiPeriodo(testo) {
-    const data = "(\\d{1,2}[\\/\\-.]\\d{1,2}[\\/\\-.]\\d{2,4})";
-    const patterns = [
-      { label: "periodo oggetto", score: 100, regex: new RegExp("periodo\\s+(?:oggetto\\s+di\\s+)?fatturazione.{0,40}?dal\\s+" + data + "\\s+(?:al|a)\\s+" + data, "i") },
-      { label: "periodo consumi", score: 95, regex: new RegExp("periodo\\s+(?:dei\\s+)?consumi.{0,40}?dal\\s+" + data + "\\s+(?:al|a)\\s+" + data, "i") },
-      { label: "competenza", score: 90, regex: new RegExp("(?:periodo\\s+di\\s+competenza|competenza).{0,35}?" + data + "\\s*(?:-|al|a)\\s*" + data, "i") },
-      { label: "dal al", score: 70, regex: new RegExp("\\bdal\\s+" + data + "\\s+(?:al|a)\\s+" + data, "i") },
-      { label: "date pair", score: 55, regex: new RegExp(data + "\\s*(?:-|al|a)\\s*" + data, "i") }
-    ];
 
-    const found = estraiConPattern(testo, patterns);
-    if (!found) return { valore: NON_RILEVATO, inizio: null, fine: null, confidenza: 0 };
+  const data =
+    "\\d{1,2}[\\/\\-.]\\d{1,2}[\\/\\-.]\\d{2,4}";
 
+  const patterns = [
+
+    {
+      label: "periodo fatturazione",
+      score: 100,
+      regex: new RegExp(
+        "(?:periodo|periodo di)\\s+(?:oggetto\\s+di\\s+)?fatturazione" +
+        ".{0,80}?(?:dal\\s*)?(" + data + ")" +
+        ".{0,30}?(?:al|a|-)?\\s*(" + data + ")",
+        "i"
+      )
+    },
+
+    {
+      label: "periodo consumi",
+      score: 95,
+      regex: new RegExp(
+        "(?:periodo\\s+(?:dei\\s+)?consumi|consumi\\s+fatturati)" +
+        ".{0,80}?(?:dal\\s*)?(" + data + ")" +
+        ".{0,30}?(?:al|a|-)?\\s*(" + data + ")",
+        "i"
+      )
+    },
+
+    {
+      label: "competenza",
+      score: 90,
+      regex: new RegExp(
+        "(?:periodo\\s+di\\s+competenza|competenza)" +
+        ".{0,80}?(" + data + ")" +
+        ".{0,30}?(" + data + ")",
+        "i"
+      )
+    },
+
+    {
+      label: "dal al",
+      score: 80,
+      regex: new RegExp(
+        "\\bdal\\s*(" + data + ")" +
+        ".{0,25}?\\b(?:al|a)\\s*(" + data + ")",
+        "i"
+      )
+    },
+
+    {
+      label: "contesto fattura",
+      score: 65,
+      regex: new RegExp(
+        "(?:fatturazione|fatturato|periodo|consumi)" +
+        ".{0,100}?(" + data + ")" +
+        ".{0,40}?(" + data + ")",
+        "i"
+      )
+    }
+
+  ];
+
+  const found =
+    estraiConPattern(testo, patterns);
+
+  if (!found) {
     return {
-      valore: found.match[1] + " – " + found.match[2],
-      inizio: found.match[1],
-      fine: found.match[2],
-      confidenza: found.score
+      valore: NON_RILEVATO,
+      inizio: null,
+      fine: null,
+      confidenza: 0
     };
   }
 
+  const inizio =
+    found.match[1].replace(/[.-]/g, "/");
+
+  const fine =
+    found.match[2].replace(/[.-]/g, "/");
+
+  return {
+    valore: inizio + " – " + fine,
+    inizio: inizio,
+    fine: fine,
+    confidenza: found.score
+  };
+}
   function trovaCandidatiConsumo(testo) {
-    const candidati = [];
-    const regex = /([\d][\d.\s]*(?:,\d+)?)\s*(kwh|smc)\b/ig;
-    let m;
 
-    while ((m = regex.exec(testo)) !== null) {
-      const valore = normalizzaNumero(m[1]);
-      if (!Number.isFinite(valore) || valore <= 0) continue;
+  const candidati = [];
 
-      const unita = m[2].toLowerCase() === "kwh" ? "kWh" : "Smc";
-      const start = Math.max(0, m.index - 120);
-      const end = Math.min(testo.length, regex.lastIndex + 80);
-      const contesto = testo.slice(start, end).toLowerCase();
+  const regex =
+    /([\d][\d.\s]*(?:,\d+)?)\s*(kwh|smc)\b/ig;
 
-      let score = 20;
-      if (/consumo totale|totale consumi|consumi fatturati|consumo fatturato/.test(contesto)) score += 70;
-      if (/consumo|consumi/.test(contesto)) score += 30;
-      if (/fatturat/.test(contesto)) score += 20;
-      if (/annuo|12 mesi|ultimi 12/.test(contesto)) score -= 40;
-      if (/lettura|autolettura|misura precedente|misura attuale/.test(contesto)) score -= 25;
-      if (/fascia\s*f[123]/.test(contesto)) score -= 10;
-      if (/quota|prezzo|corrispettivo|€/i.test(contesto)) score -= 35;
+  let m;
 
-      candidati.push({ valore, unita, score, contesto });
+  while ((m = regex.exec(testo)) !== null) {
+
+    const valore =
+      normalizzaNumero(m[1]);
+
+    if (
+      !Number.isFinite(valore) ||
+      valore <= 0 ||
+      valore > 10000000
+    ) {
+      continue;
     }
 
-    return candidati.sort((a, b) => b.score - a.score || b.valore - a.valore);
+    const unita =
+      m[2].toLowerCase() === "kwh"
+        ? "kWh"
+        : "Smc";
+
+    const start =
+      Math.max(0, m.index - 180);
+
+    const end =
+      Math.min(
+        testo.length,
+        regex.lastIndex + 120
+      );
+
+    const contesto =
+      testo.slice(start, end).toLowerCase();
+
+    let score = 20;
+
+    // Indicazioni molto forti
+    if (
+      /consumo\s+totale|totale\s+consumi|consumo\s+fatturato|consumi\s+fatturati/.test(contesto)
+    ) {
+      score += 80;
+    }
+
+    if (
+      /consumo\s+del\s+periodo|consumi\s+del\s+periodo|consumo\s+nel\s+periodo/.test(contesto)
+    ) {
+      score += 75;
+    }
+
+    if (
+      /energia\s+prelevata|energia\s+consumata|prelievo\s+energia/.test(contesto)
+    ) {
+      score += 65;
+    }
+
+    if (
+      /smc\s+fatturati|kwh\s+fatturati|quantit[aà]\s+fatturata/.test(contesto)
+    ) {
+      score += 60;
+    }
+
+    // Indicazioni generiche
+    if (/consumo|consumi/.test(contesto)) {
+      score += 30;
+    }
+
+    if (/fatturat/.test(contesto)) {
+      score += 20;
+    }
+
+    if (/quota\s+consumi/.test(contesto)) {
+      score += 15;
+    }
+
+    // Elementi che NON rappresentano il consumo del periodo
+    if (
+      /consumo\s+annuo|consumi\s+annui|annuale|12\s+mesi|ultimi\s+12/.test(contesto)
+    ) {
+      score -= 70;
+    }
+
+    if (
+      /lettura|autolettura|misura\s+precedente|misura\s+attuale|lettura\s+precedente|lettura\s+attuale/.test(contesto)
+    ) {
+      score -= 50;
+    }
+
+    if (
+      /f1|f2|f3|fascia\s+1|fascia\s+2|fascia\s+3/.test(contesto)
+    ) {
+      score -= 15;
+    }
+
+    if (
+      /prezzo|corrispettivo|euro|€\s*\/|costo\s+unitario/.test(contesto)
+    ) {
+      score -= 45;
+    }
+
+    candidati.push({
+      valore,
+      unita,
+      score,
+      contesto
+    });
   }
+
+  return candidati.sort(
+    (a, b) =>
+      b.score - a.score ||
+      b.valore - a.valore
+  );
+}
 
   function estraiConsumo(testo, tipo) {
     const candidati = trovaCandidatiConsumo(testo)
@@ -169,62 +349,256 @@
     };
   }
 
-  function trovaCandidatiTotale(testo) {
-    const patterns = [
-      /(?:importo\s+totale\s+da\s+pagare|totale\s+da\s+pagare|totale\s+bolletta|totale\s+fattura|totale\s+documento|importo\s+da\s+pagare)\s*(?:[:=])?\s*(?:€|euro)?\s*([\d.]+(?:,\d{1,2})?)/ig,
-      /(?:da\s+pagare)\s*(?:[:=])?\s*(?:€|euro)\s*([\d.]+(?:,\d{1,2})?)/ig
-    ];
+function trovaCandidatiTotale(testo) {
 
-    const candidati = [];
-    patterns.forEach((regex, idx) => {
-      let m;
-      while ((m = regex.exec(testo)) !== null) {
-        const valore = normalizzaNumero(m[1]);
-        if (!Number.isFinite(valore) || valore < 0 || valore > 1000000) continue;
-        candidati.push({ valore, score: idx === 0 ? 95 : 75, index: m.index });
+  const candidati = [];
+
+  const patterns = [
+
+    {
+      score: 100,
+      regex:
+        /(?:importo\s+totale\s+da\s+pagare|totale\s+da\s+pagare|totale\s+bolletta|totale\s+fattura|totale\s+documento|importo\s+da\s+pagare|totale\s+da\s+versare)\s*(?:[:=\-])?\s*(?:€|euro)?\s*([\d.]+(?:,\d{1,2})?)/ig
+    },
+
+    {
+      score: 95,
+      regex:
+        /(?:quanto\s+devi\s+pagare|quanto\s+da\s+pagare|da\s+pagare)\s*(?:[:=\-])?\s*(?:€|euro)?\s*([\d.]+(?:,\d{1,2})?)/ig
+    },
+
+    {
+      score: 90,
+      regex:
+        /(?:importo\s+totale|totale\s+complessivo|totale\s+dovuto)\s*(?:[:=\-])?\s*(?:€|euro)?\s*([\d.]+(?:,\d{1,2})?)/ig
+    },
+
+    {
+      score: 80,
+      regex:
+        /(?:€|euro)\s*([\d.]+(?:,\d{1,2})?)\s*(?:totale|da\s+pagare|importo\s+totale)/ig
+    }
+
+  ];
+
+  patterns.forEach(({ regex, score }) => {
+
+    let m;
+
+    while ((m = regex.exec(testo)) !== null) {
+
+      const valore =
+        normalizzaNumero(m[1]);
+
+      if (
+        !Number.isFinite(valore) ||
+        valore < 0 ||
+        valore > 1000000
+      ) {
+        continue;
       }
-    });
 
-    return candidati.sort((a, b) => b.score - a.score || a.index - b.index);
-  }
+      const start =
+        Math.max(0, m.index - 120);
 
+      const end =
+        Math.min(
+          testo.length,
+          regex.lastIndex + 120
+        );
+
+      const contesto =
+        testo.slice(start, end).toLowerCase();
+
+      let punteggio = score;
+
+      // Rafforza il vero totale della bolletta
+      if (
+        /totale\s+da\s+pagare|importo\s+da\s+pagare|totale\s+bolletta|totale\s+fattura/.test(contesto)
+      ) {
+        punteggio += 20;
+      }
+
+      // Penalizza importi che normalmente non sono il totale finale
+      if (
+        /canone\s+rai|deposito\s+cauzionale|rata|morosit[aà]|interessi|bonus|sconto/.test(contesto)
+      ) {
+        punteggio -= 40;
+      }
+
+      if (
+        /iva|accisa|imposta|oneri|trasporto|materia\s+energia|spesa\s+energia/.test(contesto)
+      ) {
+        punteggio -= 25;
+      }
+
+      candidati.push({
+        valore,
+        score: punteggio,
+        index: m.index,
+        contesto
+      });
+    }
+  });
+
+  return candidati.sort(
+    (a, b) =>
+      b.score - a.score ||
+      a.index - b.index
+  );
+}
   function estraiTotale(testo) {
     const candidati = trovaCandidatiTotale(testo);
     if (!candidati.length) return { valore: NON_RILEVATO, numero: null, confidenza: 0 };
     const best = candidati[0];
-    return { valore: "€ " + formattaNumero(best.valore, 2), numero: best.valore, confidenza: best.score };
+    return { valore: "€ " + formattaNumero(best.valore, 2), numero: best.valore, confidenza: Math.max(0, Math.min(100, best.score)) };
   }
 
   function trovaPrezziUnitari(testo, tipo) {
-    const unitaTarget = tipo.codice === "gas" ? "smc" : "kwh";
-    const regex = /([0-9]+[.,][0-9]{3,8})\s*(?:€|euro)?\s*(?:\/|per)?\s*(kwh|smc)\b/ig;
-    const candidati = [];
-    let m;
 
-    while ((m = regex.exec(testo)) !== null) {
-      const prezzo = normalizzaNumero(m[1]);
-      if (!Number.isFinite(prezzo) || prezzo <= 0 || prezzo > 20) continue;
+  const candidati = [];
 
-      const unita = m[2].toLowerCase();
-      if (tipo.codice !== "unknown" && unita !== unitaTarget) continue;
+  const regex =
+    /([0-9]+(?:[.,][0-9]{1,8})?)\s*(?:€|euro)?\s*(?:\/|per)?\s*(kwh|mwh|smc)\b/ig;
+  let m;
 
-      const start = Math.max(0, m.index - 180);
-      const end = Math.min(testo.length, regex.lastIndex + 120);
-      const contesto = testo.slice(start, end).toLowerCase();
+  while ((m = regex.exec(testo)) !== null) {
 
-      let score = 30;
-      if (/prezzo\s+(?:dell['’]?|di\s+)?energia|prezzo\s+materia|costo\s+energia|costo\s+materia/.test(contesto)) score += 55;
-      if (/corrispettivo\s+energia|componente\s+energia|materia\s+energia|materia\s+prima|spesa\s+per\s+la\s+vendita/.test(contesto)) score += 45;
-      if (/quota\s+energia|prezzo\s+unitario/.test(contesto)) score += 35;
-      if (/pun|psv|indice|spread|perdite|trasporto|oneri|accisa|imposta|iva/.test(contesto)) score -= 30;
-      if (/f1|f2|f3/.test(contesto)) score -= 5;
+    let prezzo = normalizzaNumero(m[1]);
 
-      candidati.push({ prezzo, unita: unita === "kwh" ? "kWh" : "Smc", score, contesto });
+    if (!Number.isFinite(prezzo) || prezzo <= 0) {
+      continue;
     }
 
-    return candidati.sort((a, b) => b.score - a.score);
+    let unitaOriginale = m[2].toLowerCase();
+    let unita;
+
+    // Se il prezzo è espresso in €/MWh
+    // lo convertiamo automaticamente in €/kWh.
+    if (unitaOriginale === "mwh") {
+      prezzo = prezzo / 1000;
+      unita = "kWh";
+    } else if (unitaOriginale === "kwh") {
+      unita = "kWh";
+    } else {
+      unita = "Smc";
+    }
+
+    if (prezzo > 20) {
+      continue;
+    }
+
+    // Scarta unità incompatibili con il tipo di fornitura
+    if (
+      tipo.codice === "electricity" &&
+      unita !== "kWh"
+    ) {
+      continue;
+    }
+
+    if (
+      tipo.codice === "gas" &&
+      unita !== "Smc"
+    ) {
+      continue;
+    }
+
+    const start =
+      Math.max(0, m.index - 240);
+
+    const end =
+      Math.min(
+        testo.length,
+        regex.lastIndex + 160
+      );
+
+    const contesto =
+      testo.slice(start, end).toLowerCase();
+
+    let score = 20;
+
+    // COMPONENTE COMMERCIALE VERA:
+    // sono i riferimenti che vogliamo privilegiare.
+    if (
+      /spesa\s+per\s+la\s+vendita|vendita\s+(?:di\s+)?energia|materia\s+energia|materia\s+prima\s+gas|materia\s+gas|componente\s+energia|componente\s+gas|corrispettivo\s+energia|corrispettivo\s+gas/.test(contesto)
+    ) {
+      score += 100;
+    }
+
+    if (
+      /prezzo\s+(?:dell['’]?\s*)?(?:energia|gas)|costo\s+(?:energia|gas)|prezzo\s+materia|costo\s+materia/.test(contesto)
+    ) {
+      score += 80;
+    }
+
+    if (
+      /prezzo\s+unitario|corrispettivo\s+unitario/.test(contesto)
+    ) {
+      score += 45;
+    }
+
+    if (
+      /componente\s+variabile|quota\s+energia|quota\s+gas/.test(contesto)
+    ) {
+      score += 35;
+    }
+
+    // "Quota consumi" può comprendere componenti diverse:
+    // non deve battere la materia energia vera.
+    if (
+      /quota\s+consumi|totale\s+quota\s+consumi/.test(contesto)
+    ) {
+      score -= 35;
+    }
+
+    // COMPONENTI DA NON CONFRONTARE CON GME
+    if (
+      /rete|trasporto|distribuzione|misura|oneri\s+di\s+sistema|oneri\s+generali|servizi\s+di\s+rete/.test(contesto)
+    ) {
+      score -= 110;
+    }
+
+    if (
+      /accisa|iva|imposta|imposte|tributi/.test(contesto)
+    ) {
+      score -= 110;
+    }
+
+    if (
+      /commercializzazione\s+fissa|quota\s+fissa|quota\s+potenza/.test(contesto)
+    ) {
+      score -= 90;
+    }
+
+    // PUN / PSV / spread sono utili,
+    // ma non rappresentano necessariamente il prezzo finale applicato.
+    if (
+      /\bpun\b|\bpsv\b|indice|indicizzato|spread/.test(contesto)
+    ) {
+      score -= 25;
+    }
+
+    // Singole fasce F1/F2/F3 non devono diventare
+    // automaticamente il prezzo medio della bolletta.
+    if (
+      /\bf1\b|\bf2\b|\bf3\b|fascia\s+1|fascia\s+2|fascia\s+3/.test(contesto)
+    ) {
+      score -= 15;
+    }
+
+    candidati.push({
+      prezzo,
+      unita,
+      score,
+      contesto
+    });
   }
 
+  return candidati.sort(
+    (a, b) =>
+      b.score - a.score
+  );
+}
   function estraiPrezzoEnergia(testo, tipo) {
     const candidati = trovaPrezziUnitari(testo, tipo);
     if (!candidati.length) {
@@ -239,7 +613,9 @@
       valore: String(best.prezzo).replace(".", ",") + " €/" + best.unita,
       numero: best.prezzo,
       unita: best.unita,
-      confidenza: valoriDistinti.length > 1 ? Math.min(70, best.score) : Math.min(100, best.score),
+      confidenza: valoriDistinti.length > 1
+  ? Math.max(0, Math.min(70, best.score))
+  : Math.max(0, Math.min(100, best.score)),
       candidati: candidati.slice(0, 5),
       multiplo: valoriDistinti.length > 1
     };
