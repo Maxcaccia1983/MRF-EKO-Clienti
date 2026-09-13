@@ -547,7 +547,9 @@
     <a href="https://clienti.eko-360.it/">
       ACCEDI ALLA TUA AREA EKO
     </a>
-    <a class="servizi-mrf" href="#" onclick="apriServiziMRF(event)">
+    <a class="servizi-mrf"
+   href="javascript:void(0);"
+   onclick="apriServiziMRF(); return false;">
   ✨ ACCEDI AI SERVIZI MRF
 </a>
     <div id="boxServiziMRF" class="box-servizi-mrf">
@@ -958,17 +960,17 @@ function mostraAssistenza(event) {
     box.style.display = "block";
   }
   }
-  function apriServiziMRF(event) {
-  event.preventDefault();
-
+  function apriServiziMRF() {
   const box = document.getElementById("boxServiziMRF");
+
+  if (!box) return;
 
   if (box.style.display === "block") {
     box.style.display = "none";
   } else {
     box.style.display = "block";
   }
-  }
+}
 function apriLuceGasMRF() {
   const box = document.getElementById("boxLuceGasMRF");
 
