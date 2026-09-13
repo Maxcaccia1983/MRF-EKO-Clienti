@@ -457,37 +457,58 @@ function trovaCandidatiTotale(testo) {
 
   const candidati = [];
 
+  /*
+   * Un prezzo deve contenere esplicitamente
+   * € oppure la parola "euro".
+   *
+   * Questo impedisce che:
+   * 2.423 kWh
+   * venga interpretato come:
+   * 2,423 €/kWh
+   */
   const regex =
-    /([0-9]+(?:[.,][0-9]{1,8})?)\s*(?:€|euro)?\s*(?:\/|per)?\s*(kwh|mwh|smc)\b/ig;
+    /([0-9]+(?:[.,][0-9]{1,8})?)\s*(?:€|euro)\s*(?:\/|per)?\s*(kwh|mwh|smc)\b/ig;
+
   let m;
 
   while ((m = regex.exec(testo)) !== null) {
 
     let prezzo = normalizzaNumero(m[1]);
 
-    if (!Number.isFinite(prezzo) || prezzo <= 0) {
+    if (
+      !Number.isFinite(prezzo) ||
+      prezzo <= 0
+    ) {
       continue;
     }
 
-    let unitaOriginale = m[2].toLowerCase();
+    const unitaOriginale =
+      m[2].toLowerCase();
+
     let unita;
 
-    // Se il prezzo è espresso in €/MWh
-    // lo convertiamo automaticamente in €/kWh.
+    // Prezzi elettrici eventualmente espressi in €/MWh
+    // vengono convertiti automaticamente in €/kWh.
     if (unitaOriginale === "mwh") {
+
       prezzo = prezzo / 1000;
       unita = "kWh";
+
     } else if (unitaOriginale === "kwh") {
+
       unita = "kWh";
+
     } else {
+
       unita = "Smc";
     }
 
+    // Scarta valori chiaramente anomali
     if (prezzo > 20) {
       continue;
     }
 
-    // Scarta unità incompatibili con il tipo di fornitura
+    // Coerenza con il tipo di fornitura
     if (
       tipo.codice === "electricity" &&
       unita !== "kWh"
@@ -502,123 +523,290 @@ function trovaCandidatiTotale(testo) {
       continue;
     }
 
-  const start =
-  Math.max(0, m.index - 90);
+    /*
+     * Manteniamo un contesto relativamente stretto
+     * per evitare che una voce di una riga vicina
+     * influenzi la classificazione.
+     */
+    const start =
+      Math.max(0, m.index - 110);
 
-const end =
-  Math.min(
-    testo.length,
-    regex.lastIndex + 30
-  );
+    const end =
+      Math.min(
+        testo.length,
+        regex.lastIndex + 90
+      );
 
-const contesto =
-  testo.slice(start, end).toLowerCase();
+    const contesto =
+      testo.slice(start, end).toLowerCase();
 
+    let categoria = "prezzo_generico";
     let score = 20;
 
-    // COMPONENTE COMMERCIALE VERA:
-    // sono i riferimenti che vogliamo privilegiare.
-    if (
-      /spesa\s+per\s+la\s+vendita|vendita\s+(?:di\s+)?energia|materia\s+energia|materia\s+prima\s+gas|materia\s+gas|componente\s+energia|componente\s+gas|corrispettivo\s+energia|corrispettivo\s+gas/.test(contesto)
-    ) {
-      score += 100;
-    }
+    // =========================================
+    // MATERIA PRIMA
+    // È LA COMPONENTE CHE USEREMO
+    // PER IL CONFRONTO CON GME
+    // =========================================
 
     if (
-      /prezzo\s+(?:dell['’]?\s*)?(?:energia|gas)|costo\s+(?:energia|gas)|prezzo\s+materia|costo\s+materia/.test(contesto)
+      /materia\s+energia|materia\s+prima\s+gas|materia\s+gas|spesa\s+per\s+(?:la\s+)?materia|spesa\s+materia|spesa\s+per\s+(?:la\s+)?vendit|vendita\s+(?:di\s+)?energia|componente\s+energia|componente\s+gas|quota\s+energia|quota\s+gas|corrispettivo\s+energia|corrispettivo\s+gas|corrispettivo\s+di\s+vendita|prezzo\s+(?:dell['’]?\s*)?(?:energia|gas)|costo\s+(?:energia|gas)|approvvigionamento\s+energia|approvvigionamento\s+gas/i.test(contesto)
     ) {
-      score += 80;
+
+      categoria = "materia_prima";
+      score += 140;
     }
 
+    /*
+     * Elementi che rafforzano il candidato,
+     * ma da soli non bastano a definirlo
+     * materia prima.
+     */
     if (
-      /prezzo\s+unitario|corrispettivo\s+unitario/.test(contesto)
-    ) {
-      score += 45;
-    }
-
-    if (
-      /componente\s+variabile|quota\s+energia|quota\s+gas/.test(contesto)
+      /quota\s+per\s+consumi|prezzo\s+medio|prezzo\s+unitario|corrispettivo\s+unitario|quota\s+consumi/i.test(contesto)
     ) {
       score += 35;
     }
 
-    // "Quota consumi" può comprendere componenti diverse:
-    // non deve battere la materia energia vera.
+    // =========================================
+    // INDICE DI MERCATO
+    // PUN / PSV vengono tenuti separati
+    // =========================================
+
     if (
-      /quota\s+consumi|totale\s+quota\s+consumi/.test(contesto)
+      /\bpun\b|\bpsv\b|pun\s+index|indice\s+pun|indice\s+psv|indice\s+di\s+mercato/i.test(contesto)
     ) {
-      score -= 35;
+
+      categoria = "indice";
+      score += 80;
     }
 
+    // =========================================
+    // SPREAD DEL FORNITORE
+    // =========================================
+
+    if (
+      /\bspread\b|margine\s+fornitore|spread\s+commerciale|corrispettivo\s+aggiuntivo/i.test(contesto)
+    ) {
+
+      categoria = "spread";
+      score += 90;
+    }
+
+    // =========================================
     // COMPONENTI DA NON CONFRONTARE CON GME
+    // =========================================
+
     if (
-      /rete|trasporto|distribuzione|misura|oneri\s+di\s+sistema|oneri\s+generali|servizi\s+di\s+rete/.test(contesto)
+      /rete|trasporto|distribuzione|misura|oneri\s+di\s+sistema|oneri\s+generali|servizi\s+di\s+rete/i.test(contesto)
     ) {
-      score -= 110;
+
+      categoria = "rete_oneri";
+      score -= 150;
     }
 
     if (
-      /accisa|iva|imposta|imposte|tributi/.test(contesto)
+      /accisa|iva|imposta|imposte|tributi/i.test(contesto)
     ) {
-      score -= 110;
+
+      categoria = "imposte";
+      score -= 150;
     }
 
     if (
-      /commercializzazione\s+fissa|quota\s+fissa|quota\s+potenza/.test(contesto)
+      /commercializzazione\s+fissa|quota\s+fissa|quota\s+potenza/i.test(contesto)
     ) {
-      score -= 90;
+
+      categoria = "quota_fissa";
+      score -= 120;
     }
 
-    // PUN / PSV / spread sono utili,
-    // ma non rappresentano necessariamente il prezzo finale applicato.
+    /*
+     * Ulteriore protezione:
+     * un consumo non deve mai diventare
+     * prezzo materia prima.
+     */
     if (
-      /\bpun\b|\bpsv\b|indice|indicizzato|spread/.test(contesto)
+      /consumo\s+annuo|consumi\s+annui|consumo\s+totale|totale\s+consumi|consumo\s+del\s+periodo/i.test(contesto)
     ) {
-      score -= 25;
-    }
 
-    // Singole fasce F1/F2/F3 non devono diventare
-    // automaticamente il prezzo medio della bolletta.
-    if (
-      /\bf1\b|\bf2\b|\bf3\b|fascia\s+1|fascia\s+2|fascia\s+3/.test(contesto)
-    ) {
-      score -= 15;
+      score -= 100;
     }
 
     candidati.push({
       prezzo,
       unita,
+      categoria,
       score,
       contesto
     });
   }
 
   return candidati.sort(
-    (a, b) =>
-      b.score - a.score
+    (a, b) => b.score - a.score
   );
 }
-  function estraiPrezzoEnergia(testo, tipo) {
-    const candidati = trovaPrezziUnitari(testo, tipo);
-    if (!candidati.length) {
-      return { valore: NON_RILEVATO, numero: null, unita: null, confidenza: 0, candidati: [] };
-    }
 
-    const best = candidati[0];
-    const quasiPari = candidati.filter(c => Math.abs(c.score - best.score) <= 8);
-    const valoriDistinti = [...new Set(quasiPari.map(c => c.prezzo.toFixed(6)))];
+
+function estraiPrezzoEnergia(testo, tipo) {
+
+  const candidati =
+    trovaPrezziUnitari(testo, tipo);
+
+  /*
+   * Il valore che verrà confrontato con GME
+   * deve provenire esclusivamente dalla
+   * categoria materia_prima.
+   */
+  const materiaPrima =
+    candidati.filter(
+      c =>
+        c.categoria === "materia_prima" &&
+        c.score > 0
+    );
+
+  /*
+   * PUN / PSV eventualmente presenti
+   * vengono conservati separatamente.
+   */
+  const indiciMercato =
+    candidati.filter(
+      c =>
+        c.categoria === "indice" &&
+        c.score > 0
+    );
+
+  /*
+   * Spread eventualmente presente
+   * viene conservato separatamente.
+   */
+  const spread =
+    candidati.filter(
+      c =>
+        c.categoria === "spread" &&
+        c.score > 0
+    );
+
+  const indiceMercato =
+    indiciMercato.length > 0
+      ? indiciMercato[0]
+      : null;
+
+  const spreadFornitore =
+    spread.length > 0
+      ? spread[0]
+      : null;
+
+  /*
+   * Se non troviamo una materia prima
+   * sufficientemente identificata,
+   * NON inventiamo il prezzo.
+   *
+   * Meglio "Non rilevato" che confrontare
+   * un dato sbagliato con GME.
+   */
+  if (!materiaPrima.length) {
 
     return {
-      valore: String(best.prezzo).replace(".", ",") + " €/" + best.unita,
-      numero: best.prezzo,
-      unita: best.unita,
-      confidenza: valoriDistinti.length > 1
-  ? Math.max(0, Math.min(70, best.score))
-  : Math.max(0, Math.min(100, best.score)),
-      candidati: candidati.slice(0, 5),
-      multiplo: valoriDistinti.length > 1
+      valore: NON_RILEVATO,
+      numero: null,
+      unita: null,
+      confidenza: 0,
+
+      candidati:
+        candidati.slice(0, 8),
+
+      multiplo: false,
+
+      indiceMercato:
+        indiceMercato,
+
+      spread:
+        spreadFornitore
     };
   }
+
+  const best =
+    materiaPrima[0];
+
+  /*
+   * Se due prezzi materia prima hanno
+   * punteggio molto simile,
+   * abbassiamo l'affidabilità
+   * e chiediamo verifica.
+   */
+  const quasiPari =
+    materiaPrima.filter(
+      c =>
+        Math.abs(
+          c.score - best.score
+        ) <= 8
+    );
+
+  const valoriDistinti =
+    [
+      ...new Set(
+        quasiPari.map(
+          c => c.prezzo.toFixed(6)
+        )
+      )
+    ];
+
+  const multiplo =
+    valoriDistinti.length > 1;
+
+  return {
+
+    valore:
+      String(best.prezzo)
+        .replace(".", ",") +
+      " €/" +
+      best.unita,
+
+    numero:
+      best.prezzo,
+
+    unita:
+      best.unita,
+
+    confidenza:
+      multiplo
+        ? Math.max(
+            0,
+            Math.min(
+              70,
+              best.score
+            )
+          )
+        : Math.max(
+            0,
+            Math.min(
+              100,
+              best.score
+            )
+          ),
+
+    /*
+     * Manteniamo tutti i candidati
+     * per la diagnostica.
+     */
+    candidati:
+      candidati.slice(0, 8),
+
+    multiplo:
+      multiplo,
+
+    /*
+     * Informazioni che utilizzeremo
+     * nel futuro modulo GME.
+     */
+    indiceMercato:
+      indiceMercato,
+
+    spread:
+      spreadFornitore
+  };
+}
 
   function estraiCodiceUtenza(testo, tipo) {
     if (tipo.codice === "electricity") {
