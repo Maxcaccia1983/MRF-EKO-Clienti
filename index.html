@@ -1435,7 +1435,42 @@ if (caratteriOCR < 80) {
   }
 
   const dati = window.MRFBollettaParser.analizza(testo);
+let diagnosticaPrezziHTML = "";
 
+if (
+  dati.prezzoEnergia &&
+  Array.isArray(dati.prezzoEnergia.candidati) &&
+  dati.prezzoEnergia.candidati.length > 0
+) {
+
+  diagnosticaPrezziHTML =
+    "<br><br>" +
+    "<div style='" +
+      "padding:12px;" +
+      "background:#fff8e1;" +
+      "border:1px solid #e0b84f;" +
+      "border-radius:10px;" +
+      "font-size:12px;" +
+      "text-align:left;" +
+    "'>" +
+
+    "<strong>🧪 CANDIDATI PREZZO RILEVATI</strong><br><br>" +
+
+    dati.prezzoEnergia.candidati
+      .map((c, i) =>
+        "<strong>" + (i + 1) + ".</strong> " +
+        c.prezzo.toString().replace(".", ",") +
+        " €/" + c.unita +
+        " — punteggio " + c.score +
+        "<br>" +
+        "<small>" +
+        c.contesto.replace(/</g, "&lt;").replace(/>/g, "&gt;") +
+        "</small><br><br>"
+      )
+      .join("") +
+
+    "</div>";
+}
   let statoAffidabilita = "🟢 Alta";
 
   if (dati.affidabilita < 75) {
@@ -1478,7 +1513,9 @@ if (caratteriOCR < 80) {
 
     avvisiHTML +
 
-    "<br><br>✅ Lettura universale completata.";
+diagnosticaPrezziHTML +
+
+"<br><br>✅ Lettura universale completata.";
 }
 function chiudiServiziMRF() {
   document.getElementById("boxServiziMRF").style.display = "none";
