@@ -1150,71 +1150,15 @@ function preprocessaCanvasMRF(canvas) {
 
   const data = imageData.data;
 
-  // Istogramma grayscale per calcolare
-  // automaticamente la soglia migliore
-  const histogram = new Array(256).fill(0);
+  // Contrasto moderato:
+  // preserva i bordi dei caratteri invece
+  // di trasformare tutto subito in bianco/nero.
+  const contrasto = 90;
 
-  for (let i = 0; i < data.length; i += 4) {
+  const fattore =
+    (259 * (contrasto + 255)) /
+    (255 * (259 - contrasto));
 
-    const gray = Math.round(
-      0.299 * data[i] +
-      0.587 * data[i + 1] +
-      0.114 * data[i + 2]
-    );
-
-    histogram[gray]++;
-  }
-
-  const totalePixel =
-    canvas.width * canvas.height;
-
-  let sommaTotale = 0;
-
-  for (let i = 0; i < 256; i++) {
-    sommaTotale += i * histogram[i];
-  }
-
-  let sommaSfondo = 0;
-  let pesoSfondo = 0;
-  let varianzaMax = 0;
-  let soglia = 180;
-
-  for (let t = 0; t < 256; t++) {
-
-    pesoSfondo += histogram[t];
-
-    if (pesoSfondo === 0) continue;
-
-    const pesoTesto =
-      totalePixel - pesoSfondo;
-
-    if (pesoTesto === 0) break;
-
-    sommaSfondo +=
-      t * histogram[t];
-
-    const mediaSfondo =
-      sommaSfondo / pesoSfondo;
-
-    const mediaTesto =
-      (sommaTotale - sommaSfondo) /
-      pesoTesto;
-
-    const varianza =
-      pesoSfondo *
-      pesoTesto *
-      Math.pow(
-        mediaSfondo - mediaTesto,
-        2
-      );
-
-    if (varianza > varianzaMax) {
-      varianzaMax = varianza;
-      soglia = t;
-    }
-  }
-
-  // Applica grayscale + binarizzazione
   for (let i = 0; i < data.length; i += 4) {
 
     const gray =
@@ -1222,10 +1166,19 @@ function preprocessaCanvasMRF(canvas) {
       0.587 * data[i + 1] +
       0.114 * data[i + 2];
 
-    const valore =
-      gray < soglia
-        ? 0
-        : 255;
+    let valore =
+      fattore * (gray - 128) + 128;
+
+    valore =
+      Math.max(
+        0,
+        Math.min(255, valore)
+      );
+
+    // Pulisce soltanto lo sfondo molto chiaro
+    if (valore > 235) {
+      valore = 255;
+    }
 
     data[i] = valore;
     data[i + 1] = valore;
