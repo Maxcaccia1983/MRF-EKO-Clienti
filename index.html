@@ -1078,7 +1078,8 @@ function chiudiLuceGasMRF() {
   document.getElementById("boxLuceGasMRF").style.display = "none";
 }
   let bollettaMRFSelezionata = null;
-
+const DEBUG_MRF =
+  new URLSearchParams(window.location.search).get("debug") === "1";
 function apriComparatoreMRF() {
   const box = document.getElementById("boxComparatoreMRF");
 
@@ -1260,7 +1261,7 @@ if (testoOcrPrimaPaginaBox) {
     "OCR non ancora eseguito.";
 }
 
-if (diagnostica) {
+if (diagnostica && DEBUG_MRF) {
   diagnostica.style.display = "block";
 }
     let analisiPreliminare = null;
@@ -1350,7 +1351,7 @@ preprocessaCanvasMRF(canvas);
     ? riconoscimento.data.text
     : "";
 
-if (pagina === 1) {
+if (pagina === 1 && DEBUG_MRF) {
 
   const boxOCR =
     document.getElementById(
@@ -1438,6 +1439,7 @@ if (caratteriOCR < 80) {
 let diagnosticaPrezziHTML = "";
 
 if (
+  DEBUG_MRF &&
   dati.prezzoEnergia &&
   Array.isArray(dati.prezzoEnergia.candidati) &&
   dati.prezzoEnergia.candidati.length > 0
