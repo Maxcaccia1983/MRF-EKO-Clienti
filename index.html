@@ -1115,9 +1115,15 @@ function apriComparatoreMRF() {
 function chiudiComparatoreMRF() {
   document.getElementById("boxComparatoreMRF").style.display = "none";
 }
-function apriArchivioCTE() {
-  alert("Archivio CTE e Offerte MRF - area in preparazione");
+
+  function apriArchivioCTE() {
+  document.getElementById("boxArchivioCTE").style.display = "block";
 }
+
+function chiudiArchivioCTE() {
+  document.getElementById("boxArchivioCTE").style.display = "none";
+}
+
 function bollettaSelezionata(event) {
   const file = event.target.files[0];
   const info = document.getElementById("infoBolletta");
