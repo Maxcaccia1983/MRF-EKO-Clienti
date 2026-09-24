@@ -13,6 +13,56 @@
     SUPABASE_URL,
     SUPABASE_PUBLISHABLE_KEY
   );
+    supabaseClient.auth.onAuthStateChange((event, session) => {
+
+  if (event !== "PASSWORD_RECOVERY") return;
+
+  const mostraRecuperoPasswordMRF = () => {
+
+    const boxAdmin =
+      document.getElementById("boxAdminMRF");
+
+    const login =
+      document.getElementById("loginAdminMRF");
+
+    const boxNuovaPassword =
+      document.getElementById("boxNuovaPasswordMRF");
+
+    const archivio =
+      document.getElementById("boxArchivioCTE");
+
+    const stato =
+      document.getElementById("statoNuovaPasswordMRF");
+
+    if (!boxAdmin || !login || !boxNuovaPassword || !archivio || !stato) {
+      return;
+    }
+
+    boxAdmin.style.display = "block";
+    login.style.display = "none";
+    archivio.style.display = "none";
+    boxNuovaPassword.style.display = "block";
+
+    stato.textContent =
+      "🔑 Inserisci e conferma la nuova password.";
+
+    boxAdmin.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener(
+      "DOMContentLoaded",
+      mostraRecuperoPasswordMRF,
+      { once: true }
+    );
+  } else {
+    mostraRecuperoPasswordMRF();
+  }
+
+});
 </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
