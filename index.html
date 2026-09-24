@@ -1340,10 +1340,19 @@ function chiudiAdminMRF() {
     }
   );
 
-  if (error) {
-    stato.textContent = "❌ Impossibile inviare il link di recupero. Riprova.";
-    return;
+ if (error) {
+  if (DEBUG_MRF) {
+    stato.textContent =
+      "❌ " +
+      (error.message || "Errore sconosciuto") +
+      (error.status ? " [codice " + error.status + "]" : "");
+  } else {
+    stato.textContent =
+      "❌ Impossibile inviare il link di recupero. Riprova.";
   }
+
+  return;
+}
 
   stato.textContent =
     "📧 Se l'indirizzo è registrato, riceverai un'email per reimpostare la password.";
