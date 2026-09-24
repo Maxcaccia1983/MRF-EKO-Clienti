@@ -742,6 +742,35 @@
   <p>
     Area riservata per la gestione dell'Archivio CTE e Offerte.
   </p>
+    <div id="loginAdminMRF" style="margin:18px 0;">
+
+  <input
+    type="email"
+    id="adminEmailMRF"
+    placeholder="Email amministratore"
+    autocomplete="username"
+    style="width:100%; box-sizing:border-box; padding:12px; margin-bottom:10px; border:1px solid #ccc; border-radius:10px;"
+  >
+
+  <input
+    type="password"
+    id="adminPasswordMRF"
+    placeholder="Password"
+    autocomplete="current-password"
+    style="width:100%; box-sizing:border-box; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:10px;"
+  >
+
+  <button
+    type="button"
+    onclick="loginAdminMRF()"
+    style="width:100%; padding:13px; border:0; border-radius:10px; font-weight:700;"
+  >
+    🔐 ACCEDI
+  </button>
+
+  <p id="statoLoginAdminMRF" style="margin-top:10px;"></p>
+
+</div>
 <div id="boxArchivioCTE" style="display:none;">
 
   <h3>📚 Archivio CTE e Offerte MRF</h3>
@@ -1165,6 +1194,46 @@ function apriAdminMRF() {
 
 function chiudiAdminMRF() {
   document.getElementById("boxAdminMRF").style.display = "none";
+}
+  async function loginAdminMRF() {
+  const email = document.getElementById("adminEmailMRF").value.trim();
+  const password = document.getElementById("adminPasswordMRF").value;
+  const stato = document.getElementById("statoLoginAdminMRF");
+
+  if (!email || !password) {
+    stato.textContent = "⚠️ Inserisci email e password.";
+    return;
+  }
+
+  stato.textContent = "Accesso in corso...";
+
+  const { data: authData, error: authError } =
+    await supabaseClient.auth.signInWithPassword({
+      email: email,
+      password: password
+    });
+
+  if (authError || !authData.user) {
+    stato.textContent = "❌ Email o password non corretti.";
+    return;
+  }
+
+  const { data: adminData, error: adminError } =
+    await supabaseClient
+      .from("admin_users")
+      .select("user_id")
+      .eq("user_id", authData.user.id)
+      .maybeSingle();
+
+  if (adminError || !adminData) {
+    await supabaseClient.auth.signOut();
+    stato.textContent = "⛔ Utente non autorizzato come amministratore MRF.";
+    return;
+  }
+
+  document.getElementById("loginAdminMRF").style.display = "none";
+  document.getElementById("boxArchivioCTE").style.display = "block";
+  stato.textContent = "";
 }
 function bollettaSelezionata(event) {
   const file = event.target.files[0];
