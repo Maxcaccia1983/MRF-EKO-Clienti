@@ -767,8 +767,45 @@
   >
     🔐 ACCEDI
   </button>
-
+<button
+  type="button"
+  onclick="recuperaPasswordAdminMRF()"
+  style="width:100%; margin-top:10px; padding:10px; border:0; background:transparent; font-weight:600; text-decoration:underline;"
+>
+  Password dimenticata?
+</button>
   <p id="statoLoginAdminMRF" style="margin-top:10px;"></p>
+
+</div>
+    <div id="boxNuovaPasswordMRF" style="display:none; margin:18px 0;">
+
+  <h3>🔑 Imposta nuova password</h3>
+
+  <input
+    type="password"
+    id="nuovaPasswordMRF"
+    placeholder="Nuova password"
+    autocomplete="new-password"
+    style="width:100%; box-sizing:border-box; padding:12px; margin-bottom:10px; border:1px solid #ccc; border-radius:10px;"
+  >
+
+  <input
+    type="password"
+    id="confermaNuovaPasswordMRF"
+    placeholder="Conferma nuova password"
+    autocomplete="new-password"
+    style="width:100%; box-sizing:border-box; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:10px;"
+  >
+
+  <button
+    type="button"
+    onclick="salvaNuovaPasswordAdminMRF()"
+    style="width:100%; padding:13px; border:0; border-radius:10px; font-weight:700;"
+  >
+    🔐 SALVA NUOVA PASSWORD
+  </button>
+
+  <p id="statoNuovaPasswordMRF" style="margin-top:10px;"></p>
 
 </div>
 <div id="boxArchivioCTE" style="display:none;">
@@ -1235,6 +1272,114 @@ function chiudiAdminMRF() {
   document.getElementById("boxArchivioCTE").style.display = "block";
   stato.textContent = "";
 }
+  async function recuperaPasswordAdminMRF() {
+  const email = document.getElementById("adminEmailMRF").value.trim();
+  const stato = document.getElementById("statoLoginAdminMRF");
+
+  if (!email) {
+    stato.textContent = "⚠️ Inserisci prima la tua email.";
+    return;
+  }
+
+  stato.textContent = "Invio del link di recupero in corso...";
+
+  const { error } = await supabaseClient.auth.resetPasswordForEmail(
+    email,
+    {
+      redirectTo: "https://maxcaccia1983.github.io/MRF-EKO-Clienti/"
+    }
+  );
+
+  if (error) {
+    stato.textContent = "❌ Impossibile inviare il link di recupero. Riprova.";
+    return;
+  }
+
+  stato.textContent =
+    "📧 Se l'indirizzo è registrato, riceverai un'email per reimpostare la password.";
+}
+  async function salvaNuovaPasswordAdminMRF() {
+  const nuovaPassword =
+    document.getElementById("nuovaPasswordMRF").value;
+
+  const confermaPassword =
+    document.getElementById("confermaNuovaPasswordMRF").value;
+
+  const stato =
+    document.getElementById("statoNuovaPasswordMRF");
+
+  if (!nuovaPassword || !confermaPassword) {
+    stato.textContent = "⚠️ Compila entrambi i campi.";
+    return;
+  }
+
+  if (nuovaPassword.length < 8) {
+    stato.textContent = "⚠️ La password deve contenere almeno 8 caratteri.";
+    return;
+  }
+
+  if (nuovaPassword !== confermaPassword) {
+    stato.textContent = "⚠️ Le due password non coincidono.";
+    return;
+  }
+
+  stato.textContent = "Aggiornamento password in corso...";
+
+  const { error } = await supabaseClient.auth.updateUser({
+    password: nuovaPassword
+  });
+
+  if (error) {
+    stato.textContent = "❌ Impossibile aggiornare la password.";
+    return;
+  }
+
+  stato.textContent = "✅ Password aggiornata correttamente.";
+
+  await supabaseClient.auth.signOut();
+
+  document.getElementById("nuovaPasswordMRF").value = "";
+  document.getElementById("confermaNuovaPasswordMRF").value = "";
+
+  setTimeout(() => {
+    document.getElementById("boxNuovaPasswordMRF").style.display = "none";
+    document.getElementById("loginAdminMRF").style.display = "block";
+  }, 1500);
+}
+  supabaseClient.auth.onAuthStateChange((event, session) => {
+
+  if (event === "PASSWORD_RECOVERY") {
+
+    const boxAdmin =
+      document.getElementById("boxAdminMRF");
+
+    const login =
+      document.getElementById("loginAdminMRF");
+
+    const boxNuovaPassword =
+      document.getElementById("boxNuovaPasswordMRF");
+
+    const archivio =
+      document.getElementById("boxArchivioCTE");
+
+    const stato =
+      document.getElementById("statoNuovaPasswordMRF");
+
+    boxAdmin.style.display = "block";
+    login.style.display = "none";
+    archivio.style.display = "none";
+    boxNuovaPassword.style.display = "block";
+
+    stato.textContent =
+      "🔑 Inserisci e conferma la nuova password.";
+
+    boxAdmin.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  }
+
+});
 function bollettaSelezionata(event) {
   const file = event.target.files[0];
   const info = document.getElementById("infoBolletta");
