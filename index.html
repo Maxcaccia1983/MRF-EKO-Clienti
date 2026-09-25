@@ -15,7 +15,10 @@
   );
     supabaseClient.auth.onAuthStateChange((event, session) => {
 
-  if (event !== "PASSWORD_RECOVERY") return;
+  const paginaRecoveryMRF =
+  new URLSearchParams(window.location.search).get("recovery") === "1";
+
+if (event !== "PASSWORD_RECOVERY" || !paginaRecoveryMRF) return;
 
   const mostraRecuperoPasswordMRF = () => {
 
@@ -1336,7 +1339,7 @@ function chiudiAdminMRF() {
   const { error } = await supabaseClient.auth.resetPasswordForEmail(
     email,
     {
-      redirectTo: "https://maxcaccia1983.github.io/MRF-EKO-Clienti/"
+      redirectTo: "https://maxcaccia1983.github.io/MRF-EKO-Clienti/?recovery=1"
     }
   );
 
