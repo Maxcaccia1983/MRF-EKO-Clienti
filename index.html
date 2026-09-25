@@ -875,7 +875,39 @@ if (event !== "PASSWORD_RECOVERY" || !paginaRecoveryMRF) return;
   <div id="elencoFornitoriCTE">
     <p>Nessuna CTE caricata.</p>
   </div>
+<div id="ripristinoAccountMRF" style="margin:22px 0; padding:15px; border:1px solid #ddd; border-radius:12px;">
+  <h3>🔑 Ripristino account MRF 2024</h3>
 
+  <p>
+    Imposta una nuova password per l'account amministratore originale.
+  </p>
+
+  <input
+    type="password"
+    id="passwordRipristinoMRF"
+    placeholder="Nuova password"
+    autocomplete="new-password"
+    style="width:100%; box-sizing:border-box; padding:12px; margin-bottom:10px; border:1px solid #ccc; border-radius:10px;"
+  >
+
+  <input
+    type="password"
+    id="confermaPasswordRipristinoMRF"
+    placeholder="Conferma nuova password"
+    autocomplete="new-password"
+    style="width:100%; box-sizing:border-box; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:10px;"
+  >
+
+  <button
+    type="button"
+    onclick="ripristinaAccountMRF()"
+    style="width:100%; padding:13px; border:0; border-radius:10px; font-weight:700;"
+  >
+    RIPRISTINA ACCOUNT MRF 2024
+  </button>
+
+  <p id="statoRipristinoAccountMRF" style="margin-top:10px;"></p>
+</div>
   <button type="button" onclick="chiudiArchivioCTE()">
     CHIUDI ARCHIVIO
   </button>
@@ -1324,6 +1356,66 @@ function chiudiAdminMRF() {
   document.getElementById("loginAdminMRF").style.display = "none";
   document.getElementById("boxArchivioCTE").style.display = "block";
   stato.textContent = "";
+}
+  async function ripristinaAccountMRF() {
+  const password =
+    document.getElementById("passwordRipristinoMRF").value;
+
+  const conferma =
+    document.getElementById("confermaPasswordRipristinoMRF").value;
+
+  const stato =
+    document.getElementById("statoRipristinoAccountMRF");
+
+  if (!password || !conferma) {
+    stato.textContent = "⚠️ Compila entrambi i campi.";
+    return;
+  }
+
+  if (password.length < 8) {
+    stato.textContent =
+      "⚠️ La password deve contenere almeno 8 caratteri.";
+    return;
+  }
+
+  if (password !== conferma) {
+    stato.textContent = "⚠️ Le due password non coincidono.";
+    return;
+  }
+
+  const { data: sessionData } =
+    await supabaseClient.auth.getSession();
+
+  if (!sessionData.session) {
+    stato.textContent =
+      "⛔ Devi accedere come amministratore MRF.";
+    return;
+  }
+
+  stato.textContent = "Ripristino account MRF in corso...";
+
+  const { data, error } =
+    await supabaseClient.functions.invoke(
+      "reset-mrf-admin-password",
+      {
+        body: {
+          password: password
+        }
+      }
+    );
+
+  if (error || !data?.ok) {
+    stato.textContent =
+      "❌ " +
+      (data?.error || "Impossibile ripristinare l'account MRF.");
+    return;
+  }
+
+  stato.textContent =
+    "✅ Account MRF 2024 ripristinato correttamente.";
+
+  document.getElementById("passwordRipristinoMRF").value = "";
+  document.getElementById("confermaPasswordRipristinoMRF").value = "";
 }
   async function recuperaPasswordAdminMRF() {
   const email = document.getElementById("adminEmailMRF").value.trim();
