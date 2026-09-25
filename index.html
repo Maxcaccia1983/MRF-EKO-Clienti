@@ -1314,8 +1314,16 @@ function apriAdminMRF() {
   document.getElementById("boxAdminMRF").style.display = "block";
 }
 
-function chiudiAdminMRF() {
+async function chiudiAdminMRF() {
+  await supabaseClient.auth.signOut();
+
   document.getElementById("boxAdminMRF").style.display = "none";
+  document.getElementById("loginAdminMRF").style.display = "block";
+  document.getElementById("boxArchivioCTE").style.display = "none";
+
+  document.getElementById("adminEmailMRF").value = "";
+  document.getElementById("adminPasswordMRF").value = "";
+  document.getElementById("statoLoginAdminMRF").textContent = "";
 }
   async function loginAdminMRF() {
   const email = document.getElementById("adminEmailMRF").value.trim();
