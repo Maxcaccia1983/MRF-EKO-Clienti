@@ -882,9 +882,76 @@ if (event !== "PASSWORD_RECOVERY" || !paginaRecoveryMRF) return;
   </button>
 
 </div>
-  <div id="strumentiAdminCTE">
-    <p>Gestione CTE in preparazione.</p>
-  </div>
+ <div id="strumentiAdminCTE" style="display:none; margin-top:22px; padding:15px; border:1px solid #ddd; border-radius:12px;">
+
+  <h3>➕ Carica nuova CTE</h3>
+
+  <input
+    type="text"
+    id="cteFornitoreMRF"
+    placeholder="Fornitore"
+    style="width:100%; box-sizing:border-box; padding:12px; margin-bottom:10px;"
+  >
+
+  <input
+    type="text"
+    id="cteNomeOffertaMRF"
+    placeholder="Nome offerta"
+    style="width:100%; box-sizing:border-box; padding:12px; margin-bottom:10px;"
+  >
+
+  <select
+    id="cteCommodityMRF"
+    style="width:100%; padding:12px; margin-bottom:10px;"
+  >
+    <option value="">Seleziona fornitura</option>
+    <option value="luce">⚡ Luce</option>
+    <option value="gas">🔥 Gas</option>
+  </select>
+
+  <select
+    id="cteSegmentoMRF"
+    style="width:100%; padding:12px; margin-bottom:10px;"
+  >
+    <option value="">Seleziona tipologia cliente</option>
+    <option value="domestico">Domestico</option>
+    <option value="business">Business</option>
+    <option value="condominio">Condominio</option>
+    <option value="altro">Altro</option>
+  </select>
+
+  <label>Validità dal</label>
+  <input
+    type="date"
+    id="cteValiditaDaMRF"
+    style="width:100%; box-sizing:border-box; padding:12px; margin-bottom:10px;"
+  >
+
+  <label>Validità al</label>
+  <input
+    type="date"
+    id="cteValiditaAlMRF"
+    style="width:100%; box-sizing:border-box; padding:12px; margin-bottom:10px;"
+  >
+
+  <input
+    type="file"
+    id="cteFileMRF"
+    accept="application/pdf,.pdf"
+    style="width:100%; margin:10px 0 15px 0;"
+  >
+
+  <button
+    type="button"
+    onclick="caricaCTEAdminMRF()"
+    style="width:100%; padding:13px; border:0; border-radius:10px; font-weight:700;"
+  >
+    📤 CARICA CTE
+  </button>
+
+  <p id="statoCaricamentoCTEMRF" style="margin-top:10px;"></p>
+
+</div>
 
   <button type="button" onclick="chiudiAdminMRF()">
     CHIUDI AMMINISTRAZIONE
@@ -1279,6 +1346,125 @@ function chiudiComparatoreMRF() {
 function chiudiArchivioCTE() {
   document.getElementById("boxArchivioCTE").style.display = "none";
 }
+  async function caricaCTEAdminMRF() {
+  const stato = document.getElementById("statoCaricamentoCTEMRF");
+
+  const fornitore =
+    document.getElementById("cteFornitoreMRF").value.trim();
+
+  const nomeOfferta =
+    document.getElementById("cteNomeOffertaMRF").value.trim();
+
+  const commodity =
+    document.getElementById("cteCommodityMRF").value;
+
+  const segmento =
+    document.getElementById("cteSegmentoMRF").value;
+
+  const validitaDa =
+    document.getElementById("cteValiditaDaMRF").value || null;
+
+  const validitaAl =
+    document.getElementById("cteValiditaAlMRF").value || null;
+
+  const fileInput =
+    document.getElementById("cteFileMRF");
+
+  const file = fileInput.files[0];
+
+  if (!fornitore || !commodity || !segmento || !file) {
+    stato.textContent =
+      "⚠️ Compila fornitore, fornitura, tipologia cliente e seleziona il PDF.";
+    return;
+  }
+
+  if (
+    file.type !== "application/pdf" &&
+    !file.name.toLowerCase().endsWith(".pdf")
+  ) {
+    stato.textContent = "⚠️ Puoi caricare solo file PDF.";
+    return;
+  }
+
+  if (file.size > 20 * 1024 * 1024) {
+    stato.textContent = "⚠️ Il PDF supera il limite di 20 MB.";
+    return;
+  }
+
+  stato.textContent = "Caricamento CTE in corso...";
+
+  const { data: sessionData } =
+    await supabaseClient.auth.getSession();
+
+  if (!sessionData.session) {
+    stato.textContent =
+      "⛔ Sessione amministratore scaduta. Accedi nuovamente.";
+    return;
+  }
+
+  const nomePulito = file.name
+    .replace(/[^a-zA-Z0-9._-]/g, "_");
+
+  const storagePath =
+    sessionData.session.user.id +
+    "/" +
+    Date.now() +
+    "-" +
+    crypto.randomUUID() +
+    "-" +
+    nomePulito;
+
+  const { error: uploadError } =
+    await supabaseClient.storage
+      .from("cte-mrf")
+      .upload(storagePath, file, {
+        contentType: "application/pdf",
+        upsert: false
+      });
+
+  if (uploadError) {
+    stato.textContent =
+      "❌ Errore durante il caricamento del PDF.";
+    return;
+  }
+
+  const { error: dbError } =
+    await supabaseClient
+      .from("cte_offerte")
+      .insert({
+        fornitore: fornitore,
+        nome_offerta: nomeOfferta || null,
+        commodity: commodity,
+        segmento: segmento,
+        validita_da: validitaDa,
+        validita_a: validitaAl,
+        nome_file: file.name,
+        storage_path: storagePath,
+        mime_type: "application/pdf",
+        file_size: file.size,
+        attiva: true
+      });
+
+  if (dbError) {
+    await supabaseClient.storage
+      .from("cte-mrf")
+      .remove([storagePath]);
+
+    stato.textContent =
+      "❌ Errore durante il salvataggio della CTE.";
+    return;
+  }
+
+  stato.textContent = "✅ CTE caricata correttamente.";
+
+  document.getElementById("cteFornitoreMRF").value = "";
+  document.getElementById("cteNomeOffertaMRF").value = "";
+  document.getElementById("cteCommodityMRF").value = "";
+  document.getElementById("cteSegmentoMRF").value = "";
+  document.getElementById("cteValiditaDaMRF").value = "";
+  document.getElementById("cteValiditaAlMRF").value = "";
+  fileInput.value = "";
+}
 function apriAdminMRF() {
   document.getElementById("boxAdminMRF").style.display = "block";
 }
@@ -1289,7 +1475,7 @@ async function chiudiAdminMRF() {
   document.getElementById("boxAdminMRF").style.display = "none";
   document.getElementById("loginAdminMRF").style.display = "block";
   document.getElementById("boxArchivioCTE").style.display = "none";
-
+document.getElementById("strumentiAdminCTE").style.display = "none";
   document.getElementById("adminEmailMRF").value = "";
   document.getElementById("adminPasswordMRF").value = "";
   document.getElementById("statoLoginAdminMRF").textContent = "";
@@ -1332,6 +1518,7 @@ async function chiudiAdminMRF() {
 
   document.getElementById("loginAdminMRF").style.display = "none";
   document.getElementById("boxArchivioCTE").style.display = "block";
+    document.getElementById("strumentiAdminCTE").style.display = "block";
   stato.textContent = "";
 }
  
