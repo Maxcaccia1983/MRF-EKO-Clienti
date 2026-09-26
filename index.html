@@ -890,19 +890,19 @@ if (event !== "PASSWORD_RECOVERY" || !paginaRecoveryMRF) return;
     type="text"
     id="cteFornitoreMRF"
     placeholder="Fornitore"
-    style="width:100%; box-sizing:border-box; padding:12px; margin-bottom:10px;"
+    style="display:none; width:100%; box-sizing:border-box; padding:12px; margin-bottom:10px;"
   >
 
   <input
     type="text"
     id="cteNomeOffertaMRF"
     placeholder="Nome offerta"
-    style="width:100%; box-sizing:border-box; padding:12px; margin-bottom:10px;"
+    style="display:none;width:100%; box-sizing:border-box; padding:12px; margin-bottom:10px;"
   >
 
   <select
     id="cteCommodityMRF"
-    style="width:100%; padding:12px; margin-bottom:10px;"
+    style="display:none;width:100%; padding:12px; margin-bottom:10px;"
   >
     <option value="">Seleziona fornitura</option>
     <option value="luce">⚡ Luce</option>
@@ -911,7 +911,7 @@ if (event !== "PASSWORD_RECOVERY" || !paginaRecoveryMRF) return;
 
   <select
     id="cteSegmentoMRF"
-    style="width:100%; padding:12px; margin-bottom:10px;"
+    style="display:none;width:100%; padding:12px; margin-bottom:10px;"
   >
     <option value="">Seleziona tipologia cliente</option>
     <option value="domestico">Domestico</option>
@@ -920,18 +920,18 @@ if (event !== "PASSWORD_RECOVERY" || !paginaRecoveryMRF) return;
     <option value="altro">Altro</option>
   </select>
 
-  <label>Validità dal</label>
+  <label style="display:none;">Validità dal</label>
   <input
     type="date"
     id="cteValiditaDaMRF"
-    style="width:100%; box-sizing:border-box; padding:12px; margin-bottom:10px;"
+    style="display:none;width:100%; box-sizing:border-box; padding:12px; margin-bottom:10px;"
   >
 
-  <label>Validità al</label>
+  <label style="display:none;">Validità al</label>
   <input
     type="date"
     id="cteValiditaAlMRF"
-    style="width:100%; box-sizing:border-box; padding:12px; margin-bottom:10px;"
+    style="display:none;width:100%; box-sizing:border-box; padding:12px; margin-bottom:10px;"
   >
 
   <input
@@ -940,7 +940,10 @@ if (event !== "PASSWORD_RECOVERY" || !paginaRecoveryMRF) return;
     accept="application/pdf,.pdf"
     style="width:100%; margin:10px 0 15px 0;"
   >
-
+<div
+  id="anteprimaCTEMRF"
+  style="display:none; margin:15px 0; padding:15px; border:1px solid #ddd; border-radius:10px;"
+></div>
   <button
     type="button"
     onclick="caricaCTEAdminMRF()"
@@ -1346,35 +1349,263 @@ function chiudiComparatoreMRF() {
 function chiudiArchivioCTE() {
   document.getElementById("boxArchivioCTE").style.display = "none";
 }
-  async function caricaCTEAdminMRF() {
+  
+    async function leggiTestoCTEMRF(file) {
+
+  const pdfjsLib = window.pdfjsLib;
+
+  if (!pdfjsLib) {
+    throw new Error("PDF.js non disponibile.");
+  }
+
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+  const buffer = await file.arrayBuffer();
+
+  const pdf = await pdfjsLib.getDocument({
+    data: new Uint8Array(buffer)
+  }).promise;
+
+  let testoCompleto = "";
+
+  for (let pagina = 1; pagina <= pdf.numPages; pagina++) {
+
+    const page = await pdf.getPage(pagina);
+
+    const contenuto = await page.getTextContent();
+
+    const testoPagina = contenuto.items
+      .map(item => item.str)
+      .join(" ");
+
+    testoCompleto += " " + testoPagina;
+  }
+
+const testoPulito = testoCompleto
+  .replace(/\s+/g, " ")
+  .trim();
+
+const datiNativi =
+  analizzaTestoCTEMRF(testoPulito);
+
+const testoSufficiente =
+  testoPulito.length >= 180 &&
+  datiNativi.fornitore &&
+  datiNativi.commodity &&
+  datiNativi.segmento &&
+  datiNativi.validitaDa &&
+  datiNativi.validitaAl;
+
+if (testoSufficiente) {
+  return testoPulito;
+}
+
+if (!window.Tesseract) {
+  return testoPulito;
+}
+
+let testoOCR = "";
+
+for (let pagina = 1; pagina <= pdf.numPages; pagina++) {
+
+  const page = await pdf.getPage(pagina);
+  const viewport = page.getViewport({ scale: 2 });
+
+  const canvas = document.createElement("canvas");
+  const context = canvas.getContext("2d", {
+    willReadFrequently: true
+  });
+
+  canvas.width = Math.ceil(viewport.width);
+  canvas.height = Math.ceil(viewport.height);
+
+  await page.render({
+    canvasContext: context,
+    viewport: viewport
+  }).promise;
+
+  if (typeof preprocessaCanvasMRF === "function") {
+    preprocessaCanvasMRF(canvas);
+  }
+
+  const riconoscimento =
+    await window.Tesseract.recognize(
+      canvas,
+      "ita"
+    );
+
+  const testoPaginaOCR =
+    riconoscimento.data &&
+    riconoscimento.data.text
+      ? riconoscimento.data.text
+      : "";
+
+  testoOCR += " " + testoPaginaOCR;
+
+  canvas.width = 1;
+  canvas.height = 1;
+}
+
+return (testoPulito + " " + testoOCR)
+  .replace(/\s+/g, " ")
+  .trim();
+}
+  function analizzaTestoCTEMRF(testo) {
+let nomeOfferta = "";
+
+  const t = testo
+    .replace(/\s+/g, " ")
+    .trim();
+
+  const minuscolo = t.toLowerCase();
+let fornitore = "";
+
+const testoIniziale = t.slice(0, 5000);
+let validitaDa = null;
+let validitaAl = null;
+
+function dataISOCTE(giorno, mese, anno) {
+  const gg = giorno.padStart(2, "0");
+  const mm = mese.padStart(2, "0");
+  const aaaa = anno.length === 2 ? "20" + anno : anno;
+
+  return aaaa + "-" + mm + "-" + gg;
+}
+
+const patternValidita = [
+  /(?:validit[aà]|offerta valida|periodo di validit[aà])[^0-9]{0,50}(?:dal\s*)?(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})\s*(?:al|a|fino al|\-|–|—)\s*(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})/i,
+
+  /(?:valida dal|valid[aà] dal)\s*(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})\s*(?:al|a|fino al)\s*(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})/i
+];
+
+for (const pattern of patternValidita) {
+  const match = testoIniziale.match(pattern);
+
+  if (match) {
+    validitaDa = dataISOCTE(match[1], match[2], match[3]);
+    validitaAl = dataISOCTE(match[4], match[5], match[6]);
+    break;
+  }
+}
+const patternFornitore = [
+  /(?:ragione sociale|denominazione sociale|fornitore|venditore|società di vendita)\s*[:\-]?\s*([^;|]{2,100}?)(?=\s+(?:p\.?\s?iva|partita iva|codice fiscale|sede|pec|tel|www\.|$))/i,
+
+  /([A-ZÀ-ÖØ-Þ][A-Za-zÀ-ÿ0-9&'’.\- ]{2,80}?\s+(?:S\.?\s?P\.?\s?A\.?|S\.?\s?R\.?\s?L\.?|S\.?\s?R\.?\s?L\.?\s?S\.?|S\.?\s?A\.?\s?S\.?|S\.?\s?N\.?\s?C\.?))/i
+];
+
+for (const pattern of patternFornitore) {
+
+  const match = testoIniziale.match(pattern);
+
+  if (match && match[1]) {
+    fornitore = match[1]
+      .replace(/\s+/g, " ")
+      .trim();
+
+    break;
+  }
+}
+    const patternOfferta = [
+  /(?:nome offerta|denominazione offerta|offerta commerciale|nome commerciale)\s*[:\-]?\s*([^;|]{2,120}?)(?=\s+(?:codice offerta|codice|validità|durata|condizioni|fornitura|$))/i,
+
+  /(?:offerta)\s*[:\-]\s*([^;|]{2,120}?)(?=\s+(?:codice|validità|durata|condizioni|$))/i
+];
+
+for (const pattern of patternOfferta) {
+
+  const match = testoIniziale.match(pattern);
+
+  if (match && match[1]) {
+    nomeOfferta = match[1]
+      .replace(/\s+/g, " ")
+      .trim();
+
+    break;
+  }
+}
+  let commodity = "";
+
+  const indiziLuce = [
+    "energia elettrica",
+    "luce",
+    "kwh",
+    "pod",
+    "pun"
+  ];
+
+  const indiziGas = [
+    "gas naturale",
+    "smc",
+    "pdr",
+    "psv",
+    "gas"
+  ];
+
+  const puntiLuce =
+    indiziLuce.filter(x => minuscolo.includes(x)).length;
+
+  const puntiGas =
+    indiziGas.filter(x => minuscolo.includes(x)).length;
+
+  if (puntiLuce > puntiGas) {
+    commodity = "luce";
+  }
+
+  if (puntiGas > puntiLuce) {
+    commodity = "gas";
+  }
+
+  let segmento = "";
+
+  if (
+    minuscolo.includes("condominio") ||
+    minuscolo.includes("usi condominiali")
+  ) {
+    segmento = "condominio";
+  } else if (
+    minuscolo.includes("business") ||
+    minuscolo.includes("non domestico") ||
+    minuscolo.includes("microimpresa") ||
+    minuscolo.includes("piccola impresa") ||
+    minuscolo.includes("altri usi")
+  ) {
+    segmento = "business";
+  } else if (
+    minuscolo.includes("domestico") ||
+    minuscolo.includes("residente") ||
+    minuscolo.includes("abitazione")
+  ) {
+    segmento = "domestico";
+  }
+
+return {
+  fornitore,
+  nomeOfferta,
+  commodity,
+  segmento,
+  validitaDa,
+  validitaAl
+};
+}
+async function caricaCTEAdminMRF() {
   const stato = document.getElementById("statoCaricamentoCTEMRF");
+  let fornitore = "";
+  let nomeOfferta = "";
+  let commodity = "";
 
-  const fornitore =
-    document.getElementById("cteFornitoreMRF").value.trim();
-
-  const nomeOfferta =
-    document.getElementById("cteNomeOffertaMRF").value.trim();
-
-  const commodity =
-    document.getElementById("cteCommodityMRF").value;
-
-  const segmento =
-    document.getElementById("cteSegmentoMRF").value;
-
-  const validitaDa =
-    document.getElementById("cteValiditaDaMRF").value || null;
-
-  const validitaAl =
-    document.getElementById("cteValiditaAlMRF").value || null;
+let segmento = "";
+  let validitaDa = null;
+  let validitaAl = null;
 
   const fileInput =
     document.getElementById("cteFileMRF");
 
   const file = fileInput.files[0];
 
-  if (!fornitore || !commodity || !segmento || !file) {
+  if (!file) {
     stato.textContent =
-      "⚠️ Compila fornitore, fornitura, tipologia cliente e seleziona il PDF.";
+      "⚠️ Seleziona il PDF della CTE.";
     return;
   }
 
@@ -1385,7 +1616,35 @@ function chiudiArchivioCTE() {
     stato.textContent = "⚠️ Puoi caricare solo file PDF.";
     return;
   }
+stato.textContent = "🔎 Lettura automatica della CTE...";
 
+const testoCTE = await leggiTestoCTEMRF(file);
+
+const datiCTE = analizzaTestoCTEMRF(testoCTE);
+  nomeOfferta = datiCTE.nomeOfferta;
+fornitore = datiCTE.fornitore;
+commodity = datiCTE.commodity;
+segmento = datiCTE.segmento;
+  validitaDa = datiCTE.validitaDa;
+validitaAl = datiCTE.validitaAl;
+  if (!fornitore || !commodity || !segmento || !validitaDa || !validitaAl) {
+  stato.textContent =
+  "⚠️ Non riesco a riconoscere automaticamente fornitore, Luce/Gas, tipologia cliente o validità della CTE.";
+  return;
+}
+  const anteprima =
+  document.getElementById("anteprimaCTEMRF");
+
+anteprima.style.display = "block";
+anteprima.style.whiteSpace = "pre-line";
+
+anteprima.textContent =
+  "✅ DATI RICONOSCIUTI\n\n" +
+  "Fornitore: " + fornitore + "\n" +
+  "Offerta: " + (nomeOfferta || "Non rilevata") + "\n" +
+  "Fornitura: " + commodity + "\n" +
+  "Cliente: " + segmento + "\n" +
+  "Validità: " + validitaDa + " → " + validitaAl;
   if (file.size > 20 * 1024 * 1024) {
     stato.textContent = "⚠️ Il PDF supera il limite di 20 MB.";
     return;
