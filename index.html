@@ -1693,10 +1693,10 @@ if (!validitaDa || !validitaAl) {
     "i"
   );
 
-  const esplicito = testoIniziale.match(patternFornitoreEsplicito);
+  const esplicito = t.match(patternFornitoreEsplicito);
     const contestoFornitoreEsplicito =
   esplicito && typeof esplicito.index === "number"
-    ? testoIniziale
+   ? t
         .slice(
           Math.max(0, esplicito.index - 180),
           esplicito.index + esplicito[0].length + 180
@@ -1721,14 +1721,14 @@ let fornitoreAffidabile = false;
     const candidatiSocieta = [];
     let matchSocieta;
 
-    while ((matchSocieta = patternSocieta.exec(testoIniziale)) !== null) {
+   while ((matchSocieta = patternSocieta.exec(t)) !== null) {
       const nome = matchSocieta[1]
         .replace(/\s+/g, " ")
         .trim();
 
-      const prima = testoIniziale
-        .slice(Math.max(0, matchSocieta.index - 140), matchSocieta.index)
-        .toLowerCase();
+      const prima = t
+  .slice(Math.max(0, matchSocieta.index - 140), matchSocieta.index)
+  .toLowerCase();
 
       let punteggio = 0;
 
@@ -1770,13 +1770,13 @@ if (candidatiSocieta.length > 0) {
 
   fornitore = candidato.nome;
 
-  contestoFornitoreFallback =
-    testoIniziale
-      .slice(
-        Math.max(0, candidato.posizione - 180),
-        candidato.posizione + candidato.nome.length + 180
-      )
-      .trim();
+ contestoFornitoreFallback =
+  t
+    .slice(
+      Math.max(0, candidato.posizione - 180),
+      candidato.posizione + candidato.nome.length + 180
+    )
+    .trim();
 }
   }
 
