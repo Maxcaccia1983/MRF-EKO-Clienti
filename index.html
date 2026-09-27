@@ -614,9 +614,43 @@ if (event !== "PASSWORD_RECOVERY" || !paginaRecoveryMRF) return;
     </a>
     <a class="servizi-mrf"
    href="javascript:void(0);"
-   onclick="apriServiziMRF(); return false;">
+   onclick="document.getElementById('accessoRiservatoMRF').style.display='block'; return false;"
   ✨ ACCEDI AI SERVIZI MRF
 </a>
+    <div
+  id="accessoRiservatoMRF"
+  style="display:none; margin-top:15px; padding:16px; background:#fff; border:1px solid #ddd; border-radius:12px;"
+>
+
+  <h3 style="margin-top:0;">🔒 Accesso riservato MRF</h3>
+
+  <input
+    type="email"
+    id="emailServiziMRF"
+    placeholder="Email amministratore"
+    autocomplete="username"
+    style="width:100%; box-sizing:border-box; padding:12px; margin-bottom:10px; border:1px solid #ccc; border-radius:10px;"
+  >
+
+  <input
+    type="password"
+    id="passwordServiziMRF"
+    placeholder="Password"
+    autocomplete="current-password"
+    style="width:100%; box-sizing:border-box; padding:12px; margin-bottom:10px; border:1px solid #ccc; border-radius:10px;"
+  >
+
+  <button
+    type="button"
+    onclick="loginServiziMRF()"
+    style="width:100%; padding:13px; border:0; border-radius:10px; font-weight:700;"
+  >
+    🔐 ACCEDI AI SERVIZI MRF
+  </button>
+
+  <p id="statoAccessoServiziMRF" style="margin-top:10px;"></p>
+
+</div>
     <div id="boxServiziMRF" class="box-servizi-mrf">
 
   <h3>Scopri i servizi MRF </h3>
@@ -1311,6 +1345,57 @@ function mostraAssistenza(event) {
   } else {
     box.style.display = "block";
   }
+}
+  async function loginServiziMRF() {
+  const email =
+    document.getElementById("emailServiziMRF").value.trim();
+
+  const password =
+    document.getElementById("passwordServiziMRF").value;
+
+  const stato =
+    document.getElementById("statoAccessoServiziMRF");
+
+  if (!email || !password) {
+    stato.textContent = "⚠️ Inserisci email e password.";
+    return;
+  }
+
+  stato.textContent = "Accesso in corso...";
+
+  const { data: authData, error: authError } =
+    await supabaseClient.auth.signInWithPassword({
+      email,
+      password
+    });
+
+  if (authError || !authData.user) {
+    stato.textContent = "❌ Email o password non corretti.";
+    return;
+  }
+
+  const { data: adminData, error: adminError } =
+    await supabaseClient
+      .from("admin_users")
+      .select("user_id")
+      .eq("user_id", authData.user.id)
+      .maybeSingle();
+
+  if (adminError || !adminData) {
+    await supabaseClient.auth.signOut();
+
+    stato.textContent =
+      "⛔ Accesso non autorizzato ai Servizi MRF.";
+
+    return;
+  }
+
+  document.getElementById("accessoRiservatoMRF").style.display = "none";
+  document.getElementById("boxServiziMRF").style.display = "block";
+
+  document.getElementById("emailServiziMRF").value = "";
+  document.getElementById("passwordServiziMRF").value = "";
+  stato.textContent = "";
 }
 function apriLuceGasMRF() {
   const box = document.getElementById("boxLuceGasMRF");
