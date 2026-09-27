@@ -1464,7 +1464,8 @@ return (testoPulito + " " + testoOCR)
   // Nelle CTE i dati identificativi possono trovarsi oltre la prima pagina.
   // Usiamo una finestra abbastanza ampia, senza analizzare inutilmente tutto il PDF.
   const testoIniziale = t.slice(0, 12000);
-
+const dateTrovateCTE =
+  testoIniziale.match(/\b\d{1,2}[\/.\-]\d{1,2}[\/.\-]\d{2,4}\b/g) || [];
   let validitaDa = null;
   let validitaAl = null;
 
@@ -1689,13 +1690,14 @@ return (testoPulito + " " + testoOCR)
   }
 
   return {
-    fornitore,
-    nomeOfferta,
-    commodity,
-    segmento,
-    validitaDa,
-    validitaAl
-  };
+  fornitore,
+  nomeOfferta,
+  commodity,
+  segmento,
+  validitaDa,
+  validitaAl,
+  dateTrovateCTE
+};
 }
 async function caricaCTEAdminMRF() {
   const stato = document.getElementById("statoCaricamentoCTEMRF");
@@ -1743,6 +1745,7 @@ commodity = datiCTE.commodity;
 segmento = datiCTE.segmento;
   validitaDa = datiCTE.validitaDa;
 validitaAl = datiCTE.validitaAl;
+  const dateTrovateCTE = datiCTE.dateTrovateCTE || [];
   if (!fornitore || !commodity || !segmento || !validitaDa || !validitaAl) {
 
   const mancanti = [];
@@ -1754,7 +1757,9 @@ validitaAl = datiCTE.validitaAl;
   if (!validitaAl) mancanti.push("validità finale");
 
   stato.textContent =
-    "⚠️ Dati non riconosciuti: " + mancanti.join(", ");
+  "⚠️ Dati non riconosciuti: " + mancanti.join(", ") +
+  " | Date trovate nel PDF: " +
+  (dateTrovateCTE.length ? dateTrovateCTE.join(" - ") : "nessuna");
 
   return;
 }
