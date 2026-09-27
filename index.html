@@ -1556,7 +1556,7 @@ return (testoPulito + " " + testoOCR)
     // Fallback universale: individua vere ragioni sociali e preferisce
     // quelle vicine a parole come fornitore/venditore/ragione sociale.
     const patternSocieta =
-      /\b((?:[A-ZÀ-ÖØ-Þ][A-Za-zÀ-ÿ0-9&'’.\-]*|[A-Z0-9][A-Z0-9&'’.\-]{1,})(?:\s+(?:[A-ZÀ-ÖØ-Þ][A-Za-zÀ-ÿ0-9&'’.\-]*|[A-Z0-9][A-Z0-9&'’.\-]{1,})){0,6}\s+(?:S\.?\s?R\.?\s?L\.?\s?S\.?|S\.?\s?R\.?\s?L\.?|S\.?\s?P\.?\s?A\.?|S\.?\s?A\.?\s?S\.?|S\.?\s?N\.?\s?C\.?))\b/g;
+      /\b((?:[A-ZÀ-ÖØ-Þ][A-Za-zÀ-ÿ0-9&'’.\-]*|[A-Z0-9][A-Z0-9&'’.\-]{1,})(?:\s+(?:[A-ZÀ-ÖØ-Þ][A-Za-zÀ-ÿ0-9&'’.\-]*|[A-Z0-9][A-Z0-9&'’.\-]{1,})){0,6}\s+(?:[Ss]\.?\s?[Rr]\.?\s?[Ll]\.?\s?[Ss]\.?|[Ss]\.?\s?[Rr]\.?\s?[Ll]\.?|[Ss]\.?\s?[Pp]\.?\s?[Aa]\.?|[Ss]\.?\s?[Aa]\.?\s?[Ss]\.?|[Ss]\.?\s?[Nn]\.?\s?[Cc]\.?))\b/g;
 
     const candidatiSocieta = [];
     let matchSocieta;
