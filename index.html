@@ -1674,11 +1674,12 @@ if (!validitaDa || !validitaAl) {
   );
 
   const esplicito = testoIniziale.match(patternFornitoreEsplicito);
-
+let fornitoreAffidabile = false;
   if (esplicito && esplicito[1]) {
     fornitore = esplicito[1]
       .replace(/\s+/g, " ")
       .trim();
+    fornitoreAffidabile = true;
   }
 
   if (!fornitore) {
@@ -1819,6 +1820,7 @@ if (!validitaDa || !validitaAl) {
 
   return {
   fornitore,
+    fornitoreAffidabile,
   nomeOfferta,
   commodity,
   segmento,
@@ -1871,13 +1873,21 @@ const testoCTE = await leggiTestoCTEMRF(file);
 const datiCTE = analizzaTestoCTEMRF(testoCTE);
   nomeOfferta = datiCTE.nomeOfferta;
 fornitore = datiCTE.fornitore;
+  const fornitoreAffidabile = datiCTE.fornitoreAffidabile === true;
 commodity = datiCTE.commodity;
 segmento = datiCTE.segmento;
   validitaDa = datiCTE.validitaDa;
 validitaAl = datiCTE.validitaAl;
   const dateTrovateCTE = datiCTE.dateTrovateCTE || [];
-  const datiCTECompleti =
-  !!(fornitore && commodity && segmento && validitaDa && validitaAl);
+ const datiCTECompleti =
+  !!(
+    fornitore &&
+    fornitoreAffidabile &&
+    commodity &&
+    segmento &&
+    validitaDa &&
+    validitaAl
+  );
 
 if (!datiCTECompleti) {
     const dateTestualiCTE = datiCTE.dateTestualiCTE || [];
@@ -1885,6 +1895,7 @@ const contestiDateTestualiCTE = datiCTE.contestiDateTestualiCTE || [];
   const mancanti = [];
 
   if (!fornitore) mancanti.push("fornitore");
+else if (!fornitoreAffidabile) mancanti.push("fornitore da verificare");
   if (!commodity) mancanti.push("Luce/Gas");
   if (!segmento) mancanti.push("tipologia cliente");
   if (!validitaDa) mancanti.push("validità iniziale");
@@ -1962,7 +1973,7 @@ anteprima.textContent =
     await supabaseClient
       .from("cte_offerte")
       .insert({
-        fornitore: fornitore || null,
+       fornitore: fornitoreAffidabile ? fornitore : null,
 nome_offerta: nomeOfferta || null,
 commodity: commodity || null,
 segmento: segmento || null,
