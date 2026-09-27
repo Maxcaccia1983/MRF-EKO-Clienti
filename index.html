@@ -1744,8 +1744,18 @@ segmento = datiCTE.segmento;
   validitaDa = datiCTE.validitaDa;
 validitaAl = datiCTE.validitaAl;
   if (!fornitore || !commodity || !segmento || !validitaDa || !validitaAl) {
+
+  const mancanti = [];
+
+  if (!fornitore) mancanti.push("fornitore");
+  if (!commodity) mancanti.push("Luce/Gas");
+  if (!segmento) mancanti.push("tipologia cliente");
+  if (!validitaDa) mancanti.push("validità iniziale");
+  if (!validitaAl) mancanti.push("validità finale");
+
   stato.textContent =
-  "⚠️ Non riesco a riconoscere automaticamente fornitore, Luce/Gas, tipologia cliente o validità della CTE.";
+    "⚠️ Dati non riconosciuti: " + mancanti.join(", ");
+
   return;
 }
   const anteprima =
