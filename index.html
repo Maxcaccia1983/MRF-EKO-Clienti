@@ -1699,6 +1699,13 @@ return (testoPulito + " " + testoOCR)
 }
 async function caricaCTEAdminMRF() {
   const stato = document.getElementById("statoCaricamentoCTEMRF");
+  const anteprima =
+  document.getElementById("anteprimaCTEMRF");
+
+if (anteprima) {
+  anteprima.style.display = "none";
+  anteprima.textContent = "";
+}
   let fornitore = "";
   let nomeOfferta = "";
   let commodity = "";
