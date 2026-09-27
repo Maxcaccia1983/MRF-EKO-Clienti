@@ -1704,6 +1704,7 @@ if (!validitaDa || !validitaAl) {
         .trim()
     : "";
 let fornitoreAffidabile = false;
+    let contestoFornitoreFallback = "";
   if (esplicito && esplicito[1]) {
     fornitore = esplicito[1]
       .replace(/\s+/g, " ")
@@ -1764,10 +1765,19 @@ let fornitoreAffidabile = false;
 
       return a.posizione - b.posizione;
     });
+if (candidatiSocieta.length > 0) {
+  const candidato = candidatiSocieta[0];
 
-    if (candidatiSocieta.length > 0) {
-      fornitore = candidatiSocieta[0].nome;
-    }
+  fornitore = candidato.nome;
+
+  contestoFornitoreFallback =
+    testoIniziale
+      .slice(
+        Math.max(0, candidato.posizione - 180),
+        candidato.posizione + candidato.nome.length + 180
+      )
+      .trim();
+}
   }
 
   /*
@@ -1851,6 +1861,7 @@ let fornitoreAffidabile = false;
   fornitore,
     fornitoreAffidabile,
     contestoFornitoreEsplicito,
+    contestoFornitoreFallback,
   nomeOfferta,
   commodity,
   segmento,
@@ -1906,6 +1917,8 @@ fornitore = datiCTE.fornitore;
   const fornitoreAffidabile = datiCTE.fornitoreAffidabile === true;
   const contestoFornitoreEsplicito =
   datiCTE.contestoFornitoreEsplicito || "";
+  const contestoFornitoreFallback =
+  datiCTE.contestoFornitoreFallback || "";
 commodity = datiCTE.commodity;
 segmento = datiCTE.segmento;
   validitaDa = datiCTE.validitaDa;
@@ -1958,6 +1971,12 @@ anteprima.textContent =
   ? fornitore
   : "Da verificare") +
 "\n" +
+  (!fornitoreAffidabile && fornitore
+  ? "Candidato rilevato: " + fornitore + "\n"
+  : "") +
+(!fornitoreAffidabile && contestoFornitoreFallback
+  ? "Contesto: " + contestoFornitoreFallback + "\n"
+  : "") +
   "Offerta: " + (nomeOfferta || "Non rilevata") + "\n" +
   "Fornitura: " + (commodity || "Non rilevata") + "\n" +
   "Cliente: " + (segmento || "Non rilevato") + "\n" +
