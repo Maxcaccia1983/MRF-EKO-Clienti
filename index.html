@@ -1470,6 +1470,13 @@ const dateTrovateCTE =
   testoIniziale.match(
     /\b(?:\d{1,2}\s+)?(?:gennaio|febbraio|marzo|aprile|maggio|giugno|luglio|agosto|settembre|ottobre|novembre|dicembre)\s+\d{4}\b/gi
   ) || [];
+    const contestiDateTestualiCTE = dateTestualiCTE.map(data => {
+  const posizione = testoIniziale.toLowerCase().indexOf(data.toLowerCase());
+
+  return testoIniziale
+    .slice(Math.max(0, posizione - 120), posizione + data.length + 120)
+    .trim();
+});
   let validitaDa = null;
   let validitaAl = null;
 
@@ -1700,7 +1707,9 @@ const dateTrovateCTE =
   segmento,
   validitaDa,
   validitaAl,
-  dateTrovateCTE,dateTestualiCTE
+  dateTrovateCTE,
+    dateTestualiCTE,
+    contestiDateTestualiCTE
 };
 }
 async function caricaCTEAdminMRF() {
@@ -1752,7 +1761,7 @@ validitaAl = datiCTE.validitaAl;
   const dateTrovateCTE = datiCTE.dateTrovateCTE || [];
   if (!fornitore || !commodity || !segmento || !validitaDa || !validitaAl) {
     const dateTestualiCTE = datiCTE.dateTestualiCTE || [];
-
+const contestiDateTestualiCTE = datiCTE.contestiDateTestualiCTE || [];
   const mancanti = [];
 
   if (!fornitore) mancanti.push("fornitore");
@@ -1766,8 +1775,11 @@ validitaAl = datiCTE.validitaAl;
   " | Date numeriche: " +
   (dateTrovateCTE.length ? dateTrovateCTE.join(" - ") : "nessuna") +
   " | Date testuali: " +
-  (dateTestualiCTE.length ? dateTestualiCTE.join(" - ") : "nessuna");
-
+  (dateTestualiCTE.length ? dateTestualiCTE.join(" - ") : "nessuna") +
+  " | Contesto date: " +
+  (contestiDateTestualiCTE.length
+    ? contestiDateTestualiCTE.join(" || ")
+    : "nessuno");
   return;
 }
 anteprima.style.display = "block";
