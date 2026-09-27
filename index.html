@@ -614,7 +614,7 @@ if (event !== "PASSWORD_RECOVERY" || !paginaRecoveryMRF) return;
     </a>
     <a class="servizi-mrf"
    href="javascript:void(0);"
-   onclick="document.getElementById('boxServiziMRF').style.display='none'; document.getElementById('accessoRiservatoMRF').style.display='block'; return false;">
+      onclick="toggleServiziMRF(); return false;">
   ✨ ACCEDI AI SERVIZI MRF
 </a>
     <div
@@ -1345,6 +1345,48 @@ function mostraAssistenza(event) {
   } else {
     box.style.display = "block";
   }
+}async function toggleServiziMRF() {
+  const boxServizi =
+    document.getElementById("boxServiziMRF");
+
+  const boxLogin =
+    document.getElementById("accessoRiservatoMRF");
+
+  // Se i servizi sono aperti, li chiude
+  if (boxServizi.style.display === "block") {
+    boxServizi.style.display = "none";
+    boxLogin.style.display = "none";
+    return;
+  }
+
+  // Se è aperto il login, lo chiude
+  if (boxLogin.style.display === "block") {
+    boxLogin.style.display = "none";
+    return;
+  }
+
+  // Controlla se esiste già una sessione autorizzata
+  const { data: sessionData } =
+    await supabaseClient.auth.getSession();
+
+  if (sessionData.session) {
+    const { data: adminData } =
+      await supabaseClient
+        .from("admin_users")
+        .select("user_id")
+        .eq("user_id", sessionData.session.user.id)
+        .maybeSingle();
+
+    if (adminData) {
+      boxServizi.style.display = "block";
+      boxLogin.style.display = "none";
+      return;
+    }
+  }
+
+  // Nessuna sessione autorizzata: mostra il login
+  boxServizi.style.display = "none";
+  boxLogin.style.display = "block";
 }
   async function loginServiziMRF() {
   const email =
@@ -1391,7 +1433,6 @@ function mostraAssistenza(event) {
   }
 
   document.getElementById("accessoRiservatoMRF").style.display = "none";
-    document.querySelector(".servizi-mrf").style.display = "none";
   document.getElementById("boxServiziMRF").style.display = "block";
 
   document.getElementById("emailServiziMRF").value = "";
