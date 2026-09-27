@@ -1674,6 +1674,15 @@ if (!validitaDa || !validitaAl) {
   );
 
   const esplicito = testoIniziale.match(patternFornitoreEsplicito);
+    const contestoFornitoreEsplicito =
+  esplicito && typeof esplicito.index === "number"
+    ? testoIniziale
+        .slice(
+          Math.max(0, esplicito.index - 180),
+          esplicito.index + esplicito[0].length + 180
+        )
+        .trim()
+    : "";
 let fornitoreAffidabile = false;
   if (esplicito && esplicito[1]) {
     fornitore = esplicito[1]
@@ -1821,6 +1830,7 @@ let fornitoreAffidabile = false;
   return {
   fornitore,
     fornitoreAffidabile,
+    contestoFornitoreEsplicito,
   nomeOfferta,
   commodity,
   segmento,
@@ -1874,6 +1884,8 @@ const datiCTE = analizzaTestoCTEMRF(testoCTE);
   nomeOfferta = datiCTE.nomeOfferta;
 fornitore = datiCTE.fornitore;
   const fornitoreAffidabile = datiCTE.fornitoreAffidabile === true;
+  const contestoFornitoreEsplicito =
+  datiCTE.contestoFornitoreEsplicito || "";
 commodity = datiCTE.commodity;
 segmento = datiCTE.segmento;
   validitaDa = datiCTE.validitaDa;
@@ -1909,8 +1921,10 @@ else if (!fornitoreAffidabile) mancanti.push("fornitore da verificare");
   (dateTestualiCTE.length ? dateTestualiCTE.join(" - ") : "nessuna") +
   " | Contesto date: " +
   (contestiDateTestualiCTE.length
-    ? contestiDateTestualiCTE.join(" || ")
-    : "nessuno");
+  ? contestiDateTestualiCTE.join(" || ")
+  : "nessuno") +
+" | Contesto fornitore: " +
+(contestoFornitoreEsplicito || "nessuno");
 }
 anteprima.style.display = "block";
 anteprima.style.whiteSpace = "pre-line";
