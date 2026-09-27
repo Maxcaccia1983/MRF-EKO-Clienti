@@ -2716,40 +2716,129 @@ function inviaAssistenza() {
 if ("serviceWorker" in navigator) {
 
   let aggiornamentoInCorso = false;
+  let registrazioneMRF = null;
 
-  navigator.serviceWorker.addEventListener("controllerchange", () => {
-    if (aggiornamentoInCorso) return;
-
-    aggiornamentoInCorso = true;
-    window.location.reload();
-  });
-
-  window.addEventListener("load", async () => {
+  async function controllaVersioneMRF() {
     try {
 
-      const registrazione =
-        await navigator.serviceWorker.register(
-          "./service-worker.js",
-          { updateViaCache: "none" }
-        );
+      if (registrazioneMRF) {
+        await registrazioneMRF.update();
+      }
 
-      // Controlla subito se esiste una versione nuova
-      await registrazione.update();
-
-      console.log(
-        "✅ Aggiornamento automatico MRF EKO attivo"
+      const risposta = await fetch(
+        "./index.html?_mrf_update=" + Date.now(),
+        { cache: "no-store" }
       );
 
-    } catch (errore) {
+      if (!risposta.ok) return;
 
-      console.error(
-        "Errore aggiornamento MRF EKO:",
+      const html = await risposta.text();
+
+      const dati =
+        new TextEncoder().encode(html);
+
+      const digest =
+        await crypto.subtle.digest(
+          "SHA-256",
+          dati
+        );
+
+      const versione = Array.from(
+        new Uint8Array(digest)
+      )
+        .map(
+          b =>
+            b.toString(16).padStart(2, "0")
+        )
+        .join("");
+
+      const versionePrecedente =
+        localStorage.getItem(
+          "mrfEkoVersioneHtml"
+        );
+
+      if (!versionePrecedente) {
+        localStorage.setItem(
+          "mrfEkoVersioneHtml",
+          versione
+        );
+        return;
+      }
+
+      if (versionePrecedente !== versione) {
+        localStorage.setItem(
+          "mrfEkoVersioneHtml",
+          versione
+        );
+
+        window.location.reload();
+      }
+
+    } catch (errore) {
+      console.log(
+        "Controllo aggiornamento MRF:",
         errore
       );
     }
-  });
+  }
+
+  navigator.serviceWorker.addEventListener(
+    "controllerchange",
+    () => {
+
+      if (aggiornamentoInCorso) return;
+
+      aggiornamentoInCorso = true;
+      window.location.reload();
+    }
+  );
+
+  window.addEventListener(
+    "load",
+    async () => {
+
+      try {
+
+        registrazioneMRF =
+          await navigator.serviceWorker.register(
+            "./service-worker.js",
+            { updateViaCache: "none" }
+          );
+
+        await controllaVersioneMRF();
+
+        setInterval(
+          controllaVersioneMRF,
+          15000
+        );
+
+        document.addEventListener(
+          "visibilitychange",
+          () => {
+            if (
+              document.visibilityState ===
+              "visible"
+            ) {
+              controllaVersioneMRF();
+            }
+          }
+        );
+
+        console.log(
+          "✅ Aggiornamento automatico MRF EKO attivo"
+        );
+
+      } catch (errore) {
+
+        console.error(
+          "Errore aggiornamento MRF EKO:",
+          errore
+        );
+      }
+    }
+  );
 }
-</script>
+  </script>
 </body>
 
 </html>
