@@ -1466,6 +1466,10 @@ return (testoPulito + " " + testoOCR)
   const testoIniziale = t.slice(0, 12000);
 const dateTrovateCTE =
   testoIniziale.match(/\b\d{1,2}[\/.\-]\d{1,2}[\/.\-]\d{2,4}\b/g) || [];
+    const dateTestualiCTE =
+  testoIniziale.match(
+    /\b(?:\d{1,2}\s+)?(?:gennaio|febbraio|marzo|aprile|maggio|giugno|luglio|agosto|settembre|ottobre|novembre|dicembre)\s+\d{4}\b/gi
+  ) || [];
   let validitaDa = null;
   let validitaAl = null;
 
@@ -1696,7 +1700,7 @@ const dateTrovateCTE =
   segmento,
   validitaDa,
   validitaAl,
-  dateTrovateCTE
+  dateTrovateCTE,dateTestualiCTE
 };
 }
 async function caricaCTEAdminMRF() {
@@ -1747,6 +1751,7 @@ segmento = datiCTE.segmento;
 validitaAl = datiCTE.validitaAl;
   const dateTrovateCTE = datiCTE.dateTrovateCTE || [];
   if (!fornitore || !commodity || !segmento || !validitaDa || !validitaAl) {
+    const dateTestualiCTE = datiCTE.dateTestualiCTE || [];
 
   const mancanti = [];
 
@@ -1755,11 +1760,13 @@ validitaAl = datiCTE.validitaAl;
   if (!segmento) mancanti.push("tipologia cliente");
   if (!validitaDa) mancanti.push("validità iniziale");
   if (!validitaAl) mancanti.push("validità finale");
-
-  stato.textContent =
+    
+ stato.textContent =
   "⚠️ Dati non riconosciuti: " + mancanti.join(", ") +
-  " | Date trovate nel PDF: " +
-  (dateTrovateCTE.length ? dateTrovateCTE.join(" - ") : "nessuna");
+  " | Date numeriche: " +
+  (dateTrovateCTE.length ? dateTrovateCTE.join(" - ") : "nessuna") +
+  " | Date testuali: " +
+  (dateTestualiCTE.length ? dateTestualiCTE.join(" - ") : "nessuna");
 
   return;
 }
