@@ -1452,78 +1452,187 @@ return (testoPulito + " " + testoOCR)
   .trim();
 }
   function analizzaTestoCTEMRF(testo) {
-let nomeOfferta = "";
+  let nomeOfferta = "";
 
   const t = testo
     .replace(/\s+/g, " ")
     .trim();
 
   const minuscolo = t.toLowerCase();
-let fornitore = "";
+  let fornitore = "";
 
-const testoIniziale = t.slice(0, 5000);
-let validitaDa = null;
-let validitaAl = null;
+  // Nelle CTE i dati identificativi possono trovarsi oltre la prima pagina.
+  // Usiamo una finestra abbastanza ampia, senza analizzare inutilmente tutto il PDF.
+  const testoIniziale = t.slice(0, 12000);
 
-function dataISOCTE(giorno, mese, anno) {
-  const gg = giorno.padStart(2, "0");
-  const mm = mese.padStart(2, "0");
-  const aaaa = anno.length === 2 ? "20" + anno : anno;
+  let validitaDa = null;
+  let validitaAl = null;
 
-  return aaaa + "-" + mm + "-" + gg;
-}
+  function dataISOCTE(giorno, mese, anno) {
+    const gg = String(giorno).padStart(2, "0");
+    const mm = String(mese).padStart(2, "0");
+    const aaaa =
+      String(anno).length === 2
+        ? "20" + String(anno)
+        : String(anno);
 
-const patternValidita = [
-  /(?:validit[aà]|offerta valida|periodo di validit[aà])[^0-9]{0,50}(?:dal\s*)?(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})\s*(?:al|a|fino al|\-|–|—)\s*(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})/i,
-
-  /(?:valida dal|valid[aà] dal)\s*(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})\s*(?:al|a|fino al)\s*(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})/i
-];
-
-for (const pattern of patternValidita) {
-  const match = testoIniziale.match(pattern);
-
-  if (match) {
-    validitaDa = dataISOCTE(match[1], match[2], match[3]);
-    validitaAl = dataISOCTE(match[4], match[5], match[6]);
-    break;
+    return aaaa + "-" + mm + "-" + gg;
   }
-}
-const patternFornitore = [
-  /(?:ragione sociale|denominazione sociale|fornitore|venditore|società di vendita)\s*[:\-]?\s*([^;|]{2,100}?)(?=\s+(?:p\.?\s?iva|partita iva|codice fiscale|sede|pec|tel|www\.|$))/i,
 
-  /([A-ZÀ-ÖØ-Þ][A-Za-zÀ-ÿ0-9&'’.\- ]{2,80}?\s+(?:S\.?\s?P\.?\s?A\.?|S\.?\s?R\.?\s?L\.?|S\.?\s?R\.?\s?L\.?\s?S\.?|S\.?\s?A\.?\s?S\.?|S\.?\s?N\.?\s?C\.?))/i
-];
+  function salvaIntervalloDate(match) {
+    if (!match) return false;
 
-for (const pattern of patternFornitore) {
+    const da = dataISOCTE(match[1], match[2], match[3]);
+    const al = dataISOCTE(match[4], match[5], match[6]);
 
-  const match = testoIniziale.match(pattern);
+    const dataDa = new Date(da + "T00:00:00");
+    const dataAl = new Date(al + "T00:00:00");
 
-  if (match && match[1]) {
-    fornitore = match[1]
+    if (
+      Number.isNaN(dataDa.getTime()) ||
+      Number.isNaN(dataAl.getTime()) ||
+      dataAl < dataDa
+    ) {
+      return false;
+    }
+
+    validitaDa = da;
+    validitaAl = al;
+    return true;
+  }
+
+  /*
+   * VALIDITÀ CTE
+   * Cerchiamo soltanto date esplicitamente riferite all'offerta.
+   * Non usiamo più il termine generico "validità", perché nelle CTE
+   * può riferirsi a recesso, documenti, pagamenti o altre condizioni.
+   */
+  const patternValiditaOfferta = [
+    /validit[aà]\s+(?:temporale\s+)?(?:dell['’]?\s*)?offerta[^0-9]{0,100}(?:dal\s*)?(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})\s*(?:al|a|fino\s+al|\-|–|—)\s*(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})/i,
+
+    /periodo\s+di\s+validit[aà]\s+(?:dell['’]?\s*)?offerta[^0-9]{0,100}(?:dal\s*)?(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})\s*(?:al|a|fino\s+al|\-|–|—)\s*(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})/i,
+
+    /offerta\s+valid[aà]?[^0-9]{0,80}(?:dal\s*)?(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})\s*(?:al|a|fino\s+al|\-|–|—)\s*(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})/i,
+
+    /valida\s+dal\s*(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})\s*(?:al|a|fino\s+al)\s*(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})/i,
+
+    /validit[aà]\s+offerta\s+dal\s*(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})[^0-9]{0,50}validit[aà]\s+offerta\s+al\s*(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})/i
+  ];
+
+  for (const pattern of patternValiditaOfferta) {
+    const match = testoIniziale.match(pattern);
+
+    if (salvaIntervalloDate(match)) {
+      break;
+    }
+  }
+
+  /*
+   * FORNITORE
+   * Una frase contrattuale non deve più essere scambiata per la ragione sociale.
+   * Diamo priorità a vere denominazioni societarie (SRL, SPA, ecc.).
+   */
+  const suffissoSocietario =
+    "(?:S\\.?\\s?R\\.?\\s?L\\.?\\s?S\\.?|S\\.?\\s?R\\.?\\s?L\\.?|S\\.?\\s?P\\.?\\s?A\\.?|S\\.?\\s?A\\.?\\s?S\\.?|S\\.?\\s?N\\.?\\s?C\\.?)";
+
+  const patternFornitoreEsplicito = new RegExp(
+    "(?:ragione\\s+sociale|denominazione\\s+sociale|societ[aà]\\s+di\\s+vendita|venditore|fornitore)" +
+    "\\s*[:\\-]?\\s*" +
+    "([A-ZÀ-ÖØ-Þ0-9][A-Za-zÀ-ÿ0-9&'’.\\-]*(?:\\s+[A-ZÀ-ÖØ-Þ0-9][A-Za-zÀ-ÿ0-9&'’.\\-]*){0,7}\\s+" +
+    suffissoSocietario +
+    ")",
+    "i"
+  );
+
+  const esplicito = testoIniziale.match(patternFornitoreEsplicito);
+
+  if (esplicito && esplicito[1]) {
+    fornitore = esplicito[1]
       .replace(/\s+/g, " ")
       .trim();
-
-    break;
   }
-}
-    const patternOfferta = [
-  /(?:nome offerta|denominazione offerta|offerta commerciale|nome commerciale)\s*[:\-]?\s*([^;|]{2,120}?)(?=\s+(?:codice offerta|codice|validità|durata|condizioni|fornitura|$))/i,
 
-  /(?:offerta)\s*[:\-]\s*([^;|]{2,120}?)(?=\s+(?:codice|validità|durata|condizioni|$))/i
-];
+  if (!fornitore) {
+    // Fallback universale: individua vere ragioni sociali e preferisce
+    // quelle vicine a parole come fornitore/venditore/ragione sociale.
+    const patternSocieta =
+      /\b((?:[A-ZÀ-ÖØ-Þ][A-Za-zÀ-ÿ0-9&'’.\-]*|[A-Z0-9][A-Z0-9&'’.\-]{1,})(?:\s+(?:[A-ZÀ-ÖØ-Þ][A-Za-zÀ-ÿ0-9&'’.\-]*|[A-Z0-9][A-Z0-9&'’.\-]{1,})){0,6}\s+(?:S\.?\s?R\.?\s?L\.?\s?S\.?|S\.?\s?R\.?\s?L\.?|S\.?\s?P\.?\s?A\.?|S\.?\s?A\.?\s?S\.?|S\.?\s?N\.?\s?C\.?))\b/g;
 
-for (const pattern of patternOfferta) {
+    const candidatiSocieta = [];
+    let matchSocieta;
 
-  const match = testoIniziale.match(pattern);
+    while ((matchSocieta = patternSocieta.exec(testoIniziale)) !== null) {
+      const nome = matchSocieta[1]
+        .replace(/\s+/g, " ")
+        .trim();
 
-  if (match && match[1]) {
-    nomeOfferta = match[1]
-      .replace(/\s+/g, " ")
-      .trim();
+      const prima = testoIniziale
+        .slice(Math.max(0, matchSocieta.index - 140), matchSocieta.index)
+        .toLowerCase();
 
-    break;
+      let punteggio = 0;
+
+      if (
+        /ragione\s+sociale|denominazione\s+sociale|fornitore|venditore|societ[aà]\s+di\s+vendita/.test(prima)
+      ) {
+        punteggio += 100;
+      }
+
+      if (matchSocieta.index < 2500) {
+        punteggio += 25;
+      }
+
+      const numeroParole = nome.split(/\s+/).length;
+
+      // Una ragione sociale breve è più plausibile di una frase intera.
+      punteggio += Math.max(0, 20 - numeroParole * 2);
+
+      if (/cliente|contraente|intestatario/.test(prima)) {
+        punteggio -= 60;
+      }
+
+      candidatiSocieta.push({
+        nome,
+        punteggio,
+        posizione: matchSocieta.index
+      });
+    }
+
+    candidatiSocieta.sort((a, b) => {
+      if (b.punteggio !== a.punteggio) {
+        return b.punteggio - a.punteggio;
+      }
+
+      return a.posizione - b.posizione;
+    });
+
+    if (candidatiSocieta.length > 0) {
+      fornitore = candidatiSocieta[0].nome;
+    }
   }
-}
+
+  /*
+   * NOME OFFERTA
+   * Supporta le diciture più comuni presenti nelle CTE ARERA.
+   */
+  const patternOfferta = [
+    /(?:nome\s+commerciale\s+(?:dell['’]?\s*)?offerta|denominazione\s+commerciale\s+(?:dell['’]?\s*)?offerta|nome\s+offerta|denominazione\s+offerta|offerta\s+commerciale)\s*[:\-]?\s*([^;|]{2,120}?)(?=\s+(?:codice\s+offerta|codice|validit[aà]|durata|condizioni|fornitura|tipologia|mercato|$))/i,
+
+    /(?:offerta)\s*[:\-]\s*([^;|]{2,120}?)(?=\s+(?:codice|validit[aà]|durata|condizioni|fornitura|$))/i
+  ];
+
+  for (const pattern of patternOfferta) {
+    const match = testoIniziale.match(pattern);
+
+    if (match && match[1]) {
+      nomeOfferta = match[1]
+        .replace(/\s+/g, " ")
+        .trim();
+
+      break;
+    }
+  }
+
   let commodity = "";
 
   const indiziLuce = [
@@ -1579,14 +1688,14 @@ for (const pattern of patternOfferta) {
     segmento = "domestico";
   }
 
-return {
-  fornitore,
-  nomeOfferta,
-  commodity,
-  segmento,
-  validitaDa,
-  validitaAl
-};
+  return {
+    fornitore,
+    nomeOfferta,
+    commodity,
+    segmento,
+    validitaDa,
+    validitaAl
+  };
 }
 async function caricaCTEAdminMRF() {
   const stato = document.getElementById("statoCaricamentoCTEMRF");
