@@ -1391,6 +1391,7 @@ function mostraAssistenza(event) {
   }
 
   document.getElementById("accessoRiservatoMRF").style.display = "none";
+    document.querySelector(".servizi-mrf").style.display = "none";
   document.getElementById("boxServiziMRF").style.display = "block";
 
   document.getElementById("emailServiziMRF").value = "";
@@ -2002,7 +2003,6 @@ function apriAdminMRF() {
 }
 
 async function chiudiAdminMRF() {
-  await supabaseClient.auth.signOut();
 
   document.getElementById("boxAdminMRF").style.display = "none";
   document.getElementById("loginAdminMRF").style.display = "block";
