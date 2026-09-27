@@ -1971,6 +1971,11 @@ anteprima.textContent =
   ? fornitore
   : "Da verificare") +
 "\n" +
+  (!fornitore
+  ? "TESTO INIZIALE CTE:\n" +
+    testoCTE.slice(0, 2500) +
+    "\n\n"
+  : "") +
   (!fornitoreAffidabile && fornitore
   ? "Candidato rilevato: " + fornitore + "\n"
   : "") +
