@@ -1953,7 +1953,11 @@ anteprima.textContent =
   (datiCTECompleti
     ? "✅ DATI RICONOSCIUTI\n\n"
     : "⚠️ CTE DA VERIFICARE\n\n") +
-  "Fornitore: " + (fornitore || "Non rilevato") + "\n" +
+ "Fornitore: " +
+(fornitoreAffidabile
+  ? fornitore
+  : "Da verificare") +
+"\n" +
   "Offerta: " + (nomeOfferta || "Non rilevata") + "\n" +
   "Fornitura: " + (commodity || "Non rilevata") + "\n" +
   "Cliente: " + (segmento || "Non rilevato") + "\n" +
