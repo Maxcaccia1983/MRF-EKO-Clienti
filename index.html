@@ -1875,7 +1875,10 @@ segmento = datiCTE.segmento;
   validitaDa = datiCTE.validitaDa;
 validitaAl = datiCTE.validitaAl;
   const dateTrovateCTE = datiCTE.dateTrovateCTE || [];
-  if (!fornitore || !commodity || !segmento || !validitaDa || !validitaAl) {
+  const datiCTECompleti =
+  !!(fornitore && commodity && segmento && validitaDa && validitaAl);
+
+if (!datiCTECompleti) {
     const dateTestualiCTE = datiCTE.dateTestualiCTE || [];
 const contestiDateTestualiCTE = datiCTE.contestiDateTestualiCTE || [];
   const mancanti = [];
@@ -1896,18 +1899,22 @@ const contestiDateTestualiCTE = datiCTE.contestiDateTestualiCTE || [];
   (contestiDateTestualiCTE.length
     ? contestiDateTestualiCTE.join(" || ")
     : "nessuno");
-  return;
 }
 anteprima.style.display = "block";
 anteprima.style.whiteSpace = "pre-line";
 
 anteprima.textContent =
-  "✅ DATI RICONOSCIUTI\n\n" +
-  "Fornitore: " + fornitore + "\n" +
+  (datiCTECompleti
+    ? "✅ DATI RICONOSCIUTI\n\n"
+    : "⚠️ CTE DA VERIFICARE\n\n") +
+  "Fornitore: " + (fornitore || "Non rilevato") + "\n" +
   "Offerta: " + (nomeOfferta || "Non rilevata") + "\n" +
-  "Fornitura: " + commodity + "\n" +
-  "Cliente: " + segmento + "\n" +
-  "Validità: " + validitaDa + " → " + validitaAl;
+  "Fornitura: " + (commodity || "Non rilevata") + "\n" +
+  "Cliente: " + (segmento || "Non rilevato") + "\n" +
+  "Validità: " +
+  (validitaDa || "Non rilevata") +
+  " → " +
+  (validitaAl || "Non rilevata");
   if (file.size > 20 * 1024 * 1024) {
     stato.textContent = "⚠️ Il PDF supera il limite di 20 MB.";
     return;
@@ -1954,17 +1961,18 @@ anteprima.textContent =
     await supabaseClient
       .from("cte_offerte")
       .insert({
-        fornitore: fornitore,
-        nome_offerta: nomeOfferta || null,
-        commodity: commodity,
-        segmento: segmento,
-        validita_da: validitaDa,
-        validita_a: validitaAl,
-        nome_file: file.name,
-        storage_path: storagePath,
-        mime_type: "application/pdf",
-        file_size: file.size,
-        attiva: true
+        fornitore: fornitore || null,
+nome_offerta: nomeOfferta || null,
+commodity: commodity || null,
+segmento: segmento || null,
+validita_da: validitaDa || null,
+validita_a: validitaAl || null,
+nome_file: file.name,
+storage_path: storagePath,
+mime_type: "application/pdf",
+file_size: file.size,
+attiva: true,
+ da_verificare: !datiCTECompleti       
       });
 
   if (dbError) {
@@ -1977,7 +1985,9 @@ anteprima.textContent =
     return;
   }
 
-  stato.textContent = "✅ CTE caricata correttamente.";
+  stato.textContent = datiCTECompleti
+  ? "✅ CTE caricata correttamente."
+  : "⚠️ CTE caricata correttamente, ma alcuni dati sono da verificare.";
 
   document.getElementById("cteFornitoreMRF").value = "";
   document.getElementById("cteNomeOffertaMRF").value = "";
