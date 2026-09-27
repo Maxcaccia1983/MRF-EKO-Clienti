@@ -878,3 +878,57 @@ function estraiPrezzoEnergia(testo, tipo) {
     versione: "1.0.0"
   };
 })();
+
+
+/* MRF_CTE_REFINEMENT_V1 */
+window.addEventListener("DOMContentLoaded", function () {
+  const parserCTEOriginale = window.analizzaTestoCTEMRF;
+
+  if (typeof parserCTEOriginale !== "function") {
+    return;
+  }
+
+  window.analizzaTestoCTEMRF = function (testo) {
+    const dati = parserCTEOriginale(testo);
+    const t = String(testo || "").replace(/\s+/g, " ").trim();
+
+    // Nome offerta: prende solo il valore tra "Nome Offerta"
+    // e "Cod. Offerta", senza inglobare codice e descrizione successiva.
+    const matchNomeOfferta = t.match(
+      /nome\s+offerta\s*[:\-]?\s*([^;|]{2,120}?)(?=\s+cod\.?\s*offerta\s*[:\-])/i
+    );
+
+    if (matchNomeOfferta && matchNomeOfferta[1]) {
+      dati.nomeOfferta = matchNomeOfferta[1]
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    // Segmento: priorità alle diciture esplicite presenti nelle CTE.
+    // Evita che una parola generica altrove nel PDF faccia classificare
+    // come "business" un'offerta domestica.
+    if (
+      /clienti?\s+domestici\b/i.test(t) ||
+      /pod\s+(?:uso\s+)?domestico\b/i.test(t) ||
+      /pod\s+domestici\b/i.test(t) ||
+      /uso\s+domestico\b/i.test(t)
+    ) {
+      dati.segmento = "domestico";
+    } else if (
+      /condominio\b/i.test(t) ||
+      /usi\s+condominiali\b/i.test(t)
+    ) {
+      dati.segmento = "condominio";
+    } else if (
+      /clienti?\s+(?:business|non\s+domestici)\b/i.test(t) ||
+      /usi\s+diversi\b/i.test(t) ||
+      /microimpresa\b/i.test(t) ||
+      /piccola\s+impresa\b/i.test(t) ||
+      /altri\s+usi\b/i.test(t)
+    ) {
+      dati.segmento = "business";
+    }
+
+    return dati;
+  };
+});
