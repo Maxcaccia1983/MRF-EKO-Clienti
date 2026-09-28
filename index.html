@@ -2061,10 +2061,22 @@ anteprima.textContent =
   "Codice offerta: " + (codiceOfferta || "Non rilevato") + "\n" +
   "Fornitura: " + (commodity || "Non rilevata") + "\n" +
   "Cliente: " + (segmento || "Non rilevato") + "\n" +
+ 
   "Validità: " +
-  (validitaDa || "Non rilevata") +
-  " → " +
-  (validitaAl || "Non rilevata");
+(validitaDa || "Non rilevata") +
+" → " +
+(validitaAl || "Non rilevata") +
+(
+  (!validitaDa || !validitaAl)
+    ? "\n\n🔎 DIAGNOSTICA DATE" +
+      "\nDate numeriche: " +
+      ((datiCTE.dateTrovateCTE || []).join(" - ") || "nessuna") +
+      "\nDate testuali: " +
+      ((datiCTE.dateTestualiCTE || []).join(" - ") || "nessuna") +
+      "\nContesto date: " +
+      ((datiCTE.contestiDateTestualiCTE || []).join(" || ") || "nessuno")
+    : ""
+);
   if (file.size > 20 * 1024 * 1024) {
     stato.textContent = "⚠️ Il PDF supera il limite di 20 MB.";
     return;
