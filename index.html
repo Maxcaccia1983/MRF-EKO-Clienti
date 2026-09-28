@@ -1808,7 +1808,7 @@ if (candidatiSocieta.length > 0) {
 let codiceOfferta = "";
 
 const matchCodiceOfferta = t.match(
-  /codice\s+offerta\s*[:\-]?\s*([A-Z0-9]{10,60})/i
+  /(?:codice|cod\.?)\s+offerta\s*[:\-]?\s*([A-Z0-9]{10,60})/i
 );
 
 if (matchCodiceOfferta && matchCodiceOfferta[1]) {
