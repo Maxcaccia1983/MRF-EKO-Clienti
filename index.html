@@ -1495,15 +1495,14 @@ const testoPulito = testoCompleto
 const datiNativi =
   analizzaTestoCTEMRF(testoPulito);
 
-const testoSufficiente =
-  testoPulito.length >= 180 &&
-  datiNativi.fornitore &&
-  datiNativi.commodity &&
-  datiNativi.segmento &&
-  datiNativi.validitaDa &&
-  datiNativi.validitaAl;
+const numeroParoleTestoNativo =
+  testoPulito.split(/\s+/).filter(Boolean).length;
 
-if (testoSufficiente) {
+const testoNativoLeggibile =
+  testoPulito.length >= 500 &&
+  numeroParoleTestoNativo >= 80;
+
+if (testoNativoLeggibile) {
   return testoPulito;
 }
 
