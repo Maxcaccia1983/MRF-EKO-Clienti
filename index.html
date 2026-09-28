@@ -1747,10 +1747,16 @@ const intorno = t
       ) {
         punteggio += 100;
       }
-if (
-  /www\.|https?:\/\/|e-?mail|email|pec|telefono|tel\.?|numero\s+verde|recapiti|servizio\s+clienti/.test(intorno)
-) {
+if (/e-?mail|email|pec/.test(intorno)) {
   punteggio += 40;
+}
+
+if (/www\.|https?:\/\//.test(intorno)) {
+  punteggio += 30;
+}
+
+if (/telefono|tel\.?|numero\s+verde|recapiti|servizio\s+clienti/.test(intorno)) {
+  punteggio += 20;
 }
      if (
   /direzione\s+e\s+coordinamento|soggetta\s+ad\s+attivit[aà]\s+di\s+direzione|impresa\s+di\s+distribuzione|societ[aà]\s+controllante/.test(intorno)
