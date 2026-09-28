@@ -1727,7 +1727,17 @@ const patternSocieta =
         .trim();
 
       const prima = t
-  .slice(Math.max(0, matchSocieta.index - 140), matchSocieta.index)
+  .slice(
+    Math.max(0, matchSocieta.index - 140),
+    matchSocieta.index
+  )
+  .toLowerCase();
+
+const intorno = t
+  .slice(
+    Math.max(0, matchSocieta.index - 180),
+    matchSocieta.index + nome.length + 260
+  )
   .toLowerCase();
 
       let punteggio = 0;
@@ -1737,7 +1747,16 @@ const patternSocieta =
       ) {
         punteggio += 100;
       }
-
+if (
+  /www\.|https?:\/\/|e-?mail|email|pec|telefono|tel\.?|numero\s+verde|recapiti|servizio\s+clienti/.test(intorno)
+) {
+  punteggio += 40;
+}
+     if (
+  /direzione\s+e\s+coordinamento|soggetta\s+ad\s+attivit[aà]\s+di\s+direzione|impresa\s+di\s+distribuzione|societ[aà]\s+controllante/.test(intorno)
+) {
+  punteggio -= 120;
+}
       if (matchSocieta.index < 2500) {
         punteggio += 25;
       }
@@ -1769,7 +1788,7 @@ if (candidatiSocieta.length > 0) {
   const candidato = candidatiSocieta[0];
 
   fornitore = candidato.nome;
-
+fornitoreAffidabile = candidato.punteggio >= 60;
  contestoFornitoreFallback =
   t
     .slice(
