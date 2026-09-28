@@ -1997,6 +1997,7 @@ anteprima.textContent =
   ? "Contesto: " + contestoFornitoreFallback + "\n"
   : "") +
   "Offerta: " + (nomeOfferta || "Non rilevata") + "\n" +
+  "Codice offerta: " + (codiceOfferta || "Non rilevato") + "\n" +
   "Fornitura: " + (commodity || "Non rilevata") + "\n" +
   "Cliente: " + (segmento || "Non rilevato") + "\n" +
   "Validità: " +
@@ -2051,6 +2052,7 @@ anteprima.textContent =
       .insert({
        fornitore: fornitoreAffidabile ? fornitore : null,
 nome_offerta: nomeOfferta || null,
+codice_offerta: codiceOfferta || null,
 commodity: commodity || null,
 segmento: segmento || null,
 validita_da: validitaDa || null,
