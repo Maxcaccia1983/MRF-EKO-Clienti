@@ -1841,35 +1841,58 @@ if (matchCodiceOfferta && matchCodiceOfferta[1]) {
 }
   let commodity = "";
 
-  const indiziLuce = [
-    "energia elettrica",
-    "luce",
-    "kwh",
-    "pod",
-    "pun"
-  ];
+ const contestoFornitura =
+  t.slice(0, 6000).toLowerCase();
 
-  const indiziGas = [
-    "gas naturale",
-    "smc",
-    "pdr",
-    "psv",
-    "gas"
-  ];
+let puntiLuce = 0;
+let puntiGas = 0;
 
-  const puntiLuce =
-    indiziLuce.filter(x => minuscolo.includes(x)).length;
+/* Segnali forti LUCE */
+if (
+  /(?:offerta|fornitura|vendita)\s+(?:di\s+)?energia\s+elettrica/.test(contestoFornitura)
+) {
+  puntiLuce += 100;
+}
 
-  const puntiGas =
-    indiziGas.filter(x => minuscolo.includes(x)).length;
+if (/\bpod\b/.test(contestoFornitura)) {
+  puntiLuce += 40;
+}
 
-  if (puntiLuce > puntiGas) {
-    commodity = "luce";
-  }
+if (/\bkwh\b/.test(contestoFornitura)) {
+  puntiLuce += 20;
+}
 
-  if (puntiGas > puntiLuce) {
-    commodity = "gas";
-  }
+if (/\bpun(?:\s+index)?\b/.test(contestoFornitura)) {
+  puntiLuce += 15;
+}
+
+/* Segnali forti GAS */
+if (
+  /(?:offerta|fornitura|vendita)\s+(?:di\s+)?gas(?:\s+naturale)?/.test(contestoFornitura) ||
+  /fornitura\s+del\s+gas\s+naturale/.test(contestoFornitura)
+) {
+  puntiGas += 100;
+}
+
+if (/\bpdr\b/.test(contestoFornitura)) {
+  puntiGas += 40;
+}
+
+if (/\bsmc\b/.test(contestoFornitura)) {
+  puntiGas += 20;
+}
+
+if (/\b(?:psv|psbg)\b/.test(contestoFornitura)) {
+  puntiGas += 15;
+}
+
+if (puntiLuce > puntiGas) {
+  commodity = "luce";
+}
+
+if (puntiGas > puntiLuce) {
+  commodity = "gas";
+}
 
   let segmento = "";
 
