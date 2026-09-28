@@ -1802,7 +1802,18 @@ if (candidatiSocieta.length > 0) {
       break;
     }
   }
+/*
+ * CODICE OFFERTA
+ */
+let codiceOfferta = "";
 
+const matchCodiceOfferta = t.match(
+  /codice\s+offerta\s*[:\-]?\s*([A-Z0-9]{10,60})/i
+);
+
+if (matchCodiceOfferta && matchCodiceOfferta[1]) {
+  codiceOfferta = matchCodiceOfferta[1].trim();
+}
   let commodity = "";
 
   const indiziLuce = [
@@ -1864,6 +1875,7 @@ if (candidatiSocieta.length > 0) {
     contestoFornitoreEsplicito,
     contestoFornitoreFallback,
   nomeOfferta,
+    codiceOfferta,
   commodity,
   segmento,
   validitaDa,
@@ -1914,6 +1926,7 @@ const testoCTE = await leggiTestoCTEMRF(file);
 
 const datiCTE = analizzaTestoCTEMRF(testoCTE);
   nomeOfferta = datiCTE.nomeOfferta;
+  const codiceOfferta = datiCTE.codiceOfferta || "";
 fornitore = datiCTE.fornitore;
   const fornitoreAffidabile = datiCTE.fornitoreAffidabile === true;
   const contestoFornitoreEsplicito =
