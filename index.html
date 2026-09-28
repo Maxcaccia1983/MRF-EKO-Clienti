@@ -1625,6 +1625,9 @@ const dateTrovateCTE =
    * può riferirsi a recesso, documenti, pagamenti o altre condizioni.
    */
   const patternValiditaOfferta = [
+    
+    /offerta[^0-9]{0,160}(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})[^0-9]{0,120}(?:valida|validit[aà]|scadenza)[^0-9]{0,80}(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})/i,
+    
     /validit[aà]\s+(?:temporale\s+)?(?:dell['’]?\s*)?offerta[^0-9]{0,100}(?:dal\s*)?(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})\s*(?:al|a|fino\s+al|\-|–|—)\s*(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})/i,
 
     /periodo\s+di\s+validit[aà]\s+(?:dell['’]?\s*)?offerta[^0-9]{0,100}(?:dal\s*)?(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})\s*(?:al|a|fino\s+al|\-|–|—)\s*(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})/i,
