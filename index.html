@@ -1846,7 +1846,17 @@ if (matchCodiceOfferta && matchCodiceOfferta[1]) {
 
 let puntiLuce = 0;
 let puntiGas = 0;
+if (
+  /\bcodice\s+offerta\b.{0,120}\benergia\s+elettrica\b/.test(contestoFornitura)
+) {
+  puntiLuce += 150;
+}
 
+if (
+  /\bcodice\s+offerta\b.{0,120}\bgas(?:\s+naturale)?\b/.test(contestoFornitura)
+) {
+  puntiGas += 150;
+}
 /* Segnali forti LUCE */
 if (
   /(?:offerta|fornitura|vendita)\s+(?:di\s+)?energia\s+elettrica/.test(contestoFornitura)
