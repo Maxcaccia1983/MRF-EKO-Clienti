@@ -1576,8 +1576,9 @@ return (testoPulito + " " + testoOCR)
   // Usiamo una finestra abbastanza ampia, senza analizzare inutilmente tutto il PDF.
   const testoIniziale = t.slice(0, 12000);
 const matchDateNumericheCTE = [
-  ...t.matchAll(/\b\d{1,2}[\/.\-]\d{1,2}[\/.\-]\d{2,4}\b/g)
-];
+...t.matchAll(
+  /\b(?:0?[1-9]|[12]\d|3[01])[\/.\-](?:0?[1-9]|1[0-2])[\/.\-](?:\d{2}|\d{4})\b/g
+)
 
 const dateTrovateCTE =
   matchDateNumericheCTE.map(match => match[0]);
