@@ -1746,6 +1746,37 @@ if (!validitaDa || !validitaAl) {
       anno + "-" + mm + "-" + String(ultimoGiorno).padStart(2, "0");
   }
 }
+    if (!validitaDa || !validitaAl) {
+  const dateValiditaClassificateCTE = [
+    ...new Set(
+      classificazioneDateNumericheCTE
+        .filter(item => item.tipo === "validita_offerta")
+        .map(item => item.data)
+    )
+  ];
+
+  if (dateValiditaClassificateCTE.length === 2) {
+    const dateISO = dateValiditaClassificateCTE
+      .map(data => {
+        const parti = data.split(/[\/.\-]/);
+
+        if (parti.length !== 3) return null;
+
+        return dataISOCTE(
+          parti[0],
+          parti[1],
+          parti[2]
+        );
+      })
+      .filter(Boolean)
+      .sort();
+
+    if (dateISO.length === 2) {
+      validitaDa = dateISO[0];
+      validitaAl = dateISO[1];
+    }
+  }
+}
   /*
    * FORNITORE
    * Una frase contrattuale non deve più essere scambiata per la ragione sociale.
