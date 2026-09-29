@@ -1944,7 +1944,22 @@ if (matchCodiceOfferta && matchCodiceOfferta[1]) {
   codiceOfferta = matchCodiceOfferta[1].trim();
 }
   let commodity = "";
+if (!codiceOfferta && nomeOfferta) {
+  const nomeOffertaRegex = nomeOfferta
+    .replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
+  const matchCodiceDopoNome = t.match(
+    new RegExp(
+      nomeOffertaRegex +
+      "\\s+((?=[A-Z0-9_\\/-]*\\d)[A-Z0-9_\\/-]{6,})",
+      "i"
+    )
+  );
+
+  if (matchCodiceDopoNome && matchCodiceDopoNome[1]) {
+    codiceOfferta = matchCodiceDopoNome[1].trim();
+  }
+}
  const contestoFornitura =
   t.slice(0, 6000).toLowerCase();
 
