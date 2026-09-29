@@ -2141,6 +2141,12 @@ anteprima.textContent =
     ? "\n\n🔎 DIAGNOSTICA DATE" +
       "\nDate numeriche: " +
       ((datiCTE.dateTrovateCTE || []).join(" - ") || "nessuna") +
+  "\nClassificazione date: " +
+(
+  (datiCTE.classificazioneDateNumericheCTE || [])
+    .map(item => item.data + " → " + item.tipo)
+    .join(" | ") || "nessuna"
+) +
   "\nContesto date numeriche: " +
 ((datiCTE.contestiDateNumericheCTE || []).join(" || ") || "nessuno") +
       "\nDate testuali: " +
