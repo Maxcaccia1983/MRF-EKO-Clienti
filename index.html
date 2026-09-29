@@ -1912,6 +1912,7 @@ fornitoreAffidabile = candidato.punteggio >= 60;
    * Supporta le diciture più comuni presenti nelle CTE ARERA.
    */
   const patternOfferta = [
+    /condizioni\s+economiche\s+(?:mercato\s+libero\s+)?(?:clienti\s+(?:domestici|non\s+domestici|business)\s+)?([A-ZÀ-ÖØ-Þ][A-ZÀ-ÖØ-Þ0-9'’&+\- ]{2,80}?)(?=\s+(?=[A-Z0-9_\/\-]*\d)[A-Z0-9_\/\-]{6,}\b)/i,
     /(?:offerta)\s*[:\-]?\s*[A-Z0-9]{10,60}\s+(.+?)(?=\s+[èe]\s+un['’]?\s*offerta\b)/i,
     /scheda\s+sintetica\s+per\s+l['’]?\s*offerta\s+(.+?)(?=\s+codice\s+offerta)/i,
     /(?:nome\s+commerciale\s+(?:dell['’]?\s*)?offerta|denominazione\s+commerciale\s+(?:dell['’]?\s*)?offerta|nome\s+offerta|denominazione\s+offerta|offerta\s+commerciale)\s*[:\-]?\s*([^;|]{2,120}?)(?=\s+(?:codice\s+offerta|codice|validit[aà]|durata|condizioni|fornitura|tipologia|mercato|$))/i,
