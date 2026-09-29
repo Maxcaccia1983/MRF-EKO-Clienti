@@ -1977,33 +1977,123 @@ if (!fornitore) {
   }
 /*
  * CODICE OFFERTA
+ * Motore universale a candidati e punteggi.
  */
 let codiceOfferta = "";
 
-const matchCodiceOfferta = t.match(
-  /(?:codice|cod\.?)\s+offerta\s*[:\-]?\s*([A-Z0-9]{10,60})/i
-);
+const candidatiCodiceOfferta = new Map();
 
-if (matchCodiceOfferta && matchCodiceOfferta[1]) {
-  codiceOfferta = matchCodiceOfferta[1].trim();
-}
-  let commodity = "";
-if (!codiceOfferta && nomeOfferta) {
-  const nomeOffertaRegex = nomeOfferta
-    .replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+function aggiungiCandidatoCodiceOfferta(
+  valore,
+  punteggioBase,
+  indice
+) {
+  const codice = String(valore || "")
+    .toUpperCase()
+    .replace(/\s+/g, "")
+    .trim();
 
-  const matchCodiceDopoNome = t.match(
-    new RegExp(
-      nomeOffertaRegex +
-      "\\s+((?=[A-Z0-9_\\/-]*\\d)[A-Z0-9_\\/-]{6,})",
-      "i"
+  if (
+    !/^(?=.*[A-Z])(?=.*\d)[A-Z0-9_\/-]{6,60}$/.test(codice)
+  ) {
+    return;
+  }
+
+  const posizione =
+    Number.isInteger(indice) ? indice : 0;
+
+  const contesto = t
+    .slice(
+      Math.max(0, posizione - 180),
+      posizione + codice.length + 180
     )
-  );
+    .toLowerCase();
 
-  if (matchCodiceDopoNome && matchCodiceDopoNome[1]) {
-    codiceOfferta = matchCodiceDopoNome[1].trim();
+  let punteggio = punteggioBase;
+
+  if (
+    /codice\s+(?:dell['’]?\s*)?offerta/.test(contesto)
+  ) {
+    punteggio += 120;
+  }
+
+  if (/scheda\s+sintetica/.test(contesto)) {
+    punteggio += 80;
+  }
+
+  if (/condizioni\s+economiche/.test(contesto)) {
+    punteggio += 35;
+  }
+
+  if (
+    nomeOfferta &&
+    contesto.includes(nomeOfferta.toLowerCase())
+  ) {
+    punteggio += 45;
+  }
+
+  if (codice.length >= 20) {
+    punteggio += 20;
+  }
+
+  if (
+    /partita\s+iva|codice\s+fiscale|privacy|pod|pdr/.test(contesto)
+  ) {
+    punteggio -= 100;
+  }
+
+  const precedente =
+    candidatiCodiceOfferta.get(codice);
+
+  if (
+    !precedente ||
+    punteggio > precedente.punteggio
+  ) {
+    candidatiCodiceOfferta.set(codice, {
+      codice,
+      punteggio
+    });
   }
 }
+
+/* Candidati esplicitamente indicati come codice offerta */
+for (const match of t.matchAll(
+  /(?:codice|cod\.?)\s+(?:dell['’]?\s*)?offerta\s*[:\-]?\s*([A-Z0-9_\/-]{6,60})/gi
+)) {
+  aggiungiCandidatoCodiceOfferta(
+    match[1],
+    100,
+    match.index ?? 0
+  );
+}
+
+/* Tutti gli altri codici plausibili presenti nella CTE */
+for (const match of t.matchAll(
+  /\b(?=[A-Z0-9_\/-]{6,60}\b)(?=[A-Z0-9_\/-]*[A-Z])(?=[A-Z0-9_\/-]*\d)[A-Z0-9_\/-]+\b/gi
+)) {
+  aggiungiCandidatoCodiceOfferta(
+    match[0],
+    0,
+    match.index ?? 0
+  );
+}
+
+/* Vince il candidato con il contesto più affidabile */
+const miglioreCodiceOfferta =
+  [...candidatiCodiceOfferta.values()]
+    .sort(
+      (a, b) => b.punteggio - a.punteggio
+    )[0];
+
+if (
+  miglioreCodiceOfferta &&
+  miglioreCodiceOfferta.punteggio >= 40
+) {
+  codiceOfferta =
+    miglioreCodiceOfferta.codice;
+}
+
+let commodity = "";
  const contestoFornitura =
   t.slice(0, 6000).toLowerCase();
 
