@@ -2195,8 +2195,18 @@ anteprima.textContent =
     .map(item => item.data + " → " + item.tipo)
     .join(" | ") || "nessuna"
 ) +
-  "\nContesto date numeriche: " +
-((datiCTE.contestiDateNumericheCTE || []).join(" || ") || "nessuno") +
+  "\nDettaglio date numeriche:\n" +
+(
+  (datiCTE.dateTrovateCTE || [])
+    .map((data, i) => {
+      const contesto =
+        (datiCTE.contestiDateNumericheCTE || [])[i] ||
+        "contesto non disponibile";
+
+      return data + " → " + contesto;
+    })
+    .join("\n\n") || "nessuno"
+) +
       "\nDate testuali: " +
       ((datiCTE.dateTestualiCTE || []).join(" - ") || "nessuna") +
       "\nContesto date: " +
