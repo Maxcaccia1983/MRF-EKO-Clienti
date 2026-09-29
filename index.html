@@ -1610,7 +1610,7 @@ const contestiDateNumericheCTE =
     let tipo = "altro";
 
     if (
-      /validit[aà]\s+(?:temporale\s+)?(?:dell['’]?\s*)?offerta|periodo\s+di\s+validit[aà]|offerta\s+valid|valida\s+dal|validit[aà]\s+cte/.test(contesto)
+      /validit[aà]\s+(?:temporale\s+)?(?:dell['’]?\s*)?offerta|periodo\s+di\s+validit[aà]|offerta\s+valid|valida\s+dal|validit[aà]\s+cte|sottoscrivibil[ei]\s+dal|sottoscrizione\s+dal/.test(contesto)
     ) {
       tipo = "validita_offerta";
     } else if (
