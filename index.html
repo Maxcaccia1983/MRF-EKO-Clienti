@@ -2082,6 +2082,8 @@ anteprima.textContent =
     ? "\n\n🔎 DIAGNOSTICA DATE" +
       "\nDate numeriche: " +
       ((datiCTE.dateTrovateCTE || []).join(" - ") || "nessuna") +
+  "\nContesto date numeriche: " +
+((datiCTE.contestiDateNumericheCTE || []).join(" || ") || "nessuno") +
       "\nDate testuali: " +
       ((datiCTE.dateTestualiCTE || []).join(" - ") || "nessuna") +
       "\nContesto date: " +
