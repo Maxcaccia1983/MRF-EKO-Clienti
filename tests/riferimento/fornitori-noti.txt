@@ -1,0 +1,4 @@
+# Elenco dei fornitori GIA' NOTI (uno per riga), usato SOLO dal controllo di universalita':
+# se uno di questi nomi compare nel codice del parser, il test lo segnala.
+# Fonte suggerita: i valori della colonna "fornitore" dei 78 record di cte_offerte
+# (solo i nomi, nessun altro dato). Questo file NON viene mai letto dal parser.

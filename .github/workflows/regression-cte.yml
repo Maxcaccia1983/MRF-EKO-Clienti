@@ -1,0 +1,50 @@
+name: Test regressione lettore CTE
+
+# Solo test. Nessun deploy, nessuna pubblicazione, nessun APK, nessun accesso
+# a Supabase, nessun segreto. Permessi di sola lettura sul repository.
+on:
+  pull_request:
+    paths:
+      - 'tests/**'
+      - 'parser-bolletta.js'
+      - 'index.html'
+      - '.github/workflows/regression-cte.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: regression-cte-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  regressione:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: tests/runner
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Dipendenze di test (versioni esatte)
+        run: npm install --no-audit --no-fund
+
+      - name: Esegui test di regressione
+        run: node esegui-test.mjs --ci
+
+      - name: Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: report-regressione-cte
+          path: tests/runner/report/
+          if-no-files-found: ignore
+          retention-days: 30

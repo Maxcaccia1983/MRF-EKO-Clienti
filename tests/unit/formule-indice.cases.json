@@ -1,0 +1,110 @@
+{
+  "schema_version": "1.0",
+  "suite": "formule-indice",
+  "descrizione": "Classificazione fisso/indicizzato e separazione indice/spread (regole 5-8, 10, 11). Il campo 'valore_indice_nel_documento' verifica che uno spread non venga scambiato per il valore dell'indice. Casi sintetici proposti da Claude: da rivedere e approvare da Max.",
+  "revisione": { "state": "da_rivedere", "by": null, "at": null },
+  "casi": [
+    { "id": "F01", "commodity": "luce", "input": "Prezzo energia: PUN + 0,025 €/kWh",
+      "atteso": {
+        "luce.price_type": { "status": "presente", "value": "indicizzato" },
+        "luce.index": { "status": "presente", "value": "PUN" },
+        "luce.spread": { "status": "presente", "value": 0.025, "unit": "€/kWh" },
+        "luce.fixed_price": { "status": "non_applicabile", "value": null },
+        "luce.valore_indice_nel_documento": { "status": "non_presente", "value": null }
+      } },
+    { "id": "F02", "commodity": "luce", "input": "Corrispettivo energia pari al PUN Index GME maggiorato di uno spread di 0,018 €/kWh",
+      "atteso": {
+        "luce.price_type": { "status": "presente", "value": "indicizzato" },
+        "luce.index": { "status": "presente", "value": "PUN", "variant": "index_gme" },
+        "luce.spread": { "status": "presente", "value": 0.018, "unit": "€/kWh" },
+        "luce.fixed_price": { "status": "non_applicabile", "value": null },
+        "luce.valore_indice_nel_documento": { "status": "non_presente", "value": null }
+      } },
+    { "id": "F03", "commodity": "luce", "input": "Al valore del PUN sarà applicato un corrispettivo pari a 0,025 €/kWh",
+      "atteso": {
+        "luce.price_type": { "status": "presente", "value": "indicizzato" },
+        "luce.index": { "status": "presente", "value": "PUN" },
+        "luce.spread": { "status": "presente", "value": 0.025, "unit": "€/kWh" },
+        "luce.valore_indice_nel_documento": { "status": "non_presente", "value": null }
+      } },
+    { "id": "F04", "commodity": "luce", "input": "Prezzo energia: PUN + 2,5 c€/kWh",
+      "atteso": {
+        "luce.index": { "status": "presente", "value": "PUN" },
+        "luce.spread": { "status": "presente", "value": 0.025, "unit": "€/kWh" },
+        "luce.valore_indice_nel_documento": { "status": "non_presente", "value": null }
+      } },
+    { "id": "F05", "commodity": "luce", "input": "Prezzo energia: PUN x 1,05 + 0,010 €/kWh",
+      "atteso": {
+        "luce.index": { "status": "presente", "value": "PUN" },
+        "luce.multiplier": { "status": "presente", "value": 1.05 },
+        "luce.spread": { "status": "presente", "value": 0.01, "unit": "€/kWh" },
+        "luce.valore_indice_nel_documento": { "status": "non_presente", "value": null }
+      } },
+    { "id": "F06", "commodity": "luce", "input": "Prezzo energia fisso e invariabile per 12 mesi: 0,140 €/kWh",
+      "atteso": {
+        "luce.price_type": { "status": "presente", "value": "fisso" },
+        "luce.fixed_price": { "status": "presente", "value": 0.14, "unit": "€/kWh" },
+        "luce.index": { "status": "non_applicabile", "value": null },
+        "luce.spread": { "status": "non_applicabile", "value": null }
+      } },
+    { "id": "F07", "commodity": "gas", "input": "Prezzo gas: PSV + 0,10 €/Smc",
+      "atteso": {
+        "gas.price_type": { "status": "presente", "value": "indicizzato" },
+        "gas.index": { "status": "presente", "value": "PSV" },
+        "gas.spread": { "status": "presente", "value": 0.10, "unit": "€/Smc" },
+        "gas.fixed_price": { "status": "non_applicabile", "value": null },
+        "gas.valore_indice_nel_documento": { "status": "non_presente", "value": null }
+      } },
+    { "id": "F08", "commodity": "gas", "input": "Corrispettivo materia gas pari al PSV Day Ahead maggiorato di 0,08 €/Smc",
+      "atteso": {
+        "gas.index": { "status": "presente", "value": "PSV", "variant": "day_ahead" },
+        "gas.spread": { "status": "presente", "value": 0.08, "unit": "€/Smc" },
+        "gas.valore_indice_nel_documento": { "status": "non_presente", "value": null }
+      } },
+    { "id": "F09", "commodity": "gas", "input": "Prezzo gas naturale fisso: 0,62 €/Smc",
+      "atteso": {
+        "gas.price_type": { "status": "presente", "value": "fisso" },
+        "gas.fixed_price": { "status": "presente", "value": 0.62, "unit": "€/Smc" },
+        "gas.index": { "status": "non_applicabile", "value": null },
+        "gas.spread": { "status": "non_applicabile", "value": null }
+      } },
+    { "id": "F10", "commodity": "gas", "input": "Prezzo materia gas: TTF + 1,50 €/MWh",
+      "atteso": {
+        "gas.index": { "status": "presente", "value": "TTF" },
+        "gas.spread": { "status": "presente", "value": 1.5, "unit": "€/MWh" },
+        "gas.valore_indice_nel_documento": { "status": "non_presente", "value": null }
+      } },
+    { "id": "F11", "commodity": "gas", "input": "Prezzo gas: indice ZXGAS-M + 0,05 €/Smc",
+      "descrizione": "Indice non riconosciuto: deve risultare ALTRO senza perdere il testo originale (regola 7)",
+      "atteso": {
+        "gas.index": { "status": "presente", "value": "ALTRO", "original_text": "ZXGAS-M" },
+        "gas.spread": { "status": "presente", "value": 0.05, "unit": "€/Smc" }
+      } },
+    { "id": "F12", "commodity": "dual", "input": "Energia elettrica: PUN + 0,020 €/kWh. Gas naturale: PSV + 0,08 €/Smc.",
+      "descrizione": "Offerta DUAL: i valori luce e gas non vanno confusi (regola 10)",
+      "atteso": {
+        "luce.index": { "status": "presente", "value": "PUN" },
+        "luce.spread": { "status": "presente", "value": 0.02, "unit": "€/kWh" },
+        "gas.index": { "status": "presente", "value": "PSV" },
+        "gas.spread": { "status": "presente", "value": 0.08, "unit": "€/Smc" }
+      } },
+    { "id": "F13", "commodity": "luce", "input": "Sconto di 0,010 €/kWh sul prezzo energia per i primi 12 mesi",
+      "descrizione": "Uno sconto non e' uno spread ne' un prezzo (regola 11)",
+      "atteso": {
+        "luce.spread": { "status": "non_presente", "value": null },
+        "luce.fixed_price": { "status": "non_presente", "value": null }
+      } },
+    { "id": "F14", "commodity": "luce", "input": "A titolo informativo, il PUN medio di agosto 2026 è stato pari a 0,108 €/kWh.",
+      "descrizione": "Un valore informativo dell'indice non e' lo spread ne' il prezzo del cliente",
+      "atteso": {
+        "luce.spread": { "status": "non_presente", "value": null },
+        "luce.fixed_price": { "status": "non_presente", "value": null }
+      } },
+    { "id": "F15", "commodity": "luce", "input": "Quota fissa: 12 €/mese",
+      "descrizione": "12 €/mese non e' il prezzo dell'energia (regola 27)",
+      "atteso": {
+        "luce.fixed_price": { "status": "non_presente", "value": null },
+        "luce.spread": { "status": "non_presente", "value": null }
+      } }
+  ]
+}

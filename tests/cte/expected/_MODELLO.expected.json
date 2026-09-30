@@ -1,0 +1,437 @@
+{
+  "schema_version": "1.0",
+  "document_id": "modello",
+  "document_review": {
+    "state": "bozza",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": "Copiare questo file come <id>.expected.json. Compilare leggendo il PDF, non la baseline."
+  },
+  "document": {
+    "supplier": {
+      "value": null,
+      "unit": null,
+      "status": "non_valutato",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": null,
+      "page": null
+    },
+    "offer_name": {
+      "value": null,
+      "unit": null,
+      "status": "non_valutato",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": null,
+      "page": null
+    },
+    "offer_code": {
+      "value": null,
+      "unit": null,
+      "status": "non_valutato",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": null,
+      "page": null
+    },
+    "supply_type": {
+      "value": null,
+      "unit": null,
+      "status": "non_valutato",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": null,
+      "page": null
+    },
+    "market": {
+      "value": null,
+      "unit": null,
+      "status": "non_valutato",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": null,
+      "page": null
+    },
+    "customer_segment": {
+      "value": null,
+      "unit": null,
+      "status": "non_valutato",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": null,
+      "page": null
+    },
+    "document_date": {
+      "value": null,
+      "unit": null,
+      "status": "non_valutato",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": null,
+      "page": null
+    }
+  },
+  "validity": {
+    "from": {
+      "value": null,
+      "unit": null,
+      "status": "non_valutato",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": null,
+      "page": null
+    },
+    "to": {
+      "value": null,
+      "unit": null,
+      "status": "non_valutato",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": null,
+      "page": null
+    },
+    "duration_months": {
+      "value": null,
+      "unit": null,
+      "status": "non_valutato",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": null,
+      "page": null
+    },
+    "renewal": {
+      "value": null,
+      "unit": null,
+      "status": "non_valutato",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": null,
+      "page": null
+    }
+  },
+  "electricity": {
+    "enabled": {
+      "value": null,
+      "unit": null,
+      "status": "non_valutato",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": null,
+      "page": null
+    },
+    "price_type": {
+      "value": null,
+      "unit": null,
+      "status": "non_valutato",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": null,
+      "page": null
+    },
+    "fixed_price": {
+      "value": null,
+      "unit": null,
+      "status": "non_valutato",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": null,
+      "page": null
+    },
+    "band_prices": {
+      "value": null,
+      "unit": null,
+      "status": "non_valutato",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": null,
+      "page": null
+    },
+    "index": {
+      "value": null,
+      "unit": null,
+      "status": "non_valutato",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": null,
+      "page": null,
+      "variant": null,
+      "original_text": null
+    },
+    "spread": {
+      "value": null,
+      "unit": null,
+      "status": "non_valutato",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": null,
+      "page": null
+    },
+    "multiplier": {
+      "value": null,
+      "unit": null,
+      "status": "non_valutato",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": null,
+      "page": null
+    },
+    "formula_text": {
+      "value": null,
+      "unit": null,
+      "status": "non_valutato",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": null,
+      "page": null
+    },
+    "fixed_fee": {
+      "value": null,
+      "unit": null,
+      "status": "non_valutato",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": null,
+      "page": null,
+      "original": null
+    },
+    "other_recurring_fees": {
+      "status": "non_valutato",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "items": []
+    }
+  },
+  "gas": {
+    "enabled": {
+      "value": null,
+      "unit": null,
+      "status": "non_valutato",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": null,
+      "page": null
+    },
+    "price_type": {
+      "value": null,
+      "unit": null,
+      "status": "non_valutato",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": null,
+      "page": null
+    },
+    "fixed_price": {
+      "value": null,
+      "unit": null,
+      "status": "non_valutato",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": null,
+      "page": null
+    },
+    "band_prices": {
+      "value": null,
+      "unit": null,
+      "status": "non_valutato",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": null,
+      "page": null
+    },
+    "index": {
+      "value": null,
+      "unit": null,
+      "status": "non_valutato",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": null,
+      "page": null,
+      "variant": null,
+      "original_text": null
+    },
+    "spread": {
+      "value": null,
+      "unit": null,
+      "status": "non_valutato",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": null,
+      "page": null
+    },
+    "multiplier": {
+      "value": null,
+      "unit": null,
+      "status": "non_valutato",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": null,
+      "page": null
+    },
+    "formula_text": {
+      "value": null,
+      "unit": null,
+      "status": "non_valutato",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": null,
+      "page": null
+    },
+    "fixed_fee": {
+      "value": null,
+      "unit": null,
+      "status": "non_valutato",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": null,
+      "page": null,
+      "original": null
+    },
+    "other_recurring_fees": {
+      "status": "non_valutato",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "items": []
+    }
+  },
+  "discounts": {
+    "status": "non_valutato",
+    "verification": {
+      "state": "non_verificato",
+      "by": null,
+      "at": null,
+      "note": null
+    },
+    "items": []
+  },
+  "tolerances": {
+    "price": 0.000001,
+    "fee": 0.01,
+    "multiplier": 0.0001
+  },
+  "notes": null
+}

@@ -1,0 +1,18 @@
+{
+  "name": "mrf-eko-tests",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Test di regressione del lettore CTE MRF EKO. Dipendenze SOLO di test: l'app non le carica.",
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "test": "node esegui-test.mjs",
+    "baseline": "node genera-baseline.mjs",
+    "universalita": "node controllo-universalita.mjs",
+    "accessi": "node ../accessi/verifica-accessi.mjs"
+  },
+  "dependencies": {
+    "ajv": "8.17.1",
+    "pdfjs-dist": "3.11.174"
+  }
+}
