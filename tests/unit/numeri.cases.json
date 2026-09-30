@@ -2,22 +2,212 @@
   "schema_version": "1.0",
   "suite": "numeri",
   "descrizione": "Normalizzazione dei numeri in formato italiano/europeo (regola 25). Casi sintetici proposti da Claude: da rivedere e approvare da Max.",
-  "revisione": { "state": "da_rivedere", "by": null, "at": null },
+  "revisione": {
+    "state": "da_rivedere",
+    "nota": "Nessun caso e' approvato: ogni caso ha il proprio stato_revisione. Gli esiti su casi 'da_rivedere' sono PROVVISORI.",
+    "by": null,
+    "at": null
+  },
   "casi": [
-    { "id": "N01", "input": "0,145", "contesto": "prezzo", "atteso": { "valore": { "status": "presente", "value": 0.145 } } },
-    { "id": "N02", "input": "0,140", "contesto": "prezzo", "atteso": { "valore": { "status": "presente", "value": 0.14 } } },
-    { "id": "N03", "input": "0,0250", "contesto": "prezzo", "atteso": { "valore": { "status": "presente", "value": 0.025 } } },
-    { "id": "N04", "input": "1.234,56", "contesto": "importo", "atteso": { "valore": { "status": "presente", "value": 1234.56 } } },
-    { "id": "N05", "input": "1234,56", "contesto": "importo", "atteso": { "valore": { "status": "presente", "value": 1234.56 } } },
-    { "id": "N06", "input": "10.000,00", "contesto": "importo", "atteso": { "valore": { "status": "presente", "value": 10000 } } },
-    { "id": "N07", "input": "2.423", "contesto": "consumo", "descrizione": "Punto come separatore delle migliaia (difetto C1)", "atteso": { "valore": { "status": "presente", "value": 2423 } } },
-    { "id": "N08", "input": "12.345.678", "contesto": "consumo", "atteso": { "valore": { "status": "presente", "value": 12345678 } } },
-    { "id": "N09", "input": "1.500", "contesto": "consumo", "atteso": { "valore": { "status": "presente", "value": 1500 } } },
-    { "id": "N10", "input": "144", "contesto": "importo", "atteso": { "valore": { "status": "presente", "value": 144 } } },
-    { "id": "N11", "input": "1,234.56", "contesto": "importo", "descrizione": "Formato internazionale", "atteso": { "valore": { "status": "presente", "value": 1234.56 } } },
-    { "id": "N12", "input": "0.145", "contesto": "prezzo", "descrizione": "Zero iniziale: il punto e' decimale", "atteso": { "valore": { "status": "presente", "value": 0.145 } } },
-    { "id": "N13", "input": "7,50", "contesto": "importo", "atteso": { "valore": { "status": "presente", "value": 7.5 } } },
-    { "id": "N14", "input": "abc", "contesto": "prezzo", "descrizione": "Non numerico: nessun valore", "atteso": { "valore": { "status": "non_presente", "value": null } } },
-    { "id": "N15", "input": "1.234", "contesto": "prezzo", "descrizione": "Ambiguo senza contesto di unita': non deve essere dato per certo", "atteso": { "valore": { "status": "ambiguo", "value": null } } }
+    {
+      "id": "N01",
+      "input": "0,145",
+      "contesto": "prezzo",
+      "atteso": {
+        "valore": {
+          "status": "presente",
+          "value": 0.145
+        }
+      },
+      "motivazione": "Formato italiano: la virgola e' il separatore decimale.",
+      "stato_revisione": "da_rivedere"
+    },
+    {
+      "id": "N02",
+      "input": "0,140",
+      "contesto": "prezzo",
+      "atteso": {
+        "valore": {
+          "status": "presente",
+          "value": 0.14
+        }
+      },
+      "motivazione": "Virgola decimale; lo zero finale non cambia il valore (0,140 = 0,14).",
+      "stato_revisione": "da_rivedere"
+    },
+    {
+      "id": "N03",
+      "input": "0,0250",
+      "contesto": "prezzo",
+      "atteso": {
+        "valore": {
+          "status": "presente",
+          "value": 0.025
+        }
+      },
+      "motivazione": "Virgola decimale con zeri finali: 0,0250 = 0,025.",
+      "stato_revisione": "da_rivedere"
+    },
+    {
+      "id": "N04",
+      "input": "1.234,56",
+      "contesto": "importo",
+      "atteso": {
+        "valore": {
+          "status": "presente",
+          "value": 1234.56
+        }
+      },
+      "motivazione": "Formato italiano completo: punto per le migliaia, virgola per i decimali.",
+      "stato_revisione": "da_rivedere"
+    },
+    {
+      "id": "N05",
+      "input": "1234,56",
+      "contesto": "importo",
+      "atteso": {
+        "valore": {
+          "status": "presente",
+          "value": 1234.56
+        }
+      },
+      "motivazione": "Virgola decimale senza separatore delle migliaia.",
+      "stato_revisione": "da_rivedere"
+    },
+    {
+      "id": "N06",
+      "input": "10.000,00",
+      "contesto": "importo",
+      "atteso": {
+        "valore": {
+          "status": "presente",
+          "value": 10000
+        }
+      },
+      "motivazione": "Punto per le migliaia e virgola per i decimali: diecimila.",
+      "stato_revisione": "da_rivedere"
+    },
+    {
+      "id": "N07",
+      "input": "2.423",
+      "contesto": "consumo",
+      "descrizione": "Punto come separatore delle migliaia (difetto C1)",
+      "atteso": {
+        "valore": {
+          "status": "presente",
+          "value": 2423
+        }
+      },
+      "motivazione": "Contesto CONSUMO (quantita' in kWh o Smc): in italiano il punto seguito da esattamente 3 cifre e' il separatore delle migliaia; i decimali si scrivono con la virgola. '2.423 kWh' = duemilaquattrocentoventitre kWh. Difetto C1.",
+      "stato_revisione": "da_rivedere"
+    },
+    {
+      "id": "N08",
+      "input": "12.345.678",
+      "contesto": "consumo",
+      "atteso": {
+        "valore": {
+          "status": "presente",
+          "value": 12345678
+        }
+      },
+      "motivazione": "Contesto CONSUMO: piu' gruppi da 3 cifre separati da punti sono sempre migliaia.",
+      "stato_revisione": "da_rivedere"
+    },
+    {
+      "id": "N09",
+      "input": "1.500",
+      "contesto": "consumo",
+      "atteso": {
+        "valore": {
+          "status": "presente",
+          "value": 1500
+        }
+      },
+      "motivazione": "Contesto CONSUMO: stesso caso di N07 ('1.500 kWh' = millecinquecento kWh), con zeri finali che rendono l'errore piu' grave (1,5 invece di 1500).",
+      "stato_revisione": "da_rivedere"
+    },
+    {
+      "id": "N10",
+      "input": "144",
+      "contesto": "importo",
+      "atteso": {
+        "valore": {
+          "status": "presente",
+          "value": 144
+        }
+      },
+      "motivazione": "Intero senza separatori.",
+      "stato_revisione": "da_rivedere"
+    },
+    {
+      "id": "N11",
+      "input": "1,234.56",
+      "contesto": "importo",
+      "descrizione": "Formato internazionale",
+      "atteso": {
+        "valore": {
+          "status": "presente",
+          "value": 1234.56
+        }
+      },
+      "motivazione": "Formato internazionale: se compaiono entrambi i separatori, l'ultimo e' il decimale (1,234.56 = 1234,56).",
+      "stato_revisione": "da_rivedere"
+    },
+    {
+      "id": "N12",
+      "input": "0.145",
+      "contesto": "prezzo",
+      "descrizione": "Zero iniziale: il punto e' decimale",
+      "atteso": {
+        "valore": {
+          "status": "presente",
+          "value": 0.145
+        }
+      },
+      "motivazione": "Contesto PREZZO: con lo zero iniziale il punto non puo' separare le migliaia (non esiste '0 migliaia'), quindi e' decimale.",
+      "stato_revisione": "da_rivedere"
+    },
+    {
+      "id": "N13",
+      "input": "7,50",
+      "contesto": "importo",
+      "atteso": {
+        "valore": {
+          "status": "presente",
+          "value": 7.5
+        }
+      },
+      "motivazione": "Virgola decimale.",
+      "stato_revisione": "da_rivedere"
+    },
+    {
+      "id": "N14",
+      "input": "abc",
+      "contesto": "prezzo",
+      "descrizione": "Non numerico: nessun valore",
+      "atteso": {
+        "valore": {
+          "status": "non_presente",
+          "value": null
+        }
+      },
+      "motivazione": "Testo non numerico: il parser non deve produrre alcun valore.",
+      "stato_revisione": "da_rivedere"
+    },
+    {
+      "id": "N15",
+      "input": "1.234",
+      "contesto": "prezzo",
+      "descrizione": "Ambiguo senza contesto di unita': non deve essere dato per certo",
+      "atteso": {
+        "valore": {
+          "status": "ambiguo",
+          "value": null
+        }
+      },
+      "motivazione": "Contesto PREZZO senza unita' di misura: '1.234' puo' essere 1234 (migliaia) o 1,234 (decimale scritto con il punto). Senza un'unita' (€/kWh, €/MWh) o un contesto che lo chiarisca, NON si deve scegliere: il valore va lasciato vuoto o segnalato da verificare.",
+      "stato_revisione": "da_rivedere"
+    }
   ]
 }

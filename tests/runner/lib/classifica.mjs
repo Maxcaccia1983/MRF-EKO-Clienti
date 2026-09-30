@@ -5,7 +5,12 @@
 //   ERRATO        il parser da' un valore diverso da quello atteso
 //   MANCANTE      l'atteso ha un valore, il parser restituisce null
 //   INVENTATO     l'atteso e' non_presente / non_applicabile / ambiguo ma il
-//                 parser restituisce un valore come certo (regola 13)
+//                 parser restituisce un valore come certo (regola 13).
+//                 Sottotipi (campo "sottotipo"):
+//                   attribuzione_errata        il numero esiste nel testo ma il
+//                                              parser lo assegna al campo sbagliato
+//                   valore_assente_dal_testo   il numero non compare nel testo
+//                   certezza_non_giustificata  dato ambiguo restituito come certo
 //   NON_VALUTATO  campo non ancora compilato nell'atteso
 //
 // L'output del parser (dopo l'adattatore) per ogni campo e':
@@ -52,7 +57,29 @@ export function scegliTolleranza(percorsoCampo, tolleranze = {}) {
  * @param ottenuto null | { value, unit?, variant?, original_text?, da_verificare? }
  * @returns { esito, dettaglio }
  */
-export function classificaCampo(atteso, ottenuto, tolleranza = TOLLERANZE_DEFAULT.number) {
+/** Il valore numerico compare nel testo sorgente (anche come c€ o €/MWh)? */
+export function numeroNelTesto(valore, testo) {
+  if (typeof valore !== "number" || !testo) return false;
+  const numeri = String(testo).match(/\d+(?:[.,]\d+)*/g) || [];
+  for (const n of numeri) {
+    const letture = new Set([
+      Number(n.replace(",", ".")),
+      Number(n.replace(/\./g, "").replace(",", ".")),
+      Number(n.replace(/,/g, "")),
+    ]);
+    for (const x of letture) {
+      if (!Number.isFinite(x)) continue;
+      for (const f of [1, 0.01, 0.001]) if (Math.abs(x * f - valore) < 1e-9) return true;
+    }
+  }
+  return false;
+}
+
+function inventato(dettaglio, sottotipo) {
+  return { esito: "INVENTATO", sottotipo, dettaglio: dettaglio + " [" + sottotipo + "]" };
+}
+
+export function classificaCampo(atteso, ottenuto, tolleranza = TOLLERANZE_DEFAULT.number, testoSorgente = "") {
   const status = atteso && atteso.status;
 
   if (!status || status === "non_valutato") {
@@ -61,13 +88,14 @@ export function classificaCampo(atteso, ottenuto, tolleranza = TOLLERANZE_DEFAUL
 
   if (status === "non_presente" || status === "non_applicabile") {
     if (valoreVuoto(ottenuto)) return { esito: "CORRETTO", dettaglio: "nessun valore, come atteso" };
-    return { esito: "INVENTATO", dettaglio: "valore " + JSON.stringify(ottenuto.value) + " per un dato " + status };
+    const st = numeroNelTesto(ottenuto.value, testoSorgente) ? "attribuzione_errata" : "valore_assente_dal_testo";
+    return inventato("valore " + JSON.stringify(ottenuto.value) + " per un dato " + status, st);
   }
 
   if (status === "ambiguo") {
     if (valoreVuoto(ottenuto)) return { esito: "CORRETTO", dettaglio: "ambiguo lasciato vuoto" };
     if (ottenuto.da_verificare === true) return { esito: "CORRETTO", dettaglio: "ambiguo segnalato da verificare" };
-    return { esito: "INVENTATO", dettaglio: "valore certo " + JSON.stringify(ottenuto.value) + " su dato ambiguo" };
+    return inventato("valore certo " + JSON.stringify(ottenuto.value) + " su dato ambiguo", "certezza_non_giustificata");
   }
 
   // status === "presente"

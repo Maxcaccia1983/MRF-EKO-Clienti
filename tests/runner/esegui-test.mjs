@@ -63,11 +63,16 @@ function eseguiUnit(parser) {
         continue;
       }
       for (const [campo, atteso] of Object.entries(caso.atteso)) {
-        const { esito, dettaglio } = classificaCampo(atteso, uscita[campo] ?? null, scegliTolleranza(campo));
+        const ott = uscita[campo] ?? null;
+        const { esito, dettaglio, sottotipo } = classificaCampo(atteso, ott, scegliTolleranza(campo), caso.input);
         risultati.push({
           chiave: "unit/" + suite + "/" + caso.id + "/" + campo,
-          gruppo: "unit/" + suite, id: caso.id, campo, esito, dettaglio,
-          conta_nel_giudizio: true, input: caso.input,
+          gruppo: "unit/" + suite, id: caso.id, campo, esito, dettaglio, sottotipo,
+          // I casi unitari entrano nel controllo di REGRESSIONE (comportamento),
+          // ma il loro giudizio di CORRETTEZZA resta provvisorio finche' Max non li approva.
+          conta_nel_giudizio: true,
+          provvisorio: caso.stato_revisione !== "approvato",
+          input: caso.input, atteso: atteso, ottenuto: ott, motivazione: caso.motivazione,
         });
       }
     }
@@ -124,14 +129,15 @@ async function eseguiCTE(parser, validatori) {
 
     for (const [campo, atteso] of Object.entries(appiattisciExpected(exp))) {
       const tol = scegliTolleranza(campo, exp.tolerances);
-      const { esito, dettaglio } = eLista(campo)
+      const { esito, dettaglio, sottotipo } = eLista(campo)
         ? classificaLista(atteso, uscita[campo], tol)
-        : classificaCampo(atteso, uscita[campo] ?? null, tol);
+        : classificaCampo(atteso, uscita[campo] ?? null, tol, estratto.testo);
       const verificato = atteso && atteso.verification && atteso.verification.state === "verificato";
       risultati.push({
         chiave: "cte/" + doc.id + "/" + campo,
-        gruppo: "cte", id: doc.id, campo, esito, dettaglio,
+        gruppo: "cte", id: doc.id, campo, esito, dettaglio, sottotipo,
         conta_nel_giudizio: !!verificato,
+        provvisorio: !verificato,
         insieme: doc.insieme, fornitore_nuovo: doc.fornitore_nuovo,
       });
     }
@@ -197,76 +203,99 @@ function riga(c) {
   return `| ${c.CORRETTO} | ${c.ERRATO} | ${c.MANCANTE} | ${c.INVENTATO} | ${c.NON_VALUTATO} |`;
 }
 
+const fmt = (o) => (o == null ? "null" : JSON.stringify(o.value !== undefined ? o.value : o) + (o && o.unit ? " " + o.unit : ""));
+
 function scriviReport(ctx) {
-  const { parser, cte, rif, univ, pronto, esitoFinale } = ctx;
+  const { parser, cte, rif, univ, pronto, esitoControlli, esitoRegressione } = ctx;
   const L = [];
   L.push("# Report regressione CTE - MRF EKO", "");
+  L.push(`> **STATO DEL LETTORE: ${pronto.pronto ? "PRONTO" : "NON PRONTO"}.** ` +
+    "Questo esito dipende solo dal criterio di prontezza (sezione D). Il superamento dei controlli e della regressione NON rende il lettore pronto.", "");
   L.push(`- Data: ${new Date().toISOString()}`);
   L.push(`- Commit: ${commitCorrente()}`);
-  L.push(`- parser-bolletta.js v${parser.provenienza.parser_bolletta_versione} (sha256 ${parser.provenienza.parser_bolletta_sha256.slice(0, 12)}...)`);
-  L.push(`- index.html sha256 ${parser.provenienza.index_html_sha256.slice(0, 12)}...`);
-  L.push(`- Riferimento: ${rif.presente ? rif.generato_il + " (commit " + rif.commit + ")" : "assente"}`);
-  L.push("", `## Esito: ${esitoFinale ? "SUPERATO" : "NON SUPERATO"}`, "");
-  L.push("SUPERATO significa soltanto: nessuna regressione, nessuna nuova invenzione, integrita' ok. NON significa che il lettore sia pronto (vedi 'Criterio di prontezza').", "");
+  L.push(`- parser-bolletta.js v${parser.provenienza.parser_bolletta_versione} (sha256 ${parser.provenienza.parser_bolletta_sha256.slice(0, 12)}...) · index.html sha256 ${parser.provenienza.index_html_sha256.slice(0, 12)}...`);
+  L.push(`- Riferimento per la regressione: ${rif.presente ? rif.generato_il + " (commit " + rif.commit + ")" : "assente"}`, "");
 
-  if (bloccanti.length) { L.push("### Problemi bloccanti"); bloccanti.forEach((b) => L.push("- " + b)); L.push(""); }
-  if (avvisi.length) { L.push("### Avvisi"); avvisi.forEach((b) => L.push("- " + b)); L.push(""); }
+  L.push("| Sezione | Domanda | Esito |", "|---|---|---|");
+  L.push(`| A. Controlli del runner | Il materiale di test e' integro e valido? | ${esitoControlli ? "OK" : "PROBLEMI"} |`);
+  L.push(`| B. Regressione | Il comportamento e' peggiorato rispetto al riferimento? | ${esitoRegressione ? "Nessun peggioramento" : "PEGGIORAMENTI"} |`);
+  L.push(`| C. Correttezza del parser | Il parser estrae i valori giusti? | Vedi tabelle: tutti gli esiti sono PROVVISORI finche' i casi non sono approvati |`);
+  L.push(`| D. Prontezza | Il lettore puo' essere dichiarato pronto? | ${pronto.pronto ? "SI" : "NO"} |`, "");
 
-  L.push("## Nuove invenzioni (bloccanti, anche se il totale non aumenta)");
-  if (!rif.nuoveInvenzioni.length) L.push("Nessuna.");
+  // ---- A
+  L.push("## A. Controlli del runner (integrita')", "");
+  L.push("Verificano il materiale di test, non il parser: schema JSON, hash dei PDF, ID univoci, caricamento dei parser, universalita' statica.", "");
+  if (!bloccanti.length) L.push("- Nessun problema bloccante.");
+  bloccanti.forEach((b) => L.push("- BLOCCANTE: " + b));
+  avvisi.forEach((b) => L.push("- Avviso: " + b));
+  L.push("", "### Universalita' (controllo statico)");
+  L.push(`Fornitori noti controllati: ${univ.fornitori_controllati}.`);
+  L.push("- Riconoscere il nome del fornitore per compilare il campo 'fornitore' e' AMMESSO (menzione, revisione umana).");
+  L.push("- Cambiare il parsing in base al fornitore e' una VIOLAZIONE (diramazione per fornitore o nome noto dentro una condizione).");
+  univ.avvisi.forEach((a) => L.push("- Avviso: " + a));
+  L.push(`- Violazioni (parsing dipendente dal fornitore o accesso a cte_offerte): ${univ.violazioni.length}`);
+  univ.violazioni.forEach((v) => L.push(`  - ${v.tipo} ${v.file}:${v.riga} \`${v.testo}\``));
+  L.push(`- Menzioni di nomi noti da rivedere a mano: ${(univ.menzioni || []).length}`);
+  (univ.menzioni || []).forEach((v) => L.push(`  - ${v.file}:${v.riga} (${v.token}) \`${v.testo}\``));
+  L.push("- Il controllo statico non dimostra l'universalita': la prova sono i risultati su holdout e fornitori nuovi (sezione C).");
+
+  // ---- B
+  L.push("", "## B. Regressione rispetto al riferimento (comportamento)", "");
+  L.push("Confronta gli esiti di oggi con quelli congelati in `riferimento/stato-accettato.json`. Misura se il comportamento e' cambiato, non se e' corretto.", "");
+  L.push("**Nuove invenzioni** (bloccanti anche se il totale non aumenta):");
+  if (!rif.nuoveInvenzioni.length) L.push("- Nessuna.");
   rif.nuoveInvenzioni.forEach((r) => L.push(`- \`${r.chiave}\` - ${r.dettaglio}`));
-  L.push("", "## Regressioni (bloccanti)");
-  if (!rif.regressioni.length) L.push("Nessuna.");
+  L.push("", "**Regressioni** (campi che erano CORRETTO e ora non lo sono):");
+  if (!rif.regressioni.length) L.push("- Nessuna.");
   rif.regressioni.forEach((r) => L.push(`- \`${r.chiave}\` - prima ${r.prima}, ora ${r.esito}: ${r.dettaglio}`));
-  L.push("", "## Invenzioni gia' note (presenti nel riferimento, da eliminare)");
-  if (!rif.invenzioniNote.length) L.push("Nessuna.");
-  rif.invenzioniNote.forEach((r) => L.push(`- \`${r.chiave}\` - ${r.dettaglio}`));
   if (rif.miglioramenti.length) {
-    L.push("", "## Miglioramenti rispetto al riferimento");
+    L.push("", "**Miglioramenti:**");
     rif.miglioramenti.forEach((r) => L.push(`- \`${r.chiave}\` - prima ${r.prima}, ora CORRETTO`));
   }
 
-  L.push("", "## Test unitari (casi sintetici)", "", "| Suite | Corretti | Errati | Mancanti | Inventati | Non valutati |", "|---|---|---|---|---|---|");
+  // ---- C
+  L.push("", "## C. Correttezza del parser (PROVVISORIA)", "");
+  L.push("Esiti rispetto ai valori attesi. I casi unitari sono proposte sintetiche NON ancora approvate: ogni esito qui sotto e' PROVVISORIO.", "");
+  L.push("### C1. Casi unitari sintetici", "", "| Suite | Corretti | Errati | Mancanti | Inventati | Non valutati | Stato |", "|---|---|---|---|---|---|---|");
   for (const s of ["numeri", "unita", "formule-indice"]) {
-    L.push(`| ${s} ` + riga(conteggi(risultati.filter((r) => r.gruppo === "unit/" + s))));
+    const lista = risultati.filter((r) => r.gruppo === "unit/" + s);
+    const prov = lista.some((r) => r.provvisorio);
+    L.push(`| ${s} ` + riga(conteggi(lista)) + ` ${prov ? "PROVVISORIO" : "approvato"} |`);
   }
-  L.push("", "<details><summary>Dettaglio dei casi non corretti</summary>", "");
+  const inv = risultati.filter((r) => r.esito === "INVENTATO");
+  L.push("", `### C2. Campi INVENTATI (${inv.length}) - gia' presenti nel riferimento: ${rif.invenzioniNote.length}`, "");
+  L.push("| Chiave | Input | Output del parser | Atteso | Sottotipo |", "|---|---|---|---|---|");
+  inv.forEach((r) => L.push(`| \`${r.chiave}\` | ${r.input ? "\"" + r.input + "\"" : "-"} | ${fmt(r.ottenuto)} | ${r.atteso ? r.atteso.status : "-"} | ${r.sottotipo || "-"} |`));
+  L.push("", "<details><summary>Tutti i casi unitari non corretti</summary>", "");
   risultati.filter((r) => r.gruppo.startsWith("unit/") && r.esito !== "CORRETTO").forEach((r) =>
-    L.push(`- ${r.esito} \`${r.chiave}\` - input: "${r.input}" - ${r.dettaglio}`));
+    L.push(`- ${r.esito}${r.provvisorio ? " (provvisorio)" : ""} \`${r.chiave}\` - input: "${r.input}" - ${r.dettaglio}`));
   L.push("", "</details>");
 
-  L.push("", "## Regressione su CTE", "");
-  L.push(`Documenti nel MANIFEST: ${cte.totale}. Solo i campi con verifica manuale 'verificato' entrano nel giudizio.`, "");
-  const gruppi = [
-    ["Sviluppo", (r) => r.insieme === "sviluppo"],
-    ["Holdout (mai usate nello sviluppo)", (r) => r.insieme === "holdout"],
-    ["Fornitori nuovi", (r) => r.fornitore_nuovo === true],
-  ];
+  L.push("", "### C3. CTE reali", "");
+  L.push(`Documenti nel MANIFEST: ${cte.totale}. Nel giudizio entrano solo i campi con verifica manuale 'verificato'; gli altri sono mostrati come provvisori.`, "");
   L.push("| Insieme | Corretti | Errati | Mancanti | Inventati | Non valutati |", "|---|---|---|---|---|---|");
-  for (const [nome, f] of gruppi) L.push(`| ${nome} ` + riga(conteggi(risultati.filter((r) => r.gruppo === "cte" && r.conta_nel_giudizio && f(r)))));
-  L.push("");
+  for (const [nome, f] of [["Sviluppo", (r) => r.insieme === "sviluppo"], ["Holdout (mai usate nello sviluppo)", (r) => r.insieme === "holdout"], ["Fornitori nuovi", (r) => r.fornitore_nuovo === true]]) {
+    L.push(`| ${nome} ` + riga(conteggi(risultati.filter((r) => r.gruppo === "cte" && r.conta_nel_giudizio && f(r)))));
+  }
+  if (!cte.totale) L.push("", "Nessuna CTE caricata: la correttezza su documenti reali NON e' ancora misurata.");
   for (const d of cte.documenti) {
-    L.push(`### ${d.id} (${d.insieme}${d.fornitore_nuovo ? ", fornitore nuovo" : ""}) - expected ${d.expected}${d.revisione ? " / " + d.revisione : ""}`);
-    L.push(`- OCR: l'app ${d.ocr.app_avvierebbe_ocr ? "AVVIEREBBE" : "non avvierebbe"} l'OCR (${d.ocr.pagine_ocr_app} pagine). Nel test l'OCR non e' eseguito.`);
+    L.push("", `#### ${d.id} (${d.insieme}${d.fornitore_nuovo ? ", fornitore nuovo" : ""}) - expected ${d.expected}${d.revisione ? " / " + d.revisione : ""}`);
+    L.push(`- OCR: l'app ${d.ocr.app_avvierebbe_ocr ? "AVVIEREBBE" : "non avvierebbe"} l'OCR (${d.ocr.pagine_ocr_app} pagine). OCR effettivo nel test: NON ESEGUITO.`);
     if (d.insieme === "holdout" && !DETTAGLI_HOLDOUT) { L.push("- Dettagli nascosti (holdout)."); continue; }
     risultati.filter((r) => r.gruppo === "cte" && r.id === d.id && r.esito !== "NON_VALUTATO").forEach((r) =>
-      L.push(`- ${r.esito}${r.conta_nel_giudizio ? "" : " (non verificato)"} \`${r.campo}\` ${r.dettaglio}`));
+      L.push(`- ${r.esito}${r.provvisorio ? " (provvisorio: campo non verificato)" : ""} \`${r.campo}\` ${r.dettaglio}`));
   }
 
-  L.push("", "## Universalita' (controllo statico)");
-  L.push(`Fornitori controllati: ${univ.fornitori_controllati}.`);
-  univ.avvisi.forEach((a) => L.push("- Avviso: " + (typeof a === "string" ? a : `${a.file}:${a.riga} ${a.motivo}`)));
-  if (!univ.violazioni.length) L.push("- Nessuna violazione.");
-  univ.violazioni.forEach((v) => L.push(`- VIOLAZIONE ${v.file}:${v.riga} ${v.motivo} \`${v.testo}\``));
-  L.push("", "Il controllo statico non dimostra l'universalita': la prova sono i risultati su holdout e fornitori nuovi.");
-
-  L.push("", `## Criterio di prontezza del lettore: ${pronto.pronto ? "SODDISFATTO" : "NON SODDISFATTO"}`, "");
+  // ---- D
+  L.push("", `## D. Criterio di prontezza del lettore: ${pronto.pronto ? "SODDISFATTO" : "NON SODDISFATTO"}`, "");
   pronto.criteri.forEach((c) => L.push(`- [${c.ok ? "x" : " "}] ${c.criterio}`));
   L.push("", "Copertura categorie: " + pronto.copertura.map((c) => (c.coperta ? "✓ " : "✗ ") + c.categoria).join(" · "));
 
-  L.push("", "## Limiti noti di questa esecuzione");
-  L.push("- OCR non eseguito dal runner (FASE 0): i PDF scansionati sono valutati sul solo testo nativo.");
-  L.push("- I casi unitari sono sintetici e in stato 'da_rivedere' finche' Max non li approva.");
+  L.push("", "## Prove incomplete o non eseguite", "");
+  L.push("- **OCR effettivo: INCOMPLETO.** Il runner non esegue l'OCR; registra solo se l'app lo avvierebbe. I PDF scansionati sono valutati sul solo testo nativo.");
+  L.push("- **Prove di accesso reali a Supabase: NON ESEGUITE.** Da pianificare separatamente (tests/accessi/PIANO_PROVE_ACCESSO.md). Nessun utente creato, nessuna modifica all'autenticazione.");
+  L.push("- **Casi unitari: DA RIVEDERE.** Nessuno e' approvato; i relativi esiti di correttezza sono provvisori.");
+  L.push("- **CTE reali: ASSENTI** finche' il MANIFEST e' vuoto.");
   L.push("- La baseline descrive il comportamento attuale e non e' mai usata come verita'.");
   return L.join("\n");
 }
@@ -283,8 +312,12 @@ async function main() {
   if (!rif.presente) avvisi.push("Riferimento assente: nessun confronto di regressione possibile.");
   const pronto = valutaProntezza(cte);
 
-  const esitoFinale = bloccanti.length === 0 && rif.regressioni.length === 0 && rif.nuoveInvenzioni.length === 0;
-  const report = scriviReport({ parser, cte, rif, univ, pronto, esitoFinale });
+  const esitoControlli = bloccanti.length === 0;
+  const esitoRegressione = rif.regressioni.length === 0 && rif.nuoveInvenzioni.length === 0;
+  // Il codice di uscita riguarda solo A e B. La prontezza (D) e' riportata ma
+  // non fa fallire la CI: il lettore resta NON PRONTO finche' D non e' soddisfatto.
+  const esitoFinale = esitoControlli && esitoRegressione;
+  const report = scriviReport({ parser, cte, rif, univ, pronto, esitoControlli, esitoRegressione });
 
   mkdirSync(PERCORSI.report, { recursive: true });
   const stamp = new Date().toISOString().replace(/[:.]/g, "-");

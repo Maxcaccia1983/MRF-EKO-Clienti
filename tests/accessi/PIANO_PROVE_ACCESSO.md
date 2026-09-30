@@ -19,7 +19,10 @@ Il livello A non sostituisce il livello B: una policy scritta correttamente può
 - Bucket `cte-mrf` privato, limite 20.971.520 byte, MIME ammesso solo `application/pdf`.
 - `cte_offerte`: 40 colonne. Dei 78 record, 54 sono da verificare, 13 hanno fornitore NULL, 26 hanno codice_offerta NULL, e i codici distinti sono 9.
 
-**Da chiarire (senza modificare nulla):** la INSERT dell'app (index.html r.2393-2409) **non invia** `uploaded_by`. Se la policy lo richiede, funziona solo se la colonna ha come default `auth.uid()`. Va controllato nel CSV delle 40 colonne (`column_default` di `uploaded_by`).
+**Chiarito il 30/09/2026 (confermato da Max):**
+- `uploaded_by` è `uuid NOT NULL` con default `auth.uid()`. La INSERT dell'app (index.html r.2393-2409) non lo invia, e la policy `uploaded_by = auth.uid()` è comunque soddisfatta dal valore predefinito. Nessuna modifica necessaria.
+- `da_verificare` è `NOT NULL` con default `false`. Il valore `false` **non** è una conferma di verifica.
+- Il CSV delle 40 colonne non è ancora arrivato: finora è arrivata solo la riga d'intestazione. Da allegare come file per archiviarlo.
 
 ## Livello B — prove previste (tutte in sola lettura)
 
@@ -37,7 +40,9 @@ Il livello A non sostituisce il livello B: una policy scritta correttamente può
 | B13 | admin | download di un PDF | consentito |
 
 ### Cosa serve per eseguirle
-1. **Un utente di test non admin.** Crearlo in Supabase Auth è una modifica al progetto di produzione, quindi **decide Max**. In alternativa si usa un progetto o branch di staging.
+**Stato: NON ESEGUITE. Da pianificare separatamente.** Non è stato creato nessun utente e l'autenticazione di produzione non è stata modificata.
+
+1. **Un utente di test non admin.** Crearlo in Supabase Auth è una modifica al progetto di produzione, quindi **non va fatto ora**. Si deciderà nel piano dedicato, preferibilmente su un progetto o branch di staging.
 2. Le credenziali di test (non admin e admin) **passate solo come variabili d'ambiente**. Non vanno mai scritte nei file né nel repository.
 3. Il percorso di un PDF esistente nel bucket (`MRF_TEST_STORAGE_PATH`), letto dalla colonna `storage_path`.
 4. Un ambiente con accesso di rete a supabase.co. Da questa sessione cloud la rete verso Supabase è bloccata. Le opzioni sono un computer con Node 20 oppure un workflow manuale con i segreti di GitHub, da approvare a parte.

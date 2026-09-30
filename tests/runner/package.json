@@ -9,6 +9,7 @@
     "test": "node esegui-test.mjs",
     "baseline": "node genera-baseline.mjs",
     "universalita": "node controllo-universalita.mjs",
+    "schede": "node genera-schede-casi.mjs",
     "accessi": "node ../accessi/verifica-accessi.mjs"
   },
   "dependencies": {

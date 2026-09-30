@@ -1,8 +1,8 @@
 {
   "avviso": "BASELINE TECNICA - fotografia del parser attuale. NON e' l'output corretto e non va copiata negli expected.",
   "provenienza": {
-    "commit": "26908d6",
-    "generato_il": "2026-09-30T16:11:48.308Z",
+    "commit": "95f228e",
+    "generato_il": "2026-09-30T16:30:11.654Z",
     "parser_bolletta_sha256": "e4447c13ff09991f298235cfbe6ebdc38d7283316fd6ef9d8d9b5bb83464cfd2",
     "index_html_sha256": "ce4e0f81167d0dad836cd9583bd3a3d54e13cd0ad06e84fde53c639ae4ef60ff",
     "parser_bolletta_versione": "1.0.0",

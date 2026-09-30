@@ -40,6 +40,11 @@ jobs:
       - name: Esegui test di regressione
         run: node esegui-test.mjs --ci
 
+      - name: Scheda dei casi sintetici allineata ai JSON
+        run: |
+          node genera-schede-casi.mjs
+          git diff --exit-code ../unit/CASI_SINTETICI.md
+
       - name: Report
         if: always()
         uses: actions/upload-artifact@v4

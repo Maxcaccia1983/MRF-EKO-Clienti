@@ -1,10 +1,23 @@
 // Controllo STATICO di universalita' del codice del parser.
 //
-// Cosa verifica:
-//  1. che nel codice del parser non compaiano nomi di fornitori usati come
-//     regola (regola inderogabile n. 1);
-//  2. che il parser non consulti cte_offerte o Supabase: i 78 record sono un
-//     riferimento diagnostico, MAI una tabella di ricerca.
+// Distingue due cose diverse (non sono la stessa cosa):
+//
+//  A. RICONOSCERE il nome del fornitore  -> ammesso.
+//     Leggere la ragione sociale dal documento per compilare il campo
+//     "fornitore" e' un'estrazione come le altre. Se un nome noto compare nel
+//     codice fuori da una condizione viene solo segnalato per revisione umana
+//     (MENZIONE), senza bloccare.
+//
+//  B. CAMBIARE IL PARSING in base al fornitore -> VIOLAZIONE (regola 1).
+//     B1 diramazione_per_fornitore: una condizione confronta l'identita' del
+//        fornitore (es. if (fornitore === "X"), /x/.test(fornitore),
+//        switch (fornitore), regole[fornitore]).
+//     B2 condizione_con_nome_noto: un nome di fornitore noto compare dentro
+//        una condizione (if / switch / case / ternario / .test()).
+//
+//  C. accesso_dati -> VIOLAZIONE: il parser non deve leggere cte_offerte o
+//     Supabase. I 78 record sono un riferimento diagnostico, MAI una tabella
+//     di ricerca.
 //
 // Cosa NON dimostra: che il motore funzioni su CTE mai viste. Quella prova e'
 // data dai documenti "holdout" e "fornitore_nuovo" nel report di regressione.
@@ -57,26 +70,43 @@ export function controllaUniversalita(sorgenti) {
     avvisi.push("Elenco fornitori vuoto: il controllo dei nomi non e' ancora significativo (aggiungere documenti al MANIFEST o nomi in riferimento/fornitori-noti.txt).");
   }
 
+  const VAR = "(?:fornitore|fornitoreRilevato|nomeFornitore|supplier)";
+  const DIRAMAZIONE = [
+    new RegExp("\\b" + VAR + "\\b\\s*(?:===?|!==?)\\s*[\"'`]"),
+    new RegExp("[\"'`]\\s*(?:===?|!==?)\\s*\\b" + VAR + "\\b"),
+    new RegExp("\\.test\\(\\s*" + VAR + "\\b"),
+    new RegExp("\\b" + VAR + "\\b(?:\\s*\\.\\s*toLowerCase\\(\\))?\\s*\\.\\s*(?:includes|startsWith|endsWith|match|indexOf|search)\\("),
+    new RegExp("switch\\s*\\(\\s*" + VAR + "\\b"),
+    new RegExp("\\[\\s*" + VAR + "(?:\\.toLowerCase\\(\\))?\\s*\\]"),
+  ];
+  const CONDIZIONE = /\bif\s*\(|\belse\s+if\b|\bswitch\s*\(|\bcase\b|\?[^?:]*:|\.test\(/;
+  const menzioni = [];
+
   for (const [file, codice] of Object.entries(sorgenti)) {
-    const righe = codice.split("\n");
-    righe.forEach((riga, i) => {
-      if (/\bcte_offerte\b|supabaseClient|\.from\(\s*["']/.test(riga)) {
-        violazioni.push({ tipo: "accesso_dati", file, riga: i + 1, testo: riga.trim().slice(0, 160), motivo: "Il parser non deve leggere cte_offerte/Supabase: i record sono solo riferimento diagnostico." });
+    codice.split("\n").forEach((riga, i) => {
+      const pulita = riga.trim();
+      const commento = /^(\/\/|\/?\*)/.test(pulita);
+      const rif = { file, riga: i + 1, testo: pulita.slice(0, 160) };
+
+      if (!commento && /\bcte_offerte\b|supabaseClient|\.from\(\s*["']/.test(riga)) {
+        violazioni.push({ ...rif, tipo: "accesso_dati", motivo: "Il parser non deve leggere cte_offerte/Supabase: i record sono solo riferimento diagnostico." });
+      }
+      if (!commento && DIRAMAZIONE.some((re) => re.test(riga))) {
+        violazioni.push({ ...rif, tipo: "diramazione_per_fornitore", motivo: "La logica cambia in base all'identita' del fornitore (regola 1)." });
       }
       for (const nome of fornitori) {
         for (const tok of tokenSignificativi(nome)) {
           const re = new RegExp("(^|[^A-Za-zÀ-ÿ0-9])" + tok.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "($|[^A-Za-zÀ-ÿ0-9])", "i");
-          if (re.test(riga)) {
-            const ammessa = ecc.some((e) => e.token && e.token.toLowerCase() === tok.toLowerCase() && e.file === file);
-            (ammessa ? avvisi : violazioni).push({
-              tipo: "nome_fornitore", file, riga: i + 1, token: tok, fornitore: nome,
-              testo: riga.trim().slice(0, 160),
-              motivo: ammessa ? "Eccezione dichiarata in universalita-eccezioni.json" : "Nome di fornitore nel codice del parser (regola 1).",
-            });
+          if (!re.test(riga)) continue;
+          const ammessa = ecc.some((e) => e.token && e.token.toLowerCase() === tok.toLowerCase() && e.file === file);
+          if (!commento && CONDIZIONE.test(riga) && !ammessa) {
+            violazioni.push({ ...rif, tipo: "condizione_con_nome_noto", token: tok, fornitore: nome, motivo: "Nome di fornitore dentro una condizione di parsing (regola 1)." });
+          } else {
+            menzioni.push({ ...rif, tipo: "menzione_nome", token: tok, fornitore: nome, motivo: ammessa ? "Eccezione dichiarata" : "Nome presente fuori da condizioni: verificare a mano che serva solo a riconoscere il fornitore." });
           }
         }
       }
     });
   }
-  return { fornitori_controllati: fornitori.length, violazioni, avvisi };
+  return { fornitori_controllati: fornitori.length, violazioni, menzioni, avvisi };
 }

@@ -36,7 +36,11 @@ tests/
 ## Holdout e fornitori nuovi (prova di universalità)
 - `insieme: "holdout"`: CTE **mai usata durante lo sviluppo**. Il report ne mostra solo i conteggi, e `genera-baseline` la salta. Se la si usa per correggere il parser, passa a `"sviluppo"` (con `data_passaggio_sviluppo`) e va sostituita da una nuova holdout.
 - `fornitore_nuovo: true`: il fornitore non era presente in `cte_offerte` né nei documenti di sviluppo al momento dell'aggiunta.
-- Il controllo statico dei nomi nel codice (`controllo-universalita.mjs`) è necessario ma **non basta**: la prova vera è il risultato su holdout e fornitori nuovi.
+- Il controllo statico (`controllo-universalita.mjs`) distingue due cose che **non sono la stessa**:
+  - **riconoscere il nome** del fornitore per compilare il campo `fornitore`: è ammesso. Un nome noto nel codice fuori da una condizione viene segnalato come *menzione* da rivedere a mano;
+  - **cambiare il parsing in base al fornitore** (`if (fornitore === "X")`, `regole[fornitore]`, un nome noto dentro un `if` o un `.test()`): è una **violazione** della regola 1.
+- Il controllo statico è necessario ma **non basta**: la prova vera è il risultato su holdout e fornitori nuovi.
+- Proposta dei documenti e criteri per le holdout: `cte/CANDIDATI_DATASET.md`.
 
 ## Aggiungere una CTE
 1. Scaricare il PDF dal sito del fornitore e rinominarlo per categoria in `cte/documenti/`.
@@ -53,6 +57,18 @@ npm test
 ```
 Su ogni Pull Request che tocca `tests/`, `parser-bolletta.js` o `index.html` i test girano da soli con il workflow **"Test regressione lettore CTE"**. Il workflow ha permessi di sola lettura: nessun deploy, nessun APK, nessun segreto. Il report compare nel riepilogo dell'Action.
 
+## Come leggere il report
+Il report ha quattro sezioni indipendenti:
+- **A. Controlli del runner**: integrità del materiale di test. Non dice nulla sulla qualità del parser.
+- **B. Regressione**: il comportamento è peggiorato rispetto al riferimento? Misura il cambiamento, non la correttezza.
+- **C. Correttezza del parser**: confronto con i valori attesi. È **provvisoria** finché i casi non sono approvati o i campi verificati. Gli INVENTATI hanno un sottotipo:
+  - `attribuzione_errata`: il numero esiste nel testo ma è assegnato al campo sbagliato;
+  - `valore_assente_dal_testo`: il numero non compare nel testo;
+  - `certezza_non_giustificata`: un dato ambiguo viene restituito come certo.
+- **D. Prontezza**: l'unico punto che può dichiarare il lettore pronto.
+
+Il codice di uscita (CI verde o rossa) dipende solo da A e B. **Una CI verde non significa lettore pronto.**
+
 ## Quando una modifica al parser è accettabile
 1. Nessun campo che prima era CORRETTO peggiora.
 2. **Ogni** nuovo campo INVENTATO viene segnalato e blocca la modifica, anche se il totale non aumenta.
@@ -68,6 +84,6 @@ Su ogni Pull Request che tocca `tests/`, `parser-bolletta.js` o `index.html` i t
 `riferimento/stato-accettato.json` congela gli esiti accettati. Lo aggiorna solo `node esegui-test.mjs --aggiorna-riferimento`, **dopo approvazione di Max**. Non è la verità: registra solo da dove partiamo.
 
 ## Limiti attuali (FASE 0)
-- Il runner non esegue l'OCR: registra soltanto se l'app lo avvierebbe.
-- I casi unitari sono proposte sintetiche in stato `da_rivedere`.
+- **OCR effettivo: INCOMPLETO.** Il runner non esegue l'OCR: registra soltanto se l'app lo avvierebbe.
+- I 45 casi unitari sono proposte sintetiche in stato `da_rivedere`: vedi `unit/CASI_SINTETICI.md`, rigenerabile con `npm run schede`.
 - Le prove di accesso reali richiedono credenziali di test e rete verso Supabase (vedi `accessi/PIANO_PROVE_ACCESSO.md`).
