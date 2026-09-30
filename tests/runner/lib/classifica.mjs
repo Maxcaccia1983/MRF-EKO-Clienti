@@ -1,8 +1,17 @@
 // Classificazione di un singolo campo: output del parser vs valore atteso.
 //
 //   CORRETTO      valore uguale all'atteso (entro tolleranza), oppure null quando
-//                 il documento non contiene il dato
-//   ERRATO        il parser da' un valore diverso da quello atteso
+//                 il documento non contiene il dato. Il campo "modo" distingue:
+//                   estratto          il parser ha restituito il valore giusto
+//                   vuoto_corretto    il parser ha correttamente lasciato vuoto
+//                                     (dato non_presente / non_applicabile)
+//                   ambiguo_vuoto     dato ambiguo lasciato vuoto
+//                   ambiguo_segnalato dato ambiguo restituito con da_verificare
+//                 Solo "estratto" prova che il parser SA leggere il dato.
+//   ERRATO        il parser da' un valore diverso da quello atteso, oppure
+//                 perde un attributo che il test richiede di conservare
+//                 (unita', variante dell'indice, testo originale, valore
+//                 originale, riferimento POD/PDR)
 //   MANCANTE      l'atteso ha un valore, il parser restituisce null
 //   INVENTATO     l'atteso e' non_presente / non_applicabile / ambiguo ma il
 //                 parser restituisce un valore come certo (regola 13).
@@ -15,7 +24,7 @@
 //
 // L'output del parser (dopo l'adattatore) per ogni campo e':
 //   null                                  -> nessun valore
-//   { value, unit?, variant?, original_text?, da_verificare? }
+//   { value, unit?, variant?, original_text?, original?, per?, da_verificare? }
 
 export const ESITI = ["CORRETTO", "ERRATO", "MANCANTE", "INVENTATO", "NON_VALUTATO"];
 
@@ -52,11 +61,6 @@ export function scegliTolleranza(percorsoCampo, tolleranze = {}) {
   return t.number;
 }
 
-/**
- * @param atteso  { status, value, unit?, variant?, original_text? }
- * @param ottenuto null | { value, unit?, variant?, original_text?, da_verificare? }
- * @returns { esito, dettaglio }
- */
 /** Il valore numerico compare nel testo sorgente (anche come c€ o €/MWh)? */
 export function numeroNelTesto(valore, testo) {
   if (typeof valore !== "number" || !testo) return false;
@@ -79,6 +83,44 @@ function inventato(dettaglio, sottotipo) {
   return { esito: "INVENTATO", sottotipo, dettaglio: dettaglio + " [" + sottotipo + "]" };
 }
 
+/**
+ * Attributi che il parser deve CONSERVARE oltre al valore. Se l'atteso li
+ * richiede e il parser non li restituisce uguali, il campo e' ERRATO:
+ * un valore giusto ma senza il suo originale o il suo riferimento e' un dato perso.
+ * Restituisce il primo difetto trovato, oppure null.
+ */
+export function difettoAttributi(atteso, ottenuto) {
+  if (atteso.unit && ottenuto.unit && normUnita(atteso.unit) !== normUnita(ottenuto.unit)) {
+    return "unita' attesa " + atteso.unit + ", ottenuta " + ottenuto.unit;
+  }
+  if (atteso.unit && !ottenuto.unit) {
+    return "unita' attesa " + atteso.unit + " non dichiarata dal parser";
+  }
+  if (atteso.variant && normStringa(atteso.variant) !== normStringa(ottenuto.variant || "")) {
+    return "variante attesa " + atteso.variant + ", ottenuta " + (ottenuto.variant || "nessuna");
+  }
+  if (atteso.original_text && !normStringa(ottenuto.original_text || "").includes(normStringa(atteso.original_text))) {
+    return "testo originale dell'indice non conservato (atteso '" + atteso.original_text + "')";
+  }
+  if (atteso.original) {
+    const o = ottenuto.original;
+    if (!o || o.value == null) return "valore originale non conservato (atteso " + atteso.original.value + " " + atteso.original.unit + ")";
+    if (!uguali(atteso.original.value, o.value, TOLLERANZE_DEFAULT.fee) || normUnita(atteso.original.unit) !== normUnita(o.unit)) {
+      return "valore originale atteso " + atteso.original.value + " " + atteso.original.unit + ", ottenuto " + o.value + " " + o.unit;
+    }
+  }
+  if (atteso.per) {
+    if (!ottenuto.per) return "riferimento " + atteso.per + " non conservato";
+    if (normStringa(atteso.per) !== normStringa(ottenuto.per)) return "riferimento atteso " + atteso.per + ", ottenuto " + ottenuto.per;
+  }
+  return null;
+}
+
+/**
+ * @param atteso  { status, value, unit?, variant?, original_text?, original?, per? }
+ * @param ottenuto null | { value, unit?, variant?, original_text?, original?, per?, da_verificare? }
+ * @returns { esito, modo?, dettaglio, sottotipo? }
+ */
 export function classificaCampo(atteso, ottenuto, tolleranza = TOLLERANZE_DEFAULT.number, testoSorgente = "") {
   const status = atteso && atteso.status;
 
@@ -87,14 +129,14 @@ export function classificaCampo(atteso, ottenuto, tolleranza = TOLLERANZE_DEFAUL
   }
 
   if (status === "non_presente" || status === "non_applicabile") {
-    if (valoreVuoto(ottenuto)) return { esito: "CORRETTO", dettaglio: "nessun valore, come atteso" };
+    if (valoreVuoto(ottenuto)) return { esito: "CORRETTO", modo: "vuoto_corretto", dettaglio: "nessun valore, come atteso" };
     const st = numeroNelTesto(ottenuto.value, testoSorgente) ? "attribuzione_errata" : "valore_assente_dal_testo";
     return inventato("valore " + JSON.stringify(ottenuto.value) + " per un dato " + status, st);
   }
 
   if (status === "ambiguo") {
-    if (valoreVuoto(ottenuto)) return { esito: "CORRETTO", dettaglio: "ambiguo lasciato vuoto" };
-    if (ottenuto.da_verificare === true) return { esito: "CORRETTO", dettaglio: "ambiguo segnalato da verificare" };
+    if (valoreVuoto(ottenuto)) return { esito: "CORRETTO", modo: "ambiguo_vuoto", dettaglio: "ambiguo lasciato vuoto" };
+    if (ottenuto.da_verificare === true) return { esito: "CORRETTO", modo: "ambiguo_segnalato", dettaglio: "ambiguo segnalato da verificare" };
     return inventato("valore certo " + JSON.stringify(ottenuto.value) + " su dato ambiguo", "certezza_non_giustificata");
   }
 
@@ -103,19 +145,9 @@ export function classificaCampo(atteso, ottenuto, tolleranza = TOLLERANZE_DEFAUL
   if (!uguali(atteso.value, ottenuto.value, tolleranza)) {
     return { esito: "ERRATO", dettaglio: "atteso " + JSON.stringify(atteso.value) + ", ottenuto " + JSON.stringify(ottenuto.value) };
   }
-  if (atteso.unit && ottenuto.unit && normUnita(atteso.unit) !== normUnita(ottenuto.unit)) {
-    return { esito: "ERRATO", dettaglio: "unita' attesa " + atteso.unit + ", ottenuta " + ottenuto.unit };
-  }
-  if (atteso.unit && !ottenuto.unit) {
-    return { esito: "ERRATO", dettaglio: "unita' attesa " + atteso.unit + " non dichiarata dal parser" };
-  }
-  if (atteso.variant && normStringa(atteso.variant) !== normStringa(ottenuto.variant || "")) {
-    return { esito: "ERRATO", dettaglio: "variante attesa " + atteso.variant + ", ottenuta " + (ottenuto.variant || "nessuna") };
-  }
-  if (atteso.original_text && !normStringa(ottenuto.original_text || "").includes(normStringa(atteso.original_text))) {
-    return { esito: "ERRATO", dettaglio: "testo originale dell'indice non conservato" };
-  }
-  return { esito: "CORRETTO", dettaglio: "" };
+  const difetto = difettoAttributi(atteso, ottenuto);
+  if (difetto) return { esito: "ERRATO", dettaglio: difetto };
+  return { esito: "CORRETTO", modo: "estratto", dettaglio: "" };
 }
 
 /** Confronto di liste (sconti, altri costi ricorrenti). */
@@ -124,14 +156,45 @@ export function classificaLista(attesoLista, ottenutoItems, tolleranza) {
   const items = Array.isArray(ottenutoItems) ? ottenutoItems : [];
   if (!status || status === "non_valutato") return { esito: "NON_VALUTATO", dettaglio: "" };
   if (status === "non_presente" || status === "non_applicabile") {
-    return items.length ? { esito: "INVENTATO", dettaglio: items.length + " elementi inventati" } : { esito: "CORRETTO", dettaglio: "" };
+    return items.length
+      ? { esito: "INVENTATO", sottotipo: "valore_assente_dal_testo", dettaglio: items.length + " elementi inventati" }
+      : { esito: "CORRETTO", modo: "vuoto_corretto", dettaglio: "" };
   }
-  if (status === "ambiguo") return { esito: items.length ? "INVENTATO" : "CORRETTO", dettaglio: "" };
-  if (!items.length) return { esito: "MANCANTE", dettaglio: (attesoLista.items || []).length + " elementi attesi" };
-  const mancanti = (attesoLista.items || []).filter(
-    (a) => !items.some((o) => (a.value == null || (o.value != null && Math.abs(a.value - o.value) <= tolleranza)) && (!a.type || a.type === o.type))
-  );
-  if (mancanti.length) return { esito: "ERRATO", dettaglio: mancanti.length + " elementi non trovati" };
-  if (items.length > (attesoLista.items || []).length) return { esito: "INVENTATO", dettaglio: "elementi in piu' rispetto all'atteso" };
-  return { esito: "CORRETTO", dettaglio: "" };
+  if (status === "ambiguo") {
+    return items.length
+      ? { esito: "INVENTATO", sottotipo: "certezza_non_giustificata", dettaglio: "elementi certi su dato ambiguo" }
+      : { esito: "CORRETTO", modo: "ambiguo_vuoto", dettaglio: "" };
+  }
+  const attesi = attesoLista.items || [];
+  if (!items.length) return { esito: "MANCANTE", dettaglio: attesi.length + " elementi attesi" };
+
+  // Ogni elemento atteso deve trovare un elemento ottenuto che coincide su TUTTI
+  // gli attributi dichiarati nell'atteso: tipo, valore, unita', durata e, se
+  // indicato, il fatto che NON altera il prezzo dell'energia (regola 11).
+  const difetti = [];
+  for (const a of attesi) {
+    let migliore = null;
+    let trovato = false;
+    for (const o of items) {
+      const d = difettiElemento(a, o, tolleranza);
+      if (!d.length) { trovato = true; break; }
+      if (!migliore || d.length < migliore.length) migliore = d;
+    }
+    if (!trovato) difetti.push((a.type || "elemento") + ": " + (migliore || []).join(", "));
+  }
+  if (difetti.length) return { esito: "ERRATO", dettaglio: difetti.join(" | ") };
+  if (items.length > attesi.length) return { esito: "INVENTATO", sottotipo: "valore_assente_dal_testo", dettaglio: "elementi in piu' rispetto all'atteso" };
+  return { esito: "CORRETTO", modo: "estratto", dettaglio: "" };
+}
+
+function difettiElemento(a, o, tolleranza) {
+  const d = [];
+  if (a.type && a.type !== o.type) d.push("tipo atteso " + a.type + ", ottenuto " + (o.type || "nessuno"));
+  if (a.value != null && (o.value == null || Math.abs(a.value - o.value) > tolleranza)) d.push("valore atteso " + a.value + ", ottenuto " + (o.value ?? "nessuno"));
+  if (a.unit && normUnita(a.unit) !== normUnita(o.unit)) d.push("unita' attesa " + a.unit + ", ottenuta " + (o.unit || "nessuna"));
+  if (a.duration && normStringa(a.duration) !== normStringa(o.duration || "")) d.push("durata attesa " + a.duration + ", ottenuta " + (o.duration || "nessuna"));
+  if (typeof a.affects_energy_price === "boolean" && a.affects_energy_price !== o.affects_energy_price) {
+    d.push("affects_energy_price atteso " + a.affects_energy_price + ", ottenuto " + (o.affects_energy_price ?? "non dichiarato"));
+  }
+  return d;
 }

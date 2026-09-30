@@ -51,7 +51,8 @@
         "luce.index": {
           "status": "presente",
           "value": "PUN",
-          "variant": "index_gme"
+          "variant": "index_gme",
+          "original_text": "PUN Index GME"
         },
         "luce.spread": {
           "status": "presente",
@@ -67,8 +68,13 @@
           "value": null
         }
       },
-      "motivazione": "Variante 'PUN Index GME' e parola esplicita 'spread'.",
-      "stato_revisione": "da_rivedere"
+      "motivazione": "Variante 'PUN Index GME' (variante e testo originale conservati) e parola esplicita 'spread'.",
+      "stato_revisione": "da_rivedere",
+      "modifica": {
+        "tipo": "corretto",
+        "data": "2026-09-30",
+        "nota": "Aggiunto il controllo del testo originale 'PUN Index GME' (prima c'era solo la variante)."
+      }
     },
     {
       "id": "F03",
@@ -208,7 +214,8 @@
         "gas.index": {
           "status": "presente",
           "value": "PSV",
-          "variant": "day_ahead"
+          "variant": "day_ahead",
+          "original_text": "PSV Day Ahead"
         },
         "gas.spread": {
           "status": "presente",
@@ -220,8 +227,13 @@
           "value": null
         }
       },
-      "motivazione": "Variante PSV Day Ahead (regola 7).",
-      "stato_revisione": "da_rivedere"
+      "motivazione": "Variante PSV Day Ahead (regola 7), con variante e testo originale conservati.",
+      "stato_revisione": "da_rivedere",
+      "modifica": {
+        "tipo": "corretto",
+        "data": "2026-09-30",
+        "nota": "Aggiunto il controllo del testo originale 'PSV Day Ahead' (prima c'era solo la variante)."
+      }
     },
     {
       "id": "F09",
@@ -332,10 +344,27 @@
         "luce.fixed_price": {
           "status": "non_presente",
           "value": null
+        },
+        "luce.sconti": {
+          "status": "presente",
+          "items": [
+            {
+              "type": "sconto",
+              "value": 0.01,
+              "unit": "€/kWh",
+              "duration": "12 mesi",
+              "affects_energy_price": false
+            }
+          ]
         }
       },
-      "motivazione": "Uno sconto in €/kWh e' un incentivo commerciale, non un prezzo ne' uno spread (regola 11).",
-      "stato_revisione": "da_rivedere"
+      "motivazione": "Uno sconto in €/kWh e' un incentivo commerciale (regola 11): va ESTRATTO come sconto (tipo, valore 0,010 €/kWh, durata 12 mesi, senza alterare il prezzo dell'energia) e NON deve diventare ne' il prezzo dell'energia ne' uno spread. Il test controlla entrambe le cose: il riconoscimento dello sconto e l'assenza di prezzo/spread.",
+      "stato_revisione": "da_rivedere",
+      "modifica": {
+        "tipo": "corretto",
+        "data": "2026-09-30",
+        "nota": "Prima si verificava solo che lo sconto non diventasse un prezzo. Ora si verifica anche il riconoscimento dello sconto, del suo valore e della durata."
+      }
     },
     {
       "id": "F14",
@@ -372,6 +401,120 @@
       },
       "motivazione": "12 €/mese e' una quota fissa, non il prezzo dell'energia (regola 27).",
       "stato_revisione": "da_rivedere"
+    },
+    {
+      "id": "F16",
+      "commodity": "luce",
+      "input": "Prezzo energia: PUN medio mensile + 0,015 €/kWh",
+      "descrizione": "Variante 'PUN medio mensile' (regola 7)",
+      "atteso": {
+        "luce.price_type": {
+          "status": "presente",
+          "value": "indicizzato"
+        },
+        "luce.index": {
+          "status": "presente",
+          "value": "PUN",
+          "variant": "medio_mensile",
+          "original_text": "PUN medio mensile"
+        },
+        "luce.spread": {
+          "status": "presente",
+          "value": 0.015,
+          "unit": "€/kWh"
+        },
+        "luce.fixed_price": {
+          "status": "non_applicabile",
+          "value": null
+        },
+        "luce.valore_indice_nel_documento": {
+          "status": "non_presente",
+          "value": null
+        }
+      },
+      "motivazione": "Variante 'PUN medio mensile' (regola 7): indice PUN, variante e testo originale conservati; 0,015 e' lo spread, non il valore del PUN.",
+      "stato_revisione": "da_rivedere",
+      "modifica": {
+        "tipo": "integrato",
+        "data": "2026-09-30",
+        "nota": "Caso nuovo: copre una variante dell'indice elencata nella regola 7 che non aveva ancora un caso."
+      }
+    },
+    {
+      "id": "F17",
+      "commodity": "gas",
+      "input": "Prezzo gas: PSV mensile + 0,07 €/Smc",
+      "descrizione": "Variante 'PSV mensile' (regola 7)",
+      "atteso": {
+        "gas.price_type": {
+          "status": "presente",
+          "value": "indicizzato"
+        },
+        "gas.index": {
+          "status": "presente",
+          "value": "PSV",
+          "variant": "mensile",
+          "original_text": "PSV mensile"
+        },
+        "gas.spread": {
+          "status": "presente",
+          "value": 0.07,
+          "unit": "€/Smc"
+        },
+        "gas.fixed_price": {
+          "status": "non_applicabile",
+          "value": null
+        },
+        "gas.valore_indice_nel_documento": {
+          "status": "non_presente",
+          "value": null
+        }
+      },
+      "motivazione": "Variante 'PSV mensile' (regola 7): indice PSV, variante e testo originale conservati; 0,07 e' lo spread.",
+      "stato_revisione": "da_rivedere",
+      "modifica": {
+        "tipo": "integrato",
+        "data": "2026-09-30",
+        "nota": "Caso nuovo: copre una variante dell'indice elencata nella regola 7 che non aveva ancora un caso."
+      }
+    },
+    {
+      "id": "F18",
+      "commodity": "luce",
+      "input": "Prezzo energia: PUN per fascia + 0,020 €/kWh",
+      "descrizione": "Variante 'PUN per fascia' (regola 7)",
+      "atteso": {
+        "luce.price_type": {
+          "status": "presente",
+          "value": "indicizzato"
+        },
+        "luce.index": {
+          "status": "presente",
+          "value": "PUN",
+          "variant": "per_fascia",
+          "original_text": "PUN per fascia"
+        },
+        "luce.spread": {
+          "status": "presente",
+          "value": 0.02,
+          "unit": "€/kWh"
+        },
+        "luce.fixed_price": {
+          "status": "non_applicabile",
+          "value": null
+        },
+        "luce.valore_indice_nel_documento": {
+          "status": "non_presente",
+          "value": null
+        }
+      },
+      "motivazione": "Variante 'PUN per fascia' (regola 7): indice PUN, variante e testo originale conservati; 0,020 e' lo spread.",
+      "stato_revisione": "da_rivedere",
+      "modifica": {
+        "tipo": "integrato",
+        "data": "2026-09-30",
+        "nota": "Caso nuovo: copre una variante dell'indice elencata nella regola 7 che non aveva ancora un caso."
+      }
     }
   ]
 }

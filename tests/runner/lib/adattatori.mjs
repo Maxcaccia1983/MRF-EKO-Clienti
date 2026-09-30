@@ -45,6 +45,9 @@ export function sondaFormule(parser, caso) {
     uscita[c + ".multiplier"] = null;
     uscita[c + ".spread"] = r.spread ? v(r.spread.prezzo, { unit: "€/" + r.spread.unita }) : null;
     uscita[c + ".fixed_price"] = r.numero != null ? v(r.numero, { unit: "€/" + r.unita }) : null;
+    // Il parser attuale non estrae sconti ne' bonus (nessun campo dedicato):
+    // lista vuota, quindi MANCANTE quando l'atteso ne prevede uno.
+    uscita[c + ".sconti"] = [];
     // Valore numerico che il parser attuale etichetta come "indice di mercato".
     // In una CTE il valore dell'indice non e' scritto: se compare, e' quasi
     // sempre lo spread scambiato per indice (difetto C2).
@@ -99,5 +102,5 @@ export function appiattisciExpected(exp) {
 }
 
 export function eLista(percorso) {
-  return percorso === "discounts" || percorso.endsWith(".other_recurring_fees");
+  return percorso === "discounts" || percorso.endsWith(".other_recurring_fees") || percorso.endsWith(".sconti");
 }

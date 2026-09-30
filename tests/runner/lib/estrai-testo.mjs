@@ -20,7 +20,19 @@ async function caricaPdfjs() {
     throw new Error("pdfjs-dist 3.11.174 non installato: eseguire 'npm install' in tests/runner (in CI avviene automaticamente).");
   }
   pdfjs = mod.default || mod;
+  // La prova vale solo se la versione e' quella dell'app: un'altra versione di pdf.js
+  // potrebbe estrarre un testo diverso da quello che il parser vede nell'app.
+  if (pdfjs.version !== "3.11.174") {
+    pdfjs = null;
+    throw new Error("pdf.js in uso e' la versione " + (mod.version || mod.default?.version) + ", l'app usa la 3.11.174: estrazione rifiutata.");
+  }
   return pdfjs;
+}
+
+/** Carica pdf.js e ne verifica la versione. Restituisce la versione caricata, oppure lancia un errore. */
+export async function verificaPdfjs() {
+  const lib = await caricaPdfjs();
+  return lib.version;
 }
 
 export async function estraiTestoNativo(percorsoPdf) {
@@ -38,6 +50,7 @@ export async function estraiTestoNativo(percorsoPdf) {
     const compatto = testoPagina.replace(/\s+/g, " ").trim();
     pagine.push({
       pagina: n,
+      testo: compatto,
       caratteri: compatto.length,
       parole: compatto ? compatto.split(" ").length : 0,
     });

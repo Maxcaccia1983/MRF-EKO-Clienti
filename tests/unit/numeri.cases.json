@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "suite": "numeri",
-  "descrizione": "Normalizzazione dei numeri in formato italiano/europeo (regola 25). Casi sintetici proposti da Claude: da rivedere e approvare da Max.",
+  "descrizione": "Normalizzazione dei numeri in formato italiano/europeo (regola 25). Dove il punto e' ambiguo, il caso dichiara la CONVENZIONE NUMERICA (it | en | non_dichiarata) e riporta il testo di contesto che la prova. Casi sintetici proposti da Claude: da rivedere e approvare da Max.",
   "revisione": {
     "state": "da_rivedere",
     "nota": "Nessun caso e' approvato: ogni caso ha il proprio stato_revisione. Gli esiti su casi 'da_rivedere' sono PROVVISORI.",
@@ -91,6 +91,8 @@
       "id": "N07",
       "input": "2.423",
       "contesto": "consumo",
+      "convenzione_numerica": "it",
+      "testo_contesto": "Consumo annuo stimato: 2.423 kWh. Prezzo energia: 0,145 €/kWh.",
       "descrizione": "Punto come separatore delle migliaia (difetto C1)",
       "atteso": {
         "valore": {
@@ -98,34 +100,52 @@
           "value": 2423
         }
       },
-      "motivazione": "Contesto CONSUMO (quantita' in kWh o Smc): in italiano il punto seguito da esattamente 3 cifre e' il separatore delle migliaia; i decimali si scrivono con la virgola. '2.423 kWh' = duemilaquattrocentoventitre kWh. Difetto C1.",
-      "stato_revisione": "da_rivedere"
+      "motivazione": "Convenzione numerica ITALIANA dichiarata nel caso (punto = migliaia, virgola = decimali). La prova e' nel testo di contesto: lo stesso documento scrive 0,145 con la virgola decimale. In questa convenzione '2.423' e' duemilaquattrocentoventitre. Il contesto 'consumo' da solo NON basta a decidere: senza convenzione dichiarata il caso e' ambiguo (vedi N16). Difetto C1.",
+      "stato_revisione": "da_rivedere",
+      "modifica": {
+        "tipo": "corretto",
+        "data": "2026-09-30",
+        "nota": "Prima la motivazione si appoggiava al solo contesto 'consumo'. Ora il caso dichiara la convenzione italiana e il testo che la prova."
+      }
     },
     {
       "id": "N08",
       "input": "12.345.678",
       "contesto": "consumo",
+      "convenzione_numerica": "it",
       "atteso": {
         "valore": {
           "status": "presente",
           "value": 12345678
         }
       },
-      "motivazione": "Contesto CONSUMO: piu' gruppi da 3 cifre separati da punti sono sempre migliaia.",
-      "stato_revisione": "da_rivedere"
+      "motivazione": "Con piu' gruppi da 3 cifre separati da punti il punto non puo' essere un separatore decimale in nessuna convenzione (un numero ha un solo decimale): sono migliaia. Convenzione italiana dichiarata. Non dipende dal contesto 'consumo'.",
+      "stato_revisione": "da_rivedere",
+      "modifica": {
+        "tipo": "corretto",
+        "data": "2026-09-30",
+        "nota": "Prima la motivazione citava il contesto 'consumo'. Ora si basa sulla struttura del numero e sulla convenzione dichiarata."
+      }
     },
     {
       "id": "N09",
       "input": "1.500",
       "contesto": "consumo",
+      "convenzione_numerica": "it",
+      "testo_contesto": "Consumo annuo: 1.500 kWh. Quota fissa: 7,50 €/mese.",
       "atteso": {
         "valore": {
           "status": "presente",
           "value": 1500
         }
       },
-      "motivazione": "Contesto CONSUMO: stesso caso di N07 ('1.500 kWh' = millecinquecento kWh), con zeri finali che rendono l'errore piu' grave (1,5 invece di 1500).",
-      "stato_revisione": "da_rivedere"
+      "motivazione": "Convenzione numerica ITALIANA dichiarata: '1.500' con il punto e' millecinquecento (non 1,5). La prova e' nel testo di contesto, dove 7,50 usa la virgola decimale. Gli zeri finali rendono l'errore piu' grave (1,5 invece di 1500). Il contesto 'consumo' da solo non basta: vedi N16.",
+      "stato_revisione": "da_rivedere",
+      "modifica": {
+        "tipo": "corretto",
+        "data": "2026-09-30",
+        "nota": "Prima la motivazione si appoggiava al solo contesto 'consumo'. Ora il caso dichiara la convenzione italiana e il testo che la prova."
+      }
     },
     {
       "id": "N10",
@@ -199,6 +219,8 @@
       "id": "N15",
       "input": "1.234",
       "contesto": "prezzo",
+      "convenzione_numerica": "non_dichiarata",
+      "testo_contesto": null,
       "descrizione": "Ambiguo senza contesto di unita': non deve essere dato per certo",
       "atteso": {
         "valore": {
@@ -206,8 +228,34 @@
           "value": null
         }
       },
-      "motivazione": "Contesto PREZZO senza unita' di misura: '1.234' puo' essere 1234 (migliaia) o 1,234 (decimale scritto con il punto). Senza un'unita' (€/kWh, €/MWh) o un contesto che lo chiarisca, NON si deve scegliere: il valore va lasciato vuoto o segnalato da verificare.",
-      "stato_revisione": "da_rivedere"
+      "motivazione": "Convenzione numerica NON dichiarata e nessun testo di contesto che la provi (nessuna unita', nessun altro numero). '1.234' puo' essere 1234 (convenzione italiana, migliaia) o 1,234 (punto decimale all'inglese). Mancano elementi sufficienti: il parser NON deve scegliere; il valore va lasciato vuoto o segnalato da verificare.",
+      "stato_revisione": "da_rivedere",
+      "modifica": {
+        "tipo": "corretto",
+        "data": "2026-09-30",
+        "nota": "Il caso ambiguo resta. La motivazione ora dice esplicitamente che l'ambiguita' nasce dall'assenza di convenzione dichiarata."
+      }
+    },
+    {
+      "id": "N16",
+      "input": "2.423",
+      "contesto": "consumo",
+      "convenzione_numerica": "non_dichiarata",
+      "testo_contesto": "Consumo annuo: 2.423",
+      "descrizione": "Stesso numero di N07, ma senza convenzione dichiarata: il contesto 'consumo' non basta",
+      "atteso": {
+        "valore": {
+          "status": "ambiguo",
+          "value": null
+        }
+      },
+      "motivazione": "Stesso testo di N07 ('2.423' in contesto consumo), ma qui non c'e' alcuna convenzione dichiarata ne' altri numeri che la provino. Il solo contesto 'consumo' non impone che il punto separi le migliaia: non si deve scegliere tra 2423 e 2,423. Il valore va lasciato vuoto o segnalato da verificare. E' il caso che distingue N16 (ambiguo) da N07 (convenzione italiana dichiarata).",
+      "stato_revisione": "da_rivedere",
+      "modifica": {
+        "tipo": "integrato",
+        "data": "2026-09-30",
+        "nota": "Caso nuovo: dimostra che 'consumo' da solo non decide. Accanto a N15 (prezzo) copre l'ambiguita' in contesto consumo."
+      }
     }
   ]
 }

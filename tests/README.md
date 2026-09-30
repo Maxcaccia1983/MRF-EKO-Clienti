@@ -47,7 +47,7 @@ tests/
 2. Aggiungere una voce in `cte/MANIFEST.json` (schema: `schema/manifest.v1.schema.json`).
 3. `npm run baseline` genera `baseline/` e `testo/` (tranne che per le holdout).
 4. Copiare `expected/_MODELLO.expected.json` in `expected/<id>.expected.json` e compilarlo **leggendo il PDF**.
-5. Portare a `verificato` i campi controllati; lasciare `non_verificato` gli altri.
+5. Portare a `verificato` i campi controllati; lasciare `non_verificato` gli altri. Ogni campo `verificato` e `presente` deve indicare `page` e `source_text` (la frase esatta copiata dal PDF): il runner controlla che la frase compaia davvero nel testo del documento, alla pagina dichiarata, altrimenti il test si ferma. Per i PDF scansionati il controllo non e' automatico e il report lo segnala come parziale.
 
 ## Eseguire i test
 ```
@@ -59,9 +59,9 @@ Su ogni Pull Request che tocca `tests/`, `parser-bolletta.js` o `index.html` i t
 
 ## Come leggere il report
 Il report ha quattro sezioni indipendenti:
-- **A. Controlli del runner**: integrità del materiale di test. Non dice nulla sulla qualità del parser.
+- **A. Controlli del runner**: integrità del materiale di test. Non dice nulla sulla qualità del parser. Ha tre stati: **OK** (tutti i controlli eseguiti e superati), **CONTROLLI PARZIALI** (nulla è rotto ma almeno un controllo non è stato eseguito, ad esempio la validazione JSON Schema per mancanza di `ajv`: un controllo saltato non è un controllo superato) e **PROBLEMI**. Il report elenca sempre l'evidenza delle validazioni effettivamente eseguite (oggetto, schema, validatore e versione) e le stampa nel riepilogo dell'Action. Comprende anche l'autotest del classificatore e la verifica che i casi dichiarino la convenzione numerica quando il punto è ambiguo.
 - **B. Regressione**: il comportamento è peggiorato rispetto al riferimento? Misura il cambiamento, non la correttezza.
-- **C. Correttezza del parser**: confronto con i valori attesi. È **provvisoria** finché i casi non sono approvati o i campi verificati. Gli INVENTATI hanno un sottotipo:
+- **C. Correttezza del parser**: confronto con i valori attesi. È **provvisoria** finché i casi non sono approvati o i campi verificati. "Corretto" è sempre diviso in **estratti giusti** (il parser ha letto il valore) e **vuoti giusti** (il parser ha lasciato vuoto ciò che doveva restare vuoto: non prova alcuna capacità di lettura). Gli INVENTATI hanno un sottotipo:
   - `attribuzione_errata`: il numero esiste nel testo ma è assegnato al campo sbagliato;
   - `valore_assente_dal_testo`: il numero non compare nel testo;
   - `certezza_non_giustificata`: un dato ambiguo viene restituito come certo.
@@ -85,5 +85,7 @@ Il codice di uscita (CI verde o rossa) dipende solo da A e B. **Una CI verde non
 
 ## Limiti attuali (FASE 0)
 - **OCR effettivo: INCOMPLETO.** Il runner non esegue l'OCR: registra soltanto se l'app lo avvierebbe.
-- I 45 casi unitari sono proposte sintetiche in stato `da_rivedere`: vedi `unit/CASI_SINTETICI.md`, rigenerabile con `npm run schede`.
+- I 49 casi unitari sono proposte sintetiche in stato `da_rivedere` (45 originali, di cui 9 corretti il 30/09/2026, più 4 integrati): vedi `unit/CASI_SINTETICI.md`, rigenerabile con `npm run schede`.
+- **Campi di test nuovi:** i campi aggiunti ai casi dopo il congelamento del riferimento non hanno un "prima". Il report li elenca a parte (sezione B) e non li conta come peggioramenti; vanno congelati con l'approvazione di Max.
+- **Convenzione numerica:** quando un numero ha un punto ambiguo (`2.423`) il caso dichiara `convenzione_numerica` (`it`, `en`, `non_dichiarata`). Il solo contesto "consumo" non decide: senza convenzione dichiarata il caso resta ambiguo.
 - Le prove di accesso reali richiedono credenziali di test e rete verso Supabase (vedi `accessi/PIANO_PROVE_ACCESSO.md`).

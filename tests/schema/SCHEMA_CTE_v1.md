@@ -47,6 +47,7 @@ Vincoli automatici:
 ## Normalizzazione (regola 26)
 - Prezzi luce in **€/kWh**, prezzi gas in **€/Smc**. Il valore originale va in `original`.
 - Le quote fisse vanno in **€/mese**, con l'originale conservato (144 €/anno → 12 €/mese).
+- Il riferimento della quota fissa va in `per`: `POD` (luce) o `PDR` (gas), ad esempio `PCV 7,50 €/POD/mese` → `value 7.5`, `unit €/mese`, `per POD`. Per le quote annuali si conserva anche l'originale (`original`).
 - Il gas in €/MWh **non** si converte senza PCS: si mantiene l'unità originale.
 
 ## Regole di compilazione
@@ -55,6 +56,7 @@ Vincoli automatici:
 3. Se il documento è poco chiaro si usa `ambiguo`, senza scegliere un valore.
 4. Un bonus o uno sconto va in `discounts` e **mai** nel prezzo dell'energia.
 5. Gli indici sconosciuti diventano `ALTRO` con `original_text` compilato.
+6. Per gli indici con variante (`index_gme`, `medio_mensile`, `per_fascia`, `day_ahead`, `mensile`) si compila `variant` e, se il documento usa un nome preciso, `original_text` (es. `PUN Index GME`). Il runner li controlla: valore giusto ma variante o nome originale persi = ERRATO.
 
 ## Esiti del confronto
 | Esito | Quando |

@@ -32,7 +32,26 @@ Sui siti ufficiali non ho trovato una CTE **unica** con le condizioni economiche
 
 Finché il caso non è risolto, la categoria `dual` resta **scoperta** e il criterio di prontezza resta non soddisfatto.
 
+## Ordine di download (aggiornato il 30/09/2026)
+
+Il 30/09/2026 ho controllato che i link di sviluppo rispondano ancora (lettura di un riassunto di ciascun PDF, non estrazione di valori). **Scarica prima quelli la cui finestra di sottoscrizione è già chiusa o sta per chiudersi**, perché i fornitori tendono a sostituire i file:
+
+1. `gas-fisso-01` — Enel Fix Gas (sottoscrivibile fino al 15/09/2026: già chiusa)
+2. `complessa-01` — Pulsee Luce Limit.e (finestra 12–18/01/2026: già chiusa)
+3. `luce-fisso-01` — Alperia Placet Fissa Luce (finestra fino al 10/07/2026: già chiusa)
+4. `luce-indicizzato-01` — Enel Flex Luce (sottoscrivibile fino al 22/10/2026)
+5. `gas-indicizzato-01` — Sorgenia Next Energy (durata indeterminata)
+6. `ocr-01` — MET Sicuro Gas Flex Web (durata indeterminata): scaricare, **stampare e riscansionare**
+7. `misto-01` — Pulsee Luce e Gas RELAX (non ricontrollato oggi)
+
+Per ogni file: salvare il PDF con il nome di categoria, annotare URL, data di download e SHA-256 (`sha256sum file.pdf`), poi caricarlo in `tests/cte/documenti/`. Dall'iPad è più semplice caricarli dal sito di GitHub (Add file → Upload files) sul branch `fase-0-test`.
+
+La suddivisione in sviluppo, holdout e fornitori nuovi è fissata in **`PIANO_INSIEMI.md`**.
+
 ## Insieme HOLDOUT (mai usato nello sviluppo)
+
+> I posti e i fornitori assegnati sono in `PIANO_INSIEMI.md` (definiti prima dello sviluppo). Il PDF specifico lo sceglie Max; Claude non lo apre. Il testo qui sotto resta come criterio generale.
+
 Per essere una prova valida, il contenuto di queste CTE **non deve essere letto da chi sviluppa il parser**, me compreso. Per questo non propongo documenti specifici: se li scegliessi io, li avrei già letti.
 
 Criteri per sceglierle tu:

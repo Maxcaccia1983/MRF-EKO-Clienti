@@ -118,6 +118,7 @@
             "unit": { "type": ["string", "null"] }
           }
         },
+        "per": { "enum": ["POD", "PDR", null], "description": "Riferimento della quota fissa: POD (punto di prelievo, luce) o PDR (punto di riconsegna, gas). Va conservato insieme al valore e all'originale." },
         "variant": { "type": ["string", "null"], "description": "Per gli indici: index_gme, medio_mensile, per_fascia, day_ahead, mensile ..." },
         "original_text": { "type": ["string", "null"], "description": "Testo originale dell'indice (obbligatorio se value = ALTRO)." },
         "status": { "$ref": "#/$defs/status" },

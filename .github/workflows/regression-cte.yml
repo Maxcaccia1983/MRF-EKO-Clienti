@@ -37,6 +37,11 @@ jobs:
       - name: Dipendenze di test (versioni esatte)
         run: npm install --no-audit --no-fund
 
+      - name: Versioni installate (evidenza per il report)
+        run: |
+          echo "node $(node -v)"
+          npm ls ajv pdfjs-dist --depth=0
+
       - name: Esegui test di regressione
         run: node esegui-test.mjs --ci
 

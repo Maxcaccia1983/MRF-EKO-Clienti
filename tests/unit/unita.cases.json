@@ -186,15 +186,25 @@
         "quota_fissa_mensile": {
           "status": "presente",
           "value": 7.5,
-          "unit": "€/mese"
+          "unit": "€/mese",
+          "original": {
+            "value": 7.5,
+            "unit": "€/mese"
+          },
+          "per": "POD"
         },
         "prezzo_energia": {
           "status": "non_presente",
           "value": null
         }
       },
-      "motivazione": "PCV espressa per punto di prelievo al mese: 7,50 €/mese.",
-      "stato_revisione": "da_rivedere"
+      "motivazione": "PCV espressa per punto di prelievo al mese: 7,50 €/mese. Il riferimento 'per POD' va conservato (campo 'per'), insieme al valore originale e alla periodicita' originale (regola 9).",
+      "stato_revisione": "da_rivedere",
+      "modifica": {
+        "tipo": "corretto",
+        "data": "2026-09-30",
+        "nota": "Prima si verificava solo il valore mensile. Ora il test richiede anche il riferimento POD e l'originale."
+      }
     },
     {
       "id": "U13",
@@ -208,15 +218,21 @@
           "original": {
             "value": 96,
             "unit": "€/anno"
-          }
+          },
+          "per": "PDR"
         },
         "prezzo_energia": {
           "status": "non_presente",
           "value": null
         }
       },
-      "motivazione": "CCV gas annuale: 96 €/anno = 8 €/mese, con originale conservato.",
-      "stato_revisione": "da_rivedere"
+      "motivazione": "CCV gas annuale: 96 €/anno = 8 €/mese. Vanno conservati l'originale (96 €/anno) e il riferimento 'per PDR' (punto di riconsegna del gas), distinto dal POD della luce.",
+      "stato_revisione": "da_rivedere",
+      "modifica": {
+        "tipo": "corretto",
+        "data": "2026-09-30",
+        "nota": "Prima si verificava solo la conversione mensile e l'originale. Ora il test richiede anche il riferimento PDR."
+      }
     },
     {
       "id": "U14",
