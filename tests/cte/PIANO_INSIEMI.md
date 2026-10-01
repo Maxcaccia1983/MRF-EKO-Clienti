@@ -88,8 +88,14 @@ Conseguenze:
 
 Le holdout le compila Max **senza mostrarle a Claude** fino alla valutazione.
 
+## Decisioni di Max (01/10/2026)
+
+1. **Classificazione INVENTATO confermata.** Quando il parser assegna a un campo un valore che il documento non gli attribuisce (esempio: uno spread restituito come valore del PUN), l'esito è **INVENTATO, sottotipo `attribuzione_errata`**. Non diventa ERRATO.
+2. **Test DUAL su un singolo documento che contenga entrambe le forniture.** Non si usa la coppia di PDF luce + gas. Al 01/10/2026 non ho trovato un documento unico verificato: Enel Fix Web Luce e Gas, per esempio, ha due CTE separate (luce e gas). Candidati non ancora verificati: il contratto Sorgenia Next Energy Sunlight DUAL (il titolo dichiara "fornitura di energia elettrica e gas naturale"), la proposta di contratto "Luce e/o Gas" di WindTre (clientela professionale), la pagina Eni Plenitude "Trend Casa Gas e Luce". La categoria `dual` resta scoperta finché un documento unico non viene scelto e controllato.
+3. **Primi tre documenti di sviluppo:** `gas-fisso-01` (Enel Fix Gas), `complessa-01` (Pulsee Luce Limit.e), `luce-fisso-01` (Alperia). Testo ed expected in bozza si preparano subito, senza attendere le altre decisioni.
+
 ## Cosa resta da decidere
 
-1. Se `H4` (DUAL in un solo documento) esiste davvero o se il DUAL si prova con la coppia luce + gas della stessa offerta.
+1. Quale documento unico luce + gas usare per `dual`, e se come sviluppo o come `H4` holdout.
 2. Se la trappola `misto-01` (Pulsee, "Luce e Gas" ma solo luce) entra nello sviluppo: proposta sì.
 3. Se il risultato della query dei fornitori cambia l'assegnazione di `H1`, `H2` o `H3`.
