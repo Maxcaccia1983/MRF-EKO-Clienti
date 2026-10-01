@@ -102,6 +102,13 @@ pdf.js 3.11.174 **non è installabile** nell'ambiente di lavoro (registro npm e 
 
 Differenza già osservata: in pdf.js 6.2.108 il valore `0,01249` di `luce-fisso-02` compare come `0,01 2 4 9`. Va riconfermato con la 3.11.174, perché potrebbe cambiare il comportamento del parser.
 
+### 01/10/2026 (notte): conferme di Max su `luce-fisso-02`
+Max ha confrontato le schermate delle pagine originali dell'Enel Fix Web Luce. `expected/luce-fisso-02.expected.json` passa da `bozza` a `in_revisione`.
+- **Verificati (10 campi):** `supplier` (Enel Energia, con la ragione sociale `Enel Energia S.p.A.` conservata nella nota), `offer_name`, `supply_type`, `market`, `customer_segment`, `validity.duration_months` (36 mesi dall'attivazione), `electricity.price_type`, `electricity.fixed_price` (0,17849 €/kWh, perdite di rete incluse), `electricity.fixed_fee` (144 €/POD/anno = 12 €/POD/mese) e `discounts` (7% = 0,01249 €/kWh, prezzo scontato 0,16600, con tutte le condizioni gas e Placet, separato dal prezzo base).
+- **`validity.to`:** la data 01/10/2026 è confermata come **termine di adesione** e non è né assente né ambigua nel documento (`status: presente`). La sua collocazione nello schema resta da chiarire: nel frattempo il campo è `non_verificato`, quindi **escluso dal punteggio**, con data e significato conservati nella nota.
+- **`renewal`:** testo precisato (proroga tacita solo in assenza della comunicazione di nuove condizioni, art. 7.2 CGF, esclusi sconti e bonus; non è un rinnovo incondizionato). Resta `non_verificato` fino alla conferma esplicita.
+- **`offer_code`:** resta `null`/`ambiguo`; i riferimenti del modulo (`Enel_Fix_Web_Luce_26WR12K`, `74326 ML_RedKitSwaResCteEl`) sono solo nelle note, senza una funzione attribuita.
+
 ## Come si verificano i valori attesi
 
 1. Max apre il PDF, compila l'expected copiando il modello.
