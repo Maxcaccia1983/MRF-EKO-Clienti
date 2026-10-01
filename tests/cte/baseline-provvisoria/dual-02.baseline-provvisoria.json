@@ -1,0 +1,207 @@
+{
+  "avviso": "BASELINE PROVVISORIA - fotografia del parser attuale su testo estratto con una versione di pdf.js DIVERSA da quella dell'app (3.11.174). NON e' la baseline ufficiale, NON e' l'output corretto e non va copiata negli expected.",
+  "provenienza": {
+    "commit": "ef47b88",
+    "generato_il": "2026-10-01T19:43:41.002Z",
+    "parser_bolletta_sha256": "e4447c13ff09991f298235cfbe6ebdc38d7283316fd6ef9d8d9b5bb83464cfd2",
+    "index_html_sha256": "ce4e0f81167d0dad836cd9583bd3a3d54e13cd0ad06e84fde53c639ae4ef60ff",
+    "parser_bolletta_versione": "1.0.0",
+    "patch_cte_applicate": 1,
+    "pdfjs_usato": "6.2.108",
+    "pdfjs_dell_app": "3.11.174",
+    "baseline_ufficiale": false
+  },
+  "documento": {
+    "id": "dual-02",
+    "sha256": "ef4f4b49b1e1bc8b3597e2aa8d761921a31e82d2c00a4d189faa82bb76f838f4",
+    "tipo_pdf": "nativo"
+  },
+  "estrazione": {
+    "numero_pagine": 3,
+    "caratteri": 17652,
+    "pagine": [
+      {
+        "pagina": 1,
+        "testo": "FAC-SIMILE Trend Casa Condizioni Economiche Condizioni del mercato libero sottoscrivibili dal 16/09/26 al 14/10/26 . n° plico 1/3 CE_LTCASAVBAS160926_GTCASABAS160926_BASE_20260916_20261014 In caso di somministrazione di energia elettrica, il Cliente dichiara sotto la propria responsabilità che il PdP oggetto del Contratto rifornisce un’abitazione e eventuali locali annessi collegati allo stesso PdP con potenza impegnata non superiore a 15 kW. Energia Elettrica codice offerta 026160ESVML54XX0LTCASAVBAS160926 Le presenti Condizioni Economiche sono valide per 24 mesi di fornitura. Per la somministrazione di energia elettrica sono fatturati i corrispettivi relativi alla spesa per la Vendita dell'energia elettrica , quelli relativi alla spesa per la Tariffa per l’uso della rete dell'energia elettrica e infine quelli relativi alla spesa per Oneri generali di sistema , come definite dall'Autorità di Regolazione per Energia Reti Ambiente (di seguito \"ARERA\") nel Glossario della bolletta dei clienti finali di energia. In più, se presenti, qui di seguito sono dettagliati eventuali Sconti e/o Bonus e i corrispettivi di eventuali Prodotti e/o servizi aggiuntivi . Il Cliente è inoltre tenuto a corrispondere i diritti e i tributi relativi al Contratto di cui al relativo Articolo delle Condizioni Generali di Contratto e le cui aliquote sono consultabili sul portale eniplenitude.com . Vendita di energia elettrica Corrispettivi definiti dal venditore Corrispettivo a consumo: Corrispettivo Luce Index + Contributo al Consumo PUN + 0,022 euro/kWh Corrispettivo annuo: Commercializzazione e Vendita 144 euro⁄anno Il Corrispettivo a consumo è composto dalle seguenti voci fatturate in bolletta: - Corrispettivo Luce Index, applicato in fattura all’energia elettrica prelevata e alle relative perdite per il trasporto (di seguito “Perdite di Rete”) così come quantificate da ARERA. Lo stesso è aggiornato mensilmente e corrisponde, per ciascun mese solare di fornitura, alla media aritmetica del PUN Index GME (prezzo unico nazionale dell’energia elettrica) così come determinato dal Gestore dei Mercati Energetici e pubblicato sul sito internet di ARERA. Considerando il periodo settembre 2025 - agosto 2026, l'indice PUN ha assunto il suo valore massimo pari a 0,197999 €/kWh (netto Perdite: 0,179999 €/kWh) nel mese di agosto 2026. Ai fini della fatturazione, i valori dei Corrispettivi Luce Index saranno calcolati in base al PUN Index GME del mese solare di riferimento, o se questo non sia stato ancora pubblicato sul sito gme.mercatoelettrico.org o non recepito nei sistemi di fatturazione di Plenitude, in base al PUN Index GME del mese solare precedente a quello di riferimento, fatti salvi eventuali conguagli. Per la sola fattura di cessazione, qualora al momento dell'emissione della stessa, il valore del PUN Index GME relativo all'ultimo mese di consumo non sia stato ancora pubblicato sul sito gme.mercatoelettrico.com o non recepito nei sistemi di fatturazione Plenitude, sarà utilizzato in via definitiva il valore del PUN Index GME del mese solare precedente. In caso di scelta dell’Opzione Bioraria (codice offerta: 026160ESVFL54XX0LTCASAVBAS160926) sono applicati in fattura due Corrispettivi Luce Index distinti per le fasce orarie definite da ARERA: F1 (dalle 8:00 alle 19:00 dal lunedì al venerdì escluse festività nazionali) e F23 (tutte le ore dell’anno non comprese in fascia F1). L’Opzione Bioraria è applicata solo in presenza di misuratore atto a rilevare l’energia per ciascuna delle fasce orarie F1 e F23 e in ogni caso a partire dal momento in cui il soggetto responsabile del servizio di misura rende effettivamente disponibili a Plenitude i dati di consumo del Cliente aggregati per le due suddette fasce. - Contributo al Consumo, il cui valore espresso in €/kWh ed esposto in tabella include le Perdite di Rete. In bolletta verrà applicato il valore del Contributo al Consumo al netto delle Perdite di Rete pari a 0,02 €/kWh ed è invariabile per tutta la durata delle Condizioni Economiche. Tale corrispettivo sarà applicato sia ai volumi di energia elettrica consumata sia alla percentuale di Perdite di Rete, definita e aggiornata da ARERA. Il Corrispettivo annuo è fatturato mensilmente in bolletta alla voce Commercializzazione e Vendita, invariabile per tutta la durata delle Condizioni Economiche. Corrispettivo definito da ARERA : si applica, inoltre, il corrispettivo di dispacciamento pari al valore del corrispettivo CdispD , definito da ARERA nel Testo integrato delle disposizioni per l’erogazione dei servizi di vendita dell’energia elettrica di ultima istanza ed espresso in €/kWh. Sconti e/o Bonus Plenitude riconosce lo Sconto Domiciliazione pari a 12 € all’anno, che sarà posto a riduzione delle quote fisse della spesa per la Vendita di gas naturale; esso sarà applicato nel corso della validità delle presenti Condizioni Economiche a condizione che l’addebito diretto in conto corrente SEPA risulti attivo; qualora, invece, in qualunque momento, l’addebito diretto in conto corrente SEPA non risulti più attivo per qualunque ragione, il corrispondente sconto non sarà applicato a partire dalla data di disattivazione della domiciliazione. Resta inteso che in caso di scioglimento del Contratto, anche per Cambio Prodotto, il Cliente non avrà diritto al riconoscimento del suddetto sconto a partire dallo scioglimento del Contratto. L'incidenza percentuale media dello Sconto Domiciliazione sulla stima della spesa annua ante imposte di un cliente tipo che consuma 2.700 kWh all'anno nell'abitazione di residenza con 3 kW di potenza impegnata è pari a 1 %. Prodotti e/o servizi aggiuntivi Non sono previsti prodotti e/o servizi aggiuntivi. Tariffa per l’uso della rete dell'energia elettrica Si compone dei corrispettivi di importo pari ai costi e agli oneri sostenuti da Plenitude in relazione ai servizi di trasporto, misura, gestione del contatore e distribuzione dell'energia elettrica, che sono definiti e aggiornati da ARERA. Oneri generali di sistema Si compongono dei corrispettivi a carico di Plenitude a copertura di tali oneri definiti e aggiornati da ARERA, ivi compresa la componente Asos (la componente Asos serve per finanziare il sistema di incentivi riconosciuti per la produzione di energia elettrica da fonti rinnovabili e da cogenerazione. È a carico di tutti i clienti elettrici). Tutti i valori definiti e aggiornati da ARERA sono pubblicati alla pagina arera.it/consumatori/valori-rete-oneri-domestici-ee .",
+        "caratteri": 6485,
+        "parole": 960
+      },
+      {
+        "pagina": 2,
+        "testo": "FAC-SIMILE CE_LTCASAVBAS160926_GTCASABAS160926_BASE_20260916_20261014 Trend Casa Condizioni Economiche Condizioni del mercato libero sottoscrivibili dal 16/09/26 al 14/10/26 . n° plico 2/3 Gas Naturale codice offerta 026160GSVML54XX00GTCASABAS160926 Le presenti Condizioni Economiche sono valide per 24 mesi di fornitura. Per la somministrazione di gas naturale sono fatturati i corrispettivi relativi alla spesa per la Vendita di gas naturale ,quelli relativi alla spesa per la Tariffa per l’uso della rete del gas naturale e infine quelli relativi alla spesa per Oneri generali di sistema ,come definite dall'Autorità di Regolazione per Energia Reti Ambiente (di seguito \"ARERA\") nel Glossario della bolletta dei clienti finali di energia. In più, se presenti, qui di seguito sono dettagliati eventuali Sconti e/o Bonus e i corrispettivi di eventuali Prodotti e/o servizi aggiuntivi . Il Cliente è inoltre tenuto a corrispondere i diritti e i tributi relativi al Contratto di cui al relativo Articolo delle Condizioni Generali di Contratto e le cui aliquote sono consultabili sul portale eniplenitude.com . Vendita di gas naturale Corrispettivi definiti dal venditore Corrispettivo a consumo: Corrispettivo Gas Index + Contributo al Consumo PSV + 0,15 euro/Smc Corrispettivo annuo: Commercializzazione e Vendita 144 euro⁄anno Il Corrispettivo a consumo è composto dalle seguenti voci fatturate in bolletta: - Corrispettivo Gas Index, applicato al gas naturale prelevato con riferimento ad un potere calorifico superiore convenzionale “P” (PCS) pari a 0,03852 GJ/Smc, esso è calcolato mensilmente ed è pari all'indice energetico “PSV Day Ahead Heren Mid” (di seguito, “PSV”) che corrisponde al prezzo del gas naturale all’ingrosso al PSV (Punto di Scambio Virtuale). L’indice PSV è calcolato, con riferimento a ciascun mese di fornitura “m”, convertendo in €/Smc la media aritmetica delle quotazioni giornaliere “Heren Price” espresse in €/MWh. Per ogni giorno del mese di fornitura “m”, la quotazione ‘Heren Price’ espressa in €/MWh è, a sua volta, la media aritmetica dei prezzi ‘Bid’ e ‘Offer’ pubblicati sotto il titolo ‘PSV PRICE ASSESSMENT’ nel report ‘ICIS Heren European Spot Gas Markets’ del più vicino giorno lavorativo secondo il calendario inglese. Considerando il periodo settembre 2025 - agosto 2026, l'indice PSV ha assunto il suo valore massimo pari a 0,686448 €/Smc nel mese di agosto 2026. Ai fini della fatturazione, il valore del Corrispettivo Gas Index sarà calcolato in base al PSV del mese solare in cui sono stati effettuati i consumi oggetto di fatturazione o, se questo non fosse ancora calcolabile per mancanza della pubblicazione delle quotazioni “Heren Price” o non recepito nei sistemi di fatturazione di Plenitude, in base al PSV del mese solare precedente a quello di prelievo, fatti salvi eventuali conguagli nella prima fattura utile. Per la sola fattura di cessazione, qualora al momento dell'emissione della stessa, il valore del PSV relativo all'ultimo mese di consumo non sia stato ancora pubblicato o non recepito nei sistemi di fatturazione Plenitude, sarà utilizzato in via definitiva il valore del PSV del mese solare precedente. Qualora, nel corso della durata del Contratto, non fosse più possibile calcolare il Corrispettivo Gas Index a causa della cessata pubblicazione dei citati parametri di riferimento, Plenitude utilizzerà ai fini della fatturazione l’ultimo valore disponibile fino all’applicazione delle nuove modalità di determinazione del Corrispettivo Gas Index comunicato con un preavviso di almeno 3 mesi secondo quanto previsto dalle Condizioni Generali di Contratto. - Contributo al Consumo, applicato al gas naturale prelevato con riferimento ad un potere calorifico superiore convenzionale “P” (PCS) pari a 0,03852 GJ/Smc, esso è invariabile per tutta la durata delle Condizioni Economiche. In sede di fatturazione, i corrispettivi e le componenti di cui sopra saranno applicati ai volumi con riferimento al potere calorifico superiore convenzionale “P” (PCS) relativo all’impianto di distribuzione cui è connesso il Punto di Fornitura, secondo le disposizioni del Testo integrato delle attività di vendita al dettaglio di gas naturale e gas diversi da gas naturale (di seguito, “TIVG”). Nel caso in cui il Punto di Fornitura non sia dotato di apparecchiatura per la correzione delle misure alle condizioni standard, la correzione ai fini della fatturazione dei volumi misurati avverrà in base al valore del coefficiente C applicabile, secondo le disposizioni del TIVG. Il Corrispettivo annuo è fatturato mensilmente in bolletta alla voce Commercializzazione e Vendita, invariabile per tutta la durata delle Condizioni Economiche. Sconti e/o Bonus Plenitude riconosce lo Sconto Domiciliazione pari a 12 € all’anno, che sarà posto a riduzione delle quote fisse della spesa per la Vendita di gas naturale; esso sarà applicato nel corso della validità delle presenti Condizioni Economiche a condizione che l’addebito diretto in conto corrente SEPA risulti attivo; qualora, invece, in qualunque momento, l’addebito diretto in conto corrente SEPA non risulti più attivo per qualunque ragione, il corrispondente sconto non sarà applicato a partire dalla data di disattivazione della domiciliazione. Resta inteso che in caso di scioglimento del Contratto, anche per Cambio Prodotto, il Cliente non avrà diritto al riconoscimento del suddetto sconto a partire dallo scioglimento del Contratto. L'incidenza percentuale media dello Sconto Domiciliazione sulla stima della spesa annua ante imposte di un cliente tipo che consuma 1.000 Smc all'anno nell’ambito tariffario Centro-Sud Occidentale (3° trimestre 2026) è pari a 1%. Prodotti e/o servizi aggiuntivi Non sono previsti prodotti e/o servizi aggiuntivi. Tariffa per l’uso della rete del gas naturale Si compone dei corrispettivi di importo pari ai costi e agli oneri sostenuti da Plenitude in relazione ai servizi di trasporto, misura, gestione del contatore e distribuzione del gas naturale, che sono definiti e aggiornati da ARERA. Oneri generali di sistema Si compongono dei corrispettivi a carico di Plenitude a copertura di tali oneri definiti e aggiornati da ARERA.",
+        "caratteri": 6179,
+        "parole": 918
+      },
+      {
+        "pagina": 3,
+        "testo": "FAC-SIMILE CE_LTCASAVBAS160926_GTCASABAS160926_BASE_20260916_20261014 Trend Casa Condizioni Economiche Condizioni del mercato libero sottoscrivibili dal 16/09/26 al 14/10/26 . n° plico 3/3 Ulteriori caratteristiche del Contratto - Saranno fatturati al Cliente ulteriori oneri, corrispettivi, componenti tariffarie eventualmente introdotti dalle competenti autorità con riferimento alla fornitura di energia elettrica e/o gas naturale a punti di fornitura domestici, anche (ma non esclusivamente) in sostituzione di altri precedentemente previsti dalla normativa di settore. Nel caso in cui il Cliente abbia già in essere un contratto di somministrazione con Plenitude e intenda formulare la presente Proposta di Contratto presso il medesimo PdP e/o PdR già attivo con Plenitude a condizioni economiche del mercato libero, verrà applicato un corrispettivo una tantum di importo pari a 12€ IVA esclusa per ogni fornitura a copertura delle spese di gestione del nuovo contratto. Ad integrazione dell'Art. 5 delle CGC, in caso di Voltura o Voltura con cambio fornitore o Attivazione, oltre a qualsiasi altro onere richiesto dal Distributore Gas o dal Distributore Elettrico, verrà applicato un corrispettivo una tantum pari a 35 euro IVA esclusa. A parziale deroga e laddove non già previsto dall’articolo 8.3 delle CGC, l’importo addebitato per ciascuna diffida sarà pari a 6 € oltre IVA inclusivo sia delle spese postali sia dei costi per attività di gestione e recupero del credito, fatto salvo il risarcimento del danno ulteriore. Tale previsione resterà valida ed efficace per l’intera durata delle Contratto. Per l'energia elettrica: Per l’intera durata delle presenti Condizioni Economiche l’energia elettrica fornita da Plenitude a copertura della totalità dei consumi del Cliente sarà certificata, tramite garanzie d’origine di provenienza europea, come immessa in rete e prodotta da impianti alimentati interamente da fonti rinnovabili. Ciò non implica che l’energia elettrica consumata dal Cliente provenga direttamente da un impianto di produzione di energia elettrica rinnovabile, ma che Plenitude si farà carico di acquistare ed annullare un quantitativo di garanzie di origine atto a certificare che è stata immessa in rete energia elettrica prodotta da fonti rinnovabili in misura corrispondente al consumo annuo del Cliente. Tale certificazione viene effettuata nel rispetto della deliberazione ARERA ARG/elt 104/11 nella quale è previsto che: i) ogni contratto di vendita di energia rinnovabile debba essere comprovato da una quantità di garanzie di origine (GO) di cui alla direttiva 2009/28/CE pari alla quantità di energia elettrica venduta come rinnovabile nell’ambito del medesimo contratto; ii) ciascuna società di vendita, entro il 31 marzo dell’anno successivo a quello in cui è stata fornita energia elettrica ai clienti finali nell’ambito di contratti di vendita energia rinnovabile, sia tenuta ad approvvigionarsi di una quantità di garanzie di origine pari all’energia elettrica venduta come rinnovabile e riferite al medesimo anno, dandone evidenza al GSE secondo modalità da quest’ultimo definite. Per il gas naturale: Nel caso in cui, ai sensi del D.Lgs. 9 giugno 2020, n. 47, come modificato dal D.Lgs. 10 settembre 2024, n. 147 in attuazione della direttiva (UE) 2023/958, e successive eventuali modificazioni, dovessero entrare in vigore, a partire dal 1° gennaio 2027 o successivamente, le previsioni relative agli obblighi di acquisto da parte degli operatori delle quote di emissioni di gas a effetto serra nell'Unione Europea, Plenitude, fatta salva l’applicazione automatica di eventuali interventi tariffari ARERA, avrà il diritto di modificare le presenti Condizioni Economiche includendo gli ulteriori costi dalla stessa sostenuti in relazione all’acquisto di tali quote di emissione. A tali fini, Plenitude invierà, con congruo preavviso, una comunicazione con cui il Cliente sarà debitamente informato dell’entità di tali costi, della ragione della loro applicazione e del momento a partire dal quale verranno addebitati, ferma restando la facoltà per il Cliente di esercitare il diritto di recesso dal Contratto. Modalità di variazione delle Condizioni Economiche - Con un anticipo di almeno novanta giorni rispetto alla scadenza del loro periodo di validità, Plenitude comunicherà in forma scritta al Cliente le nuove condizioni economiche di somministrazione, nonché il relativo periodo di validità. La comunicazione non potrà essere trasmessa all’interno della fattura o congiuntamente a essa, salvo il caso in cui il rinnovo si configuri come una riduzione dei corrispettivi originariamente previsti in Contratto. In assenza di tale comunicazione, le presenti Condizioni Economiche s’intenderanno prorogate fino a nuova comunicazione da parte di Plenitude, effettuata sempre con un preavviso minimo di novanta giorni. È fatta salva per il Cliente la facoltà di esercitare il diritto di recesso di cui alle Condizioni Generali di Contratto.",
+        "caratteri": 4986,
+        "parole": 724
+      }
+    ]
+  },
+  "ocr": {
+    "testo_nativo_leggibile": true,
+    "app_avvierebbe_ocr": false,
+    "pagine_ocr_app": 0,
+    "ocr_eseguito_nel_test": false,
+    "nota": "FASE 0: l'OCR non viene eseguito dal runner. Per i documenti 'scansionato' il risultato del test riflette solo il testo nativo."
+  },
+  "parser_cte_attuale": {
+    "fornitore": "Plenitude",
+    "fornitoreAffidabile": true,
+    "contestoFornitoreEsplicito": "",
+    "contestoFornitoreFallback": "",
+    "nomeOfferta": "Trend Casa",
+    "codiceOfferta": "026160GSVML54XX00GTCASABAS160926",
+    "commodity": "luce",
+    "segmento": "domestico",
+    "validitaDa": "2026-09-16",
+    "validitaAl": "2026-10-14",
+    "dateTrovateCTE": [
+      "16/09/26",
+      "14/10/26",
+      "16/09/26",
+      "14/10/26",
+      "16/09/26",
+      "14/10/26"
+    ],
+    "classificazioneDateNumericheCTE": [
+      {
+        "data": "16/09/26",
+        "tipo": "validita_offerta"
+      },
+      {
+        "data": "14/10/26",
+        "tipo": "validita_offerta"
+      },
+      {
+        "data": "16/09/26",
+        "tipo": "validita_offerta"
+      },
+      {
+        "data": "14/10/26",
+        "tipo": "validita_offerta"
+      },
+      {
+        "data": "16/09/26",
+        "tipo": "validita_offerta"
+      },
+      {
+        "data": "14/10/26",
+        "tipo": "validita_offerta"
+      }
+    ],
+    "contestiDateNumericheCTE": [
+      "FAC-SIMILE Trend Casa Condizioni Economiche Condizioni del mercato libero sottoscrivibili dal 16/09/26 al 14/10/26 . n° plico 1/3 CE_LTCASAVBAS160926_GTCASABAS160926_BASE_20260916_20261014 In caso di somministrazione di energia elettrica, il Cliente dichiara sot",
+      "FAC-SIMILE Trend Casa Condizioni Economiche Condizioni del mercato libero sottoscrivibili dal 16/09/26 al 14/10/26 . n° plico 1/3 CE_LTCASAVBAS160926_GTCASABAS160926_BASE_20260916_20261014 In caso di somministrazione di energia elettrica, il Cliente dichiara sotto la propri",
+      "i-ee . FAC-SIMILE CE_LTCASAVBAS160926_GTCASABAS160926_BASE_20260916_20261014 Trend Casa Condizioni Economiche Condizioni del mercato libero sottoscrivibili dal 16/09/26 al 14/10/26 . n° plico 2/3 Gas Naturale codice offerta 026160GSVML54XX00GTCASABAS160926 Le presenti Condizioni Economiche sono valide per 24 mesi di fornitura.",
+      "IMILE CE_LTCASAVBAS160926_GTCASABAS160926_BASE_20260916_20261014 Trend Casa Condizioni Economiche Condizioni del mercato libero sottoscrivibili dal 16/09/26 al 14/10/26 . n° plico 2/3 Gas Naturale codice offerta 026160GSVML54XX00GTCASABAS160926 Le presenti Condizioni Economiche sono valide per 24 mesi di fornitura. Per la somm",
+      "ARERA. FAC-SIMILE CE_LTCASAVBAS160926_GTCASABAS160926_BASE_20260916_20261014 Trend Casa Condizioni Economiche Condizioni del mercato libero sottoscrivibili dal 16/09/26 al 14/10/26 . n° plico 3/3 Ulteriori caratteristiche del Contratto - Saranno fatturati al Cliente ulteriori oneri, corrispettivi, componenti tariffarie eventua",
+      "IMILE CE_LTCASAVBAS160926_GTCASABAS160926_BASE_20260916_20261014 Trend Casa Condizioni Economiche Condizioni del mercato libero sottoscrivibili dal 16/09/26 al 14/10/26 . n° plico 3/3 Ulteriori caratteristiche del Contratto - Saranno fatturati al Cliente ulteriori oneri, corrispettivi, componenti tariffarie eventualmente intro"
+    ],
+    "dateTestualiCTE": [
+      "settembre 2025",
+      "agosto 2026",
+      "agosto 2026",
+      "settembre 2025",
+      "agosto 2026",
+      "agosto 2026"
+    ],
+    "contestiDateTestualiCTE": [
+      "sì come determinato dal Gestore dei Mercati Energetici e pubblicato sul sito internet di ARERA. Considerando il periodo settembre 2025 - agosto 2026, l'indice PUN ha assunto il suo valore massimo pari a 0,197999 €/kWh (netto Perdite: 0,179999 €/kWh) nel",
+      "to dal Gestore dei Mercati Energetici e pubblicato sul sito internet di ARERA. Considerando il periodo settembre 2025 - agosto 2026, l'indice PUN ha assunto il suo valore massimo pari a 0,197999 €/kWh (netto Perdite: 0,179999 €/kWh) nel mese di agosto",
+      "to dal Gestore dei Mercati Energetici e pubblicato sul sito internet di ARERA. Considerando il periodo settembre 2025 - agosto 2026, l'indice PUN ha assunto il suo valore massimo pari a 0,197999 €/kWh (netto Perdite: 0,179999 €/kWh) nel mese di agosto",
+      "sì come determinato dal Gestore dei Mercati Energetici e pubblicato sul sito internet di ARERA. Considerando il periodo settembre 2025 - agosto 2026, l'indice PUN ha assunto il suo valore massimo pari a 0,197999 €/kWh (netto Perdite: 0,179999 €/kWh) nel",
+      "to dal Gestore dei Mercati Energetici e pubblicato sul sito internet di ARERA. Considerando il periodo settembre 2025 - agosto 2026, l'indice PUN ha assunto il suo valore massimo pari a 0,197999 €/kWh (netto Perdite: 0,179999 €/kWh) nel mese di agosto",
+      "to dal Gestore dei Mercati Energetici e pubblicato sul sito internet di ARERA. Considerando il periodo settembre 2025 - agosto 2026, l'indice PUN ha assunto il suo valore massimo pari a 0,197999 €/kWh (netto Perdite: 0,179999 €/kWh) nel mese di agosto"
+    ]
+  },
+  "adattato_schema_v1": {
+    "document.supplier": {
+      "value": "Plenitude"
+    },
+    "document.offer_name": {
+      "value": "Trend Casa"
+    },
+    "document.offer_code": {
+      "value": "026160GSVML54XX00GTCASABAS160926"
+    },
+    "document.supply_type": {
+      "value": "luce"
+    },
+    "document.customer_segment": {
+      "value": "domestico"
+    },
+    "validity.from": {
+      "value": "2026-09-16"
+    },
+    "validity.to": {
+      "value": "2026-10-14"
+    },
+    "document.market": null,
+    "document.document_date": null,
+    "validity.duration_months": null,
+    "validity.renewal": null,
+    "electricity.enabled": null,
+    "electricity.price_type": null,
+    "electricity.fixed_price": null,
+    "electricity.band_prices": null,
+    "electricity.index": null,
+    "electricity.spread": null,
+    "electricity.multiplier": null,
+    "electricity.formula_text": null,
+    "electricity.fixed_fee": null,
+    "gas.enabled": null,
+    "gas.price_type": null,
+    "gas.fixed_price": null,
+    "gas.band_prices": null,
+    "gas.index": null,
+    "gas.spread": null,
+    "gas.multiplier": null,
+    "gas.formula_text": null,
+    "gas.fixed_fee": null,
+    "electricity.other_recurring_fees": [],
+    "gas.other_recurring_fees": [],
+    "discounts": []
+  },
+  "informativo_parser_bollette_su_testo_cte": {
+    "nota": "L'app NON usa il parser bollette sulle CTE: dato solo diagnostico.",
+    "tipo": {
+      "tipo": "🔥 Gas naturale",
+      "codice": "gas",
+      "confidenza": 100
+    },
+    "prezzoEnergia": {
+      "valore": "Non rilevato",
+      "numero": null,
+      "unita": null,
+      "confidenza": 0,
+      "candidati": [
+        {
+          "prezzo": 0.15,
+          "unita": "Smc",
+          "categoria": "indice",
+          "score": 240,
+          "contesto": "pettivi definiti dal venditore corrispettivo a consumo: corrispettivo gas index + contributo al consumo psv + 0,15 euro/smc corrispettivo annuo: commercializzazione e vendita 144 euro⁄anno il corrispettivo a consu"
+        },
+        {
+          "prezzo": 0.686448,
+          "unita": "Smc",
+          "categoria": "indice",
+          "score": 240,
+          "contesto": "e. considerando il periodo settembre 2025 - agosto 2026, l'indice psv ha assunto il suo valore massimo pari a 0,686448 €/smc nel mese di agosto 2026. ai fini della fatturazione, il valore del corrispettivo gas inde"
+        }
+      ],
+      "multiplo": false,
+      "indiceMercato": {
+        "prezzo": 0.15,
+        "unita": "Smc",
+        "categoria": "indice",
+        "score": 240,
+        "contesto": "pettivi definiti dal venditore corrispettivo a consumo: corrispettivo gas index + contributo al consumo psv + 0,15 euro/smc corrispettivo annuo: commercializzazione e vendita 144 euro⁄anno il corrispettivo a consu"
+      },
+      "spread": null
+    }
+  }
+}
