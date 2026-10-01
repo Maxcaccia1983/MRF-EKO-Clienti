@@ -1,0 +1,490 @@
+{
+  "schema_version": "1.0",
+  "document_id": "luce-indicizzato-02",
+  "document_review": {
+    "state": "bozza",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": "BOZZA di Claude del 01/10/2026, compilata leggendo il PDF (non la baseline). NESSUN campo e' verificato: tocca a Max controllare ogni valore sul PDF alla pagina indicata."
+  },
+  "document": {
+    "supplier": {
+      "value": "Sorgenia",
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Scheda sintetica, riga Venditore."
+      },
+      "source_text": "Sorgenia Spa",
+      "page": 4
+    },
+    "offer_name": {
+      "value": "NEXT ENERGY SUNLIGHT/LUCE",
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Nella scheda sintetica (pag. 4) il nome e' scritto senza barra: 'NEXT ENERGY SUNLIGHT LUCE'."
+      },
+      "source_text": "1. NEXT ENERGY SUNLIGHT/LUCE",
+      "page": 2
+    },
+    "offer_code": {
+      "value": "000390DSVFL01XXES010131010000000",
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Codice etichettato 'CODICE OFFERTA' nella scheda sintetica (pag. 4), scritto subito dopo l'etichetta nel PDF. CASO C8: nel testo estratto il valore e' staccato dall'etichetta (finisce in coda alla pagina), quindi source_text contiene la sola etichetta. A pag. 2 compare anche 'CODICE PRODOTTO: NELVAR' e a pie' di pagina 'D1_NELVAR_080825': sono altri riferimenti, non usati come codice offerta."
+      },
+      "source_text": "NEXT ENERGY SUNLIGHT LUCE | CODICE OFFERTA",
+      "page": 4
+    },
+    "supply_type": {
+      "value": "luce",
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "La copertina (pag. 1) e le condizioni generali parlano di 'energia elettrica e gas naturale', ma la parte economica (pag. 2-5) e' solo luce: il gas ha un altro documento. NON e' un DUAL."
+      },
+      "source_text": "OFFERTA ENERGIA ELETTRICA",
+      "page": 4
+    },
+    "market": {
+      "value": "libero",
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": "MERCATO LIBERO",
+      "page": 2
+    },
+    "customer_segment": {
+      "value": "domestico",
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": "CLIENTI DOMESTICI",
+      "page": 2
+    },
+    "document_date": {
+      "value": null,
+      "unit": null,
+      "status": "ambiguo",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Nel PDF segue la data 08/08/2025 (staccata dall'etichetta nel testo estratto, caso C8). 08/08/2025 e' la data di riferimento dei corrispettivi (anche nel codice 'D1_NELVAR_080825'), non una data di emissione dichiarata. DECISIONE DI MAX."
+      },
+      "source_text": "Corrispettivi previsti dall’offerta alla data del",
+      "page": 3
+    }
+  },
+  "validity": {
+    "from": {
+      "value": null,
+      "unit": null,
+      "status": "ambiguo",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Nel PDF: 'VALIDA DAL 08/08/2025 AL 04/09/2025' (date staccate nel testo estratto, caso C8). Finestra di validita' dell'offerta (08/08/2025 - 04/09/2025). Lo schema non definisce validity.from/to come estremi della finestra di adesione: campi vuoti, date tracciate qui."
+      },
+      "source_text": "OFFERTA ENERGIA ELETTRICA VALIDA DAL",
+      "page": 4
+    },
+    "to": {
+      "value": null,
+      "unit": null,
+      "status": "ambiguo",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Nel PDF: 'VALIDA DAL 08/08/2025 AL 04/09/2025' (date staccate nel testo estratto, caso C8). Fine della finestra di validita' dell'offerta. Nessuna data finale calcolata dai 12 mesi di prezzo (manca la data di attivazione)."
+      },
+      "source_text": "OFFERTA ENERGIA ELETTRICA VALIDA DAL",
+      "page": 4
+    },
+    "duration_months": {
+      "value": 12,
+      "unit": "mesi",
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Durata delle condizioni economiche con Fee 0,006 €/kWh. La durata del contratto e' 'Indeterminata' (scheda sintetica, pag. 4)."
+      },
+      "source_text": "rimarranno invariate per 12 mesi dalla data di attivazione della somministrazione con Sorgenia",
+      "page": 2
+    },
+    "renewal": {
+      "value": "dopo 12 mesi la formula passa a Fee 0,03 €/kWh + Indice GO; rinnovo tacito di 12 mesi in 12 mesi",
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Con preavviso di almeno tre mesi Sorgenia puo' comunicare nuove condizioni. Valore in testo libero."
+      },
+      "source_text": "si rinnova tacitamente di 12 mesi in 12 mesi",
+      "page": 2
+    }
+  },
+  "electricity": {
+    "enabled": {
+      "value": true,
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": "OFFERTA ENERGIA ELETTRICA",
+      "page": 4
+    },
+    "price_type": {
+      "value": "indicizzato",
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": "L’offerta prevede un Prezzo Indicizzato Luce che si aggiornerà mensilmente in funzione delle variazioni del parametro PUN Index GME",
+      "page": 2
+    },
+    "fixed_price": {
+      "value": null,
+      "unit": null,
+      "status": "non_applicabile",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Offerta indicizzata. ATTENZIONE: nella scheda sintetica (pag. 5) 'COSTO PER CONSUMI 0,14 €/kWh*' e il massimo dell'indice 0,15036 €/kWh (pag. 2) sono stime/valori storici, non prezzi dell'offerta."
+      },
+      "source_text": null,
+      "page": null
+    },
+    "band_prices": {
+      "value": null,
+      "unit": null,
+      "status": "non_applicabile",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "PUN Index GME monorario o per fasce secondo il contatore, ma la Fee e' unica: nessun prezzo per fascia."
+      },
+      "source_text": null,
+      "page": null
+    },
+    "index": {
+      "value": "PUN",
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Media aritmetica mensile; monorario con contatore monorario, per fasce F1/F2/F3 con contatore a fasce."
+      },
+      "source_text": "in funzione delle variazioni del parametro PUN Index GME",
+      "page": 2,
+      "variant": "index_gme",
+      "original_text": "PUN Index GME"
+    },
+    "spread": {
+      "value": 0.006,
+      "unit": "€/kWh",
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "CASO C8: nel PDF il valore '0,006 €/kWh' segue subito l'etichetta (e si ripete nella scheda sintetica, pag. 5: 'Prezzo PUN Index GME + 0,006 €/kWh*'), ma nel testo estratto e' staccato in coda alla pagina: source_text contiene la sola etichetta. Fee del PRIMO anno, comprensiva di perdite di rete (pag. 2: 'per il primo anno di fornitura a 0,006 €/kWh'). DOPO 12 MESI la Fee e' 0,03 €/kWh e si aggiunge l'Indice GO (pag. 2). Due valori nel tempo per un solo campo: DECISIONE DI MAX su quale entra in spread."
+      },
+      "source_text": "Fee: è una costante, comprensiva di perdite di rete, il cui valore è pari, per il primo anno di fornitura a",
+      "page": 2,
+      "original": {
+        "value": 0.006,
+        "unit": "€/kWh"
+      }
+    },
+    "multiplier": {
+      "value": null,
+      "unit": null,
+      "status": "ambiguo",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "La formula contiene (1+perdite di rete) e le perdite sono 'una percentuale fissa (10% per i Clienti in bassa tensione)' (pag. 2): coefficiente 1,10 derivato, non scritto come numero. DECISIONE DI MAX."
+      },
+      "source_text": null,
+      "page": null
+    },
+    "formula_text": {
+      "value": "Prezzo Indicizzato Luce = PUN Index GME*(1+perdite di rete) + Fee.",
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Formula del primo anno. Dopo 12 mesi: 'Prezzo Luce = PUN Index GME*(1+perdite di rete) + Fee + Indice GO' con Fee 0,03."
+      },
+      "source_text": "Prezzo Indicizzato Luce = PUN Index GME*(1+perdite di rete) + Fee.",
+      "page": 2
+    },
+    "fixed_fee": {
+      "value": 7,
+      "unit": "€/mese",
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "CASO C8: nel PDF si legge 'pari a 84 €/POD/anno, fatturato in quote mensili da 7 €/mese', ma nel testo estratto i numeri 84 e 7 sono staccati dall'etichetta: source_text contiene la sola etichetta. Corrispettivo per il Servizio Commerciale, fatturato in quote mensili da 7 €/mese. ATTENZIONE: la scheda sintetica (pag. 5) riporta 'COSTO FISSO ANNO 81,12 €/anno*', valore diverso che il documento non spiega: non usato."
+      },
+      "source_text": "che rappresenta la componente espressa in quota punto di prelievo, pari a",
+      "page": 2,
+      "original": {
+        "value": 84,
+        "unit": "€/POD/anno"
+      },
+      "per": "POD"
+    },
+    "other_recurring_fees": {
+      "status": "non_presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Oneri una tantum (richieste di attivazione 50,00 €, altre richieste tecniche 23,00 €, pag. 3) non ricorrenti. Dispacciamento e capacita' sono corrispettivi passanti senza valore nel documento."
+      },
+      "items": []
+    }
+  },
+  "gas": {
+    "enabled": {
+      "value": false,
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "La parte economica di questo file regola solo la luce. NON significa che il cliente non abbia un contratto gas."
+      },
+      "source_text": "OFFERTA ENERGIA ELETTRICA",
+      "page": 4
+    },
+    "price_type": {
+      "value": null,
+      "unit": null,
+      "status": "non_applicabile",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Questo documento contiene solo le condizioni economiche luce."
+      },
+      "source_text": null,
+      "page": null
+    },
+    "fixed_price": {
+      "value": null,
+      "unit": null,
+      "status": "non_applicabile",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Questo documento contiene solo le condizioni economiche luce."
+      },
+      "source_text": null,
+      "page": null
+    },
+    "band_prices": {
+      "value": null,
+      "unit": null,
+      "status": "non_applicabile",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Questo documento contiene solo le condizioni economiche luce."
+      },
+      "source_text": null,
+      "page": null
+    },
+    "index": {
+      "value": null,
+      "unit": null,
+      "status": "non_applicabile",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Questo documento contiene solo le condizioni economiche luce."
+      },
+      "source_text": null,
+      "page": null,
+      "variant": null,
+      "original_text": null
+    },
+    "spread": {
+      "value": null,
+      "unit": null,
+      "status": "non_applicabile",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Questo documento contiene solo le condizioni economiche luce."
+      },
+      "source_text": null,
+      "page": null
+    },
+    "multiplier": {
+      "value": null,
+      "unit": null,
+      "status": "non_applicabile",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Questo documento contiene solo le condizioni economiche luce."
+      },
+      "source_text": null,
+      "page": null
+    },
+    "formula_text": {
+      "value": null,
+      "unit": null,
+      "status": "non_applicabile",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Questo documento contiene solo le condizioni economiche luce."
+      },
+      "source_text": null,
+      "page": null
+    },
+    "fixed_fee": {
+      "value": null,
+      "unit": null,
+      "status": "non_applicabile",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Questo documento contiene solo le condizioni economiche luce."
+      },
+      "source_text": null,
+      "page": null,
+      "original": null
+    },
+    "other_recurring_fees": {
+      "status": "non_applicabile",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Nessuna condizione gas in questo documento."
+      },
+      "items": []
+    }
+  },
+  "discounts": {
+    "status": "presente",
+    "verification": {
+      "state": "non_verificato",
+      "by": null,
+      "at": null,
+      "note": "Sconto Fedeltà Luce a scalini sul solo Servizio Commerciale. Il 5% dei primi 12 mesi e' gia' incluso nelle stime di spesa annua del documento. Non e' uno sconto sul prezzo dell'energia (regola 11)."
+    },
+    "items": [
+      {
+        "type": "sconto_percentuale",
+        "value": 5,
+        "unit": "%",
+        "duration": "primi 12 mesi di fornitura",
+        "commodity": "luce",
+        "affects_energy_price": false,
+        "condition": "Si applica solo al Corrispettivo per il Servizio Commerciale (84 €/POD/anno), non al prezzo dell'energia.",
+        "source_text": "Al Servizio Commerciale verrà applicato lo Sconto Fedeltà Luce pari: al 5% per i primi 12 mesi di fornitura; al 10% a partire dal 13 mese di fornitura; al 15% a partire dal 25 mese di fornitura; al 20% dal 37 mese di fornitura in avanti.",
+        "page": 2
+      },
+      {
+        "type": "sconto_percentuale",
+        "value": 10,
+        "unit": "%",
+        "duration": "dal 13° mese di fornitura",
+        "commodity": "luce",
+        "affects_energy_price": false,
+        "condition": "Si applica solo al Corrispettivo per il Servizio Commerciale (84 €/POD/anno), non al prezzo dell'energia.",
+        "source_text": "Al Servizio Commerciale verrà applicato lo Sconto Fedeltà Luce pari: al 5% per i primi 12 mesi di fornitura; al 10% a partire dal 13 mese di fornitura; al 15% a partire dal 25 mese di fornitura; al 20% dal 37 mese di fornitura in avanti.",
+        "page": 2
+      },
+      {
+        "type": "sconto_percentuale",
+        "value": 15,
+        "unit": "%",
+        "duration": "dal 25° mese di fornitura",
+        "commodity": "luce",
+        "affects_energy_price": false,
+        "condition": "Si applica solo al Corrispettivo per il Servizio Commerciale (84 €/POD/anno), non al prezzo dell'energia.",
+        "source_text": "Al Servizio Commerciale verrà applicato lo Sconto Fedeltà Luce pari: al 5% per i primi 12 mesi di fornitura; al 10% a partire dal 13 mese di fornitura; al 15% a partire dal 25 mese di fornitura; al 20% dal 37 mese di fornitura in avanti.",
+        "page": 2
+      },
+      {
+        "type": "sconto_percentuale",
+        "value": 20,
+        "unit": "%",
+        "duration": "dal 37° mese di fornitura in avanti",
+        "commodity": "luce",
+        "affects_energy_price": false,
+        "condition": "Si applica solo al Corrispettivo per il Servizio Commerciale (84 €/POD/anno), non al prezzo dell'energia.",
+        "source_text": "Al Servizio Commerciale verrà applicato lo Sconto Fedeltà Luce pari: al 5% per i primi 12 mesi di fornitura; al 10% a partire dal 13 mese di fornitura; al 15% a partire dal 25 mese di fornitura; al 20% dal 37 mese di fornitura in avanti.",
+        "page": 2
+      }
+    ]
+  },
+  "tolerances": {
+    "price": 1e-06,
+    "fee": 0.01,
+    "multiplier": 0.0001
+  },
+  "notes": "Trappole: (1) NON e' un DUAL: titolo e condizioni generali citano luce e gas, ma la parte economica e' solo luce; (2) formula in due fasi: Fee 0,006 per 12 mesi, poi Fee 0,03 + Indice GO; (3) sconto fedeltà a scalini sul Servizio Commerciale, non sul prezzo; (4) quota fissa 84 €/POD/anno a pag. 2 contro 81,12 €/anno nella scheda sintetica; (5) valori in €/kWh vicini (0,14 stima, 0,15036 massimo indice) che non sono prezzi; (6) pagine 8-18 sono condizioni generali, informative privacy e modulo di ripensamento: rumore; (7) i numeri 0,006, 84 e 7 sono campi compilati sul modulo: nel testo estratto possono comparire staccati dalle etichette (caso C8)."
+}

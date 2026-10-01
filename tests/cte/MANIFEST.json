@@ -46,7 +46,7 @@
       "fornitore_nuovo": false,
       "origine": "pubblica_fornitore",
       "data_passaggio_sviluppo": null,
-      "note": "Eco Smart Pro, uso non domestico. Luce e gas nello stesso file. Categoria indicizzato da confermare nell'expected."
+      "note": "Eco Smart Pro, uso non domestico. Luce e gas nello stesso file (pag. 1 luce, pag. 2 gas). Il documento e' scaduto (sottoscrivibile entro il 31/12/2025): irrilevante per il test."
     },
     {
       "id": "dual-02",
@@ -92,7 +92,7 @@
       "fornitore_nuovo": false,
       "origine": "pubblica_fornitore",
       "data_passaggio_sviluppo": null,
-      "note": "Contratto Next Energy Sunlight, 18 pagine, in gran parte clausole contrattuali. Categoria da confermare nell'expected."
+      "note": "Contratto Next Energy Sunlight/Luce, 18 pagine: parte economica solo luce (pag. 2-5), il resto e' rumore (condizioni generali, privacy, ripensamento). NON e' un DUAL: la copertina cita luce e gas ma il gas ha un altro documento. Valori compilati sul modulo staccati dalle etichette nel testo estratto (caso C8)."
     }
   ]
 }
