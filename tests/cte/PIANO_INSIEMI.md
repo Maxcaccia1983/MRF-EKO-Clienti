@@ -78,6 +78,30 @@ Conseguenze:
 - Su 78 record, 19 hanno il fornitore mancante o con ogni probabilità sbagliato: 13 NULL, 3 frasi di contratto e 3 "Profilati S.p.A." (quest'ultimo è un'ipotesi mia, da confermare aprendo i documenti). Il campo non è quindi affidabile come riferimento.
 - Nel file `fornitori-noti.txt` sono entrati solo i nomi plausibili (6 righe). "Eko" ha 3 lettere: il controllo di universalità ignora i token sotto le 4 lettere, quindi quel nome non è coperto in automatico (verificato a mano: nel parser compare solo in un commento di intestazione).
 
+## Registro modifiche all'insieme di sviluppo
+
+### 01/10/2026 (sera): documenti ricevuti da Max, aggiunti allo sviluppo
+Max ha allegato quattro PDF (il quinto allegato, `CE_DUAL_BASE_LTCASAV-GTCASA.pdf`, è arrivato due volte con hash identico). **Non sono quelli indicati nelle decisioni del mattino** (Enel Fix Gas, Pulsee Limit.e, Alperia), che restano da fornire: `gas-fisso-01`, `complessa-01` e `luce-fisso-01` rimangono liberi e invariati. Per non toccare quelle assegnazioni, i nuovi documenti hanno identificativi con suffisso `-02` oppure `dual-`.
+
+| ID | Documento (nome file originale) | Categoria | Pagine | Nota |
+|---|---|---|---|---|
+| `luce-fisso-02` | Enel Fix Web Luce (`enel-fix-web-luce-cte.pdf`) | luce · fisso | 4 | Sconto 7% condizionato al gas Enel: trappola per il prezzo base |
+| `dual-01` | WindTre Luce&Gas powered by Acea, Eco Smart Pro (`CONDIZIONI-ECONOMICHE-ECO-SMART-PRO.pdf`) | dual · indicizzato (da confermare) | 3 | Uso non domestico. Luce e gas nello stesso file |
+| `dual-02` | Eni Plenitude, Trend Casa (`CE_DUAL_BASE_LTCASAV-GTCASA.pdf`) | dual · indicizzato (da confermare) | 3 | Fac-simile. Luce e gas nello stesso file |
+| `luce-indicizzato-02` | Sorgenia, Next Energy Sunlight (`NEXTENERGYSunlightDUAL_LUCE_080825.pdf`) | luce · indicizzato (da confermare) | 18 | Contratto con molte clausole. Il titolo cita luce e gas: va verificato se la parte economica copre entrambe le forniture |
+
+- **Motivo:** sono i documenti che Max ha fornito per primi, e coprono la categoria `dual`, finora scoperta (decisione 2 del 01/10/2026).
+- **Tutti sviluppo.** Claude li ha letti, quindi nessuno può fare da holdout. `H4` (DUAL) resta da coprire con un altro documento, scelto da Max senza mostrarlo.
+- **`fornitore_nuovo: false`** per tutti, come da regola di questo piano per i documenti di sviluppo. Eni Plenitude è inoltre tra i 78 record.
+- **URL e data di download: da integrare** (`campi_da_integrare` nel MANIFEST). Non sono stati inventati. L'SHA-256 è calcolato dal file ricevuto.
+
+### 01/10/2026 (sera): estrazione del testo
+pdf.js 3.11.174 **non è installabile** nell'ambiente di lavoro (registro npm e CDN rispondono 403). Le cartelle ufficiali `baseline/` e `testo/` restano quindi **vuote** e verranno popolate con `npm run baseline` appena la versione corretta è disponibile (anche in CI). Nel frattempo esistono due cartelle **provvisorie**, separate:
+- `baseline-provvisoria/` e `testo-provvisorio/`, generate con **pdf.js 6.2.108**, con avviso e versione dichiarati in ogni file;
+- il runner di regressione non le legge.
+
+Differenza già osservata: in pdf.js 6.2.108 il valore `0,01249` di `luce-fisso-02` compare come `0,01 2 4 9`. Va riconfermato con la 3.11.174, perché potrebbe cambiare il comportamento del parser.
+
 ## Come si verificano i valori attesi
 
 1. Max apre il PDF, compila l'expected copiando il modello.
