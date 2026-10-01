@@ -1,0 +1,183 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrf-eko/tests/schema/expected-cte.v1.schema.json",
+  "title": "MRF EKO - Expected CTE (golden truth) v1",
+  "description": "Valori attesi verificati manualmente su una CTE pubblica. Vedi tests/schema/SCHEMA_CTE_v1.md.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "document_id", "document_review", "document", "validity", "electricity", "gas", "discounts"],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "document_id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+    "document_review": {
+      "description": "Stato di revisione dell'intero file expected. Non sostituisce la verifica per campo.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state"],
+      "properties": {
+        "state": { "enum": ["bozza", "in_revisione", "verificato"] },
+        "reviewed_by": { "type": ["string", "null"] },
+        "reviewed_at": { "type": ["string", "null"], "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+        "notes": { "type": ["string", "null"] }
+      }
+    },
+    "document": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["supplier", "offer_name", "offer_code", "supply_type", "market", "customer_segment", "document_date"],
+      "properties": {
+        "supplier": { "$ref": "#/$defs/campo" },
+        "offer_name": { "$ref": "#/$defs/campo" },
+        "offer_code": { "$ref": "#/$defs/campo" },
+        "supply_type": { "$ref": "#/$defs/campo", "description": "luce | gas | dual" },
+        "market": { "$ref": "#/$defs/campo", "description": "libero | tutele | altro" },
+        "customer_segment": { "$ref": "#/$defs/campo", "description": "domestico | business | condominio | altro" },
+        "document_date": { "$ref": "#/$defs/campo", "description": "YYYY-MM-DD" }
+      }
+    },
+    "validity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["from", "to", "duration_months", "renewal"],
+      "properties": {
+        "from": { "$ref": "#/$defs/campo" },
+        "to": { "$ref": "#/$defs/campo" },
+        "duration_months": { "$ref": "#/$defs/campo" },
+        "renewal": { "$ref": "#/$defs/campo" }
+      }
+    },
+    "electricity": { "$ref": "#/$defs/commodity" },
+    "gas": { "$ref": "#/$defs/commodity" },
+    "discounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "verification", "items"],
+      "properties": {
+        "status": { "$ref": "#/$defs/status" },
+        "verification": { "$ref": "#/$defs/verifica" },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["type", "value", "unit"],
+            "properties": {
+              "type": { "enum": ["sconto", "bonus_benvenuto", "sconto_domiciliazione", "sconto_digitale", "sconto_percentuale", "cashback", "buono", "bonus_dual", "altro"] },
+              "value": { "type": ["number", "null"] },
+              "unit": { "type": ["string", "null"] },
+              "duration": { "type": ["string", "null"] },
+              "condition": { "type": ["string", "null"], "description": "Condizione da cui dipende lo sconto (es. fornitura gas dello stesso fornitore), come scritta nel documento." },
+              "commodity": { "enum": ["luce", "gas", "entrambe", null] },
+              "affects_energy_price": { "type": "boolean", "description": "Deve essere false: i bonus non alterano la componente energia (regola 11)." },
+              "source_text": { "type": ["string", "null"] },
+              "page": { "type": ["integer", "null"], "minimum": 1 }
+            }
+          }
+        }
+      }
+    },
+    "tolerances": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "price": { "type": "number", "minimum": 0 },
+        "fee": { "type": "number", "minimum": 0 },
+        "multiplier": { "type": "number", "minimum": 0 }
+      }
+    },
+    "notes": { "type": ["string", "null"] }
+  },
+  "$defs": {
+    "status": {
+      "description": "Cosa contiene il DOCUMENTO per questo campo (non se e' stato verificato).",
+      "enum": ["presente", "non_presente", "non_applicabile", "ambiguo", "non_valutato"]
+    },
+    "verifica": {
+      "description": "Verifica manuale del campo sul PDF. Indipendente da status. Solo 'verificato' entra nel giudizio.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state"],
+      "properties": {
+        "state": { "enum": ["non_verificato", "verificato", "contestato"] },
+        "by": { "type": ["string", "null"] },
+        "at": { "type": ["string", "null"], "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+        "note": { "type": ["string", "null"] }
+      }
+    },
+    "campo": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "verification"],
+      "properties": {
+        "value": { "type": ["string", "number", "boolean", "null"] },
+        "unit": { "type": ["string", "null"] },
+        "original": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "properties": {
+            "value": { "type": ["string", "number", "null"] },
+            "unit": { "type": ["string", "null"] }
+          }
+        },
+        "per": { "enum": ["POD", "PDR", null], "description": "Riferimento della quota fissa: POD (punto di prelievo, luce) o PDR (punto di riconsegna, gas). Va conservato insieme al valore e all'originale." },
+        "variant": { "type": ["string", "null"], "description": "Per gli indici: index_gme, medio_mensile, per_fascia, day_ahead, mensile ..." },
+        "original_text": { "type": ["string", "null"], "description": "Testo originale dell'indice (obbligatorio se value = ALTRO)." },
+        "status": { "$ref": "#/$defs/status" },
+        "verification": { "$ref": "#/$defs/verifica" },
+        "source_text": { "type": ["string", "null"] },
+        "page": { "type": ["integer", "null"], "minimum": 1 }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "presente" } } },
+          "then": { "required": ["value"], "properties": { "value": { "not": { "type": "null" } } } }
+        },
+        {
+          "if": { "properties": { "status": { "enum": ["non_presente", "non_applicabile"] } } },
+          "then": { "properties": { "value": { "type": "null" } } }
+        }
+      ]
+    },
+    "commodity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "price_type", "fixed_price", "band_prices", "index", "spread", "multiplier", "formula_text", "fixed_fee", "other_recurring_fees"],
+      "properties": {
+        "enabled": { "$ref": "#/$defs/campo", "description": "true se la CTE regola questa commodity" },
+        "price_type": { "$ref": "#/$defs/campo", "description": "fisso | indicizzato | misto" },
+        "fixed_price": { "$ref": "#/$defs/campo", "description": "Normalizzato in EUR/kWh (luce) o EUR/Smc (gas)" },
+        "band_prices": { "$ref": "#/$defs/campo", "description": "Stringa JSON {F1,F2,F3} o descrizione, se prezzi per fascia" },
+        "index": { "$ref": "#/$defs/campo", "description": "PUN | PSV | TTF | ALTRO" },
+        "spread": { "$ref": "#/$defs/campo", "description": "Separato dall'indice (regola 8)" },
+        "multiplier": { "$ref": "#/$defs/campo" },
+        "formula_text": { "$ref": "#/$defs/campo" },
+        "fixed_fee": { "$ref": "#/$defs/campo", "description": "Normalizzata in EUR/mese, con original" },
+        "other_recurring_fees": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "verification", "items"],
+          "properties": {
+            "status": { "$ref": "#/$defs/status" },
+            "verification": { "$ref": "#/$defs/verifica" },
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["label", "value", "unit"],
+                "properties": {
+                  "label": { "type": "string" },
+                  "value": { "type": ["number", "null"] },
+                  "unit": { "type": ["string", "null"] },
+                  "original": { "type": ["object", "null"] },
+                  "source_text": { "type": ["string", "null"] },
+                  "page": { "type": ["integer", "null"], "minimum": 1 }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

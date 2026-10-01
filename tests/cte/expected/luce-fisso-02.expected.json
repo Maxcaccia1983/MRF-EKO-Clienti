@@ -1,0 +1,457 @@
+{
+  "schema_version": "1.0",
+  "document_id": "luce-fisso-02",
+  "document_review": {
+    "state": "in_revisione",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": "Aggiornato il 01/10/2026 (sera) dopo le conferme di Max, che ha confrontato le schermate delle pagine originali (anche con ChatGPT). VERIFICATI da Max: supplier, offer_name, supply_type, market, customer_segment, duration_months, electricity.price_type, electricity.fixed_price, electricity.fixed_fee, discounts. NON verificati: offer_code (null/ambiguo per decisione di Max), validity.to (data = termine di adesione confermata, ESCLUSA dal punteggio finche' non e' chiarita la collocazione nello schema), renewal (testo precisato, in attesa di conferma esplicita), document_date, validity.from, electricity.enabled, i campi non_applicabile e tutto il blocco gas."
+  },
+  "document": {
+    "supplier": {
+      "value": "Enel Energia",
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "verificato",
+        "by": "Max",
+        "at": "2026-10-01",
+        "note": "Confermato da Max il 01/10/2026. Il valore atteso resta 'Enel Energia'; la ragione sociale completa 'Enel Energia S.p.A.' (piede di pagina, ogni pagina) e' confermata e conservata qui, non sostituisce il valore."
+      },
+      "source_text": "Enel Energia - Mercato libero dell'energia",
+      "page": 1
+    },
+    "offer_name": {
+      "value": "Enel Fix Web Luce",
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "verificato",
+        "by": "Max",
+        "at": "2026-10-01",
+        "note": null
+      },
+      "source_text": "Enel Fix Web Luce",
+      "page": 1
+    },
+    "offer_code": {
+      "value": null,
+      "unit": null,
+      "status": "ambiguo",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Decisione di Max (01/10/2026): codice offerta null/ambiguo. I riferimenti del modulo, presenti nel piede di pagina di ogni pagina, sono conservati solo qui, senza attribuire loro alcuna funzione non confermata: 'Enel_Fix_Web_Luce_26WR12K' e '74326 ML_RedKitSwaResCteEl'. Nessun campo del documento li etichetta come 'codice offerta'."
+      },
+      "source_text": null,
+      "page": null
+    },
+    "supply_type": {
+      "value": "luce",
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "verificato",
+        "by": "Max",
+        "at": "2026-10-01",
+        "note": null
+      },
+      "source_text": "Enel Fix Web Luce è l'offerta di Energia Elettrica dedicata ai siti ad uso domestico",
+      "page": 1
+    },
+    "market": {
+      "value": "libero",
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "verificato",
+        "by": "Max",
+        "at": "2026-10-01",
+        "note": null
+      },
+      "source_text": "Enel Energia - Mercato libero dell'energia",
+      "page": 1
+    },
+    "customer_segment": {
+      "value": "domestico",
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "verificato",
+        "by": "Max",
+        "at": "2026-10-01",
+        "note": null
+      },
+      "source_text": "Enel Fix Web Luce è l'offerta di Energia Elettrica dedicata ai siti ad uso domestico",
+      "page": 1
+    },
+    "document_date": {
+      "value": null,
+      "unit": null,
+      "status": "non_presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Il documento non riporta una data di emissione. La data 01/10/2026 e' il termine per aderire, non una data del documento."
+      },
+      "source_text": null,
+      "page": null
+    }
+  },
+  "validity": {
+    "from": {
+      "value": null,
+      "unit": null,
+      "status": "non_presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Nessuna data di inizio validita' dell'offerta."
+      },
+      "source_text": null,
+      "page": null
+    },
+    "to": {
+      "value": "2026-10-01",
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "ESCLUSO DAL PUNTEGGIO. Max ha confermato (01/10/2026) che il 01/10/2026 e' il TERMINE DI ADESIONE ('Validita' per adesioni entro il 01/10/2026'): NON e' la scadenza del prezzo ne' la fine delle condizioni economiche, e la data NON e' assente ne' ambigua nel documento. Resta non_verificato solo come campo validity.to perche' SCHEMA_CTE_v1.md non dice se validity.to possa contenere la fine della finestra di adesione (decisione aperta sulla collocazione). Finche' non e' chiarita, il campo non entra nel giudizio. Le condizioni economiche durano 36 mesi dall'attivazione (validity.duration_months): nessuna data finale calcolata."
+      },
+      "source_text": "Validità per adesioni entro il 01/10/2026",
+      "page": 1
+    },
+    "duration_months": {
+      "value": 36,
+      "unit": "mesi",
+      "status": "presente",
+      "verification": {
+        "state": "verificato",
+        "by": "Max",
+        "at": "2026-10-01",
+        "note": "Confermato da Max il 01/10/2026: condizioni economiche (corrispettivi definiti dal venditore) valide 36 mesi dall'attivazione della fornitura. Separata dal termine di adesione (validity.to): nessuna data finale calcolata."
+      },
+      "source_text": "I corrispettivi definiti dal venditore hanno una validità di 36 mesi decorrenti dalla data di attivazione della fornitura.",
+      "page": 1
+    },
+    "renewal": {
+      "value": "proroga tacita delle condizioni economiche in assenza della comunicazione di nuove condizioni da parte di Enel Energia, secondo il richiamo all'art. 7.2 CGF; esclusi sconti e bonus",
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Precisazione di Max (01/10/2026): la proroga tacita opera SOLO in assenza della comunicazione dei nuovi valori (art. 7.2 CGF) e non vale per sconti e bonus: non e' un rinnovo incondizionato. Valore in testo libero: lo schema non ha un vocabolario per il rinnovo. Resta non_verificato: manca la conferma esplicita di Max sul testo."
+      },
+      "source_text": "In assenza di questa comunicazione, le condizioni economiche della presente offerta, ad eccezione di eventuali sconti e/o bonus, si intenderanno tacitamente prorogate secondo quanto previsto dall’art. 7.2 delle CGF.",
+      "page": 3
+    }
+  },
+  "electricity": {
+    "enabled": {
+      "value": true,
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": "Enel Fix Web Luce è l'offerta di Energia Elettrica dedicata ai siti ad uso domestico",
+      "page": 1
+    },
+    "price_type": {
+      "value": "fisso",
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "verificato",
+        "by": "Max",
+        "at": "2026-10-01",
+        "note": null
+      },
+      "source_text": "Offerta a prezzo fisso.",
+      "page": 1
+    },
+    "fixed_price": {
+      "value": 0.17849,
+      "unit": "€/kWh",
+      "status": "presente",
+      "verification": {
+        "state": "verificato",
+        "by": "Max",
+        "at": "2026-10-01",
+        "note": "Confermato da Max il 01/10/2026: prezzo base di listino 0,17849 €/kWh, gia' comprensivo delle perdite di rete (determinate da ARERA, attualmente 10% del consumo). NON e' il prezzo scontato 0,16600 (sconto 7%, solo con le condizioni gas): sconto e prezzo base restano separati."
+      },
+      "source_text": "Prezzo Luce 0,17849 €/kWh",
+      "page": 1,
+      "original": {
+        "value": 0.17849,
+        "unit": "€/kWh"
+      }
+    },
+    "band_prices": {
+      "value": null,
+      "unit": null,
+      "status": "non_applicabile",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Prezzo unico, nessuna fascia."
+      },
+      "source_text": null,
+      "page": null
+    },
+    "index": {
+      "value": null,
+      "unit": null,
+      "status": "non_applicabile",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Offerta a prezzo fisso: nessuna formula indicizzata."
+      },
+      "source_text": null,
+      "page": null,
+      "variant": null,
+      "original_text": null
+    },
+    "spread": {
+      "value": null,
+      "unit": null,
+      "status": "non_applicabile",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Offerta a prezzo fisso: nessuna formula indicizzata."
+      },
+      "source_text": null,
+      "page": null
+    },
+    "multiplier": {
+      "value": null,
+      "unit": null,
+      "status": "non_applicabile",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Offerta a prezzo fisso: nessuna formula indicizzata."
+      },
+      "source_text": null,
+      "page": null
+    },
+    "formula_text": {
+      "value": null,
+      "unit": null,
+      "status": "non_applicabile",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Offerta a prezzo fisso: nessuna formula indicizzata."
+      },
+      "source_text": null,
+      "page": null
+    },
+    "fixed_fee": {
+      "value": 12,
+      "unit": "€/mese",
+      "status": "presente",
+      "verification": {
+        "state": "verificato",
+        "by": "Max",
+        "at": "2026-10-01",
+        "note": "Confermato da Max il 01/10/2026: 144 €/POD/anno (original) = 12 €/POD/mese normalizzata (per POD). Somma di CCV e DispBT, applicata su base mensile."
+      },
+      "source_text": "Quota fissa 144 €/POD/anno",
+      "page": 1,
+      "original": {
+        "value": 144,
+        "unit": "€/POD/anno"
+      },
+      "per": "POD"
+    },
+    "other_recurring_fees": {
+      "status": "non_presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Il documento cita il corrispettivo di dispacciamento CDISPD (definito da ARERA) ma non ne indica il valore."
+      },
+      "items": []
+    }
+  },
+  "gas": {
+    "enabled": {
+      "value": false,
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Significa solo che QUESTA CTE regola la fornitura luce e non quella gas. NON significa che il cliente non abbia un contratto gas: lo sconto sul prezzo luce presuppone proprio una fornitura gas."
+      },
+      "source_text": "Enel Fix Web Luce è l'offerta di Energia Elettrica dedicata ai siti ad uso domestico",
+      "page": 1
+    },
+    "price_type": {
+      "value": null,
+      "unit": null,
+      "status": "non_applicabile",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Offerta solo luce."
+      },
+      "source_text": null,
+      "page": null
+    },
+    "fixed_price": {
+      "value": null,
+      "unit": null,
+      "status": "non_applicabile",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Offerta solo luce."
+      },
+      "source_text": null,
+      "page": null
+    },
+    "band_prices": {
+      "value": null,
+      "unit": null,
+      "status": "non_applicabile",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Offerta solo luce."
+      },
+      "source_text": null,
+      "page": null
+    },
+    "index": {
+      "value": null,
+      "unit": null,
+      "status": "non_applicabile",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Offerta solo luce."
+      },
+      "source_text": null,
+      "page": null,
+      "variant": null,
+      "original_text": null
+    },
+    "spread": {
+      "value": null,
+      "unit": null,
+      "status": "non_applicabile",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Offerta solo luce."
+      },
+      "source_text": null,
+      "page": null
+    },
+    "multiplier": {
+      "value": null,
+      "unit": null,
+      "status": "non_applicabile",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Offerta solo luce."
+      },
+      "source_text": null,
+      "page": null
+    },
+    "formula_text": {
+      "value": null,
+      "unit": null,
+      "status": "non_applicabile",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Offerta solo luce."
+      },
+      "source_text": null,
+      "page": null
+    },
+    "fixed_fee": {
+      "value": null,
+      "unit": null,
+      "status": "non_applicabile",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Offerta solo luce."
+      },
+      "source_text": null,
+      "page": null,
+      "original": null
+    },
+    "other_recurring_fees": {
+      "status": "non_applicabile",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "items": []
+    }
+  },
+  "discounts": {
+    "status": "presente",
+    "verification": {
+      "state": "verificato",
+      "by": "Max",
+      "at": "2026-10-01",
+      "note": "Confermato da Max il 01/10/2026: sconto 7% = 0,01249 €/kWh, prezzo scontato 0,16600 €/kWh, per i primi 36 mesi. Separato dal prezzo base 0,17849 (fixed_price): non lo modifica."
+    },
+    "items": [
+      {
+        "type": "sconto_percentuale",
+        "value": 7,
+        "unit": "%",
+        "duration": "36 mesi",
+        "commodity": "luce",
+        "affects_energy_price": false,
+        "source_text": "SCONTO ENEL FIX WEB LUCE: sconto del 7% sul Prezzo Luce (valore dello sconto pari a 0,01249€/kWh), per un Prezzo Luce di 0.16600 €/kWh solo se il Cliente è già intestatario di una fornitura Gas naturale attiva o in attivazione oppure se aderisce, contestualmente alla presente offerta, ad una offerta di Gas naturale con Enel Energia (escluse forniture con offerta Placet).",
+        "page": 2,
+        "condition": "Solo se il Cliente è già intestatario di una fornitura Gas naturale attiva o in attivazione, oppure aderisce contestualmente alla presente offerta a un'offerta Gas naturale con Enel Energia (escluse forniture con offerta Placet). Si applica per i primi 36 mesi di fornitura e a condizione che resti attiva la suddetta fornitura gas durante l'applicazione dello sconto. Se il requisito non è rispettato o viene meno si applica il Prezzo Luce di listino 0,17849 €/kWh."
+      }
+    ]
+  },
+  "tolerances": {
+    "price": 1e-06,
+    "fee": 0.01,
+    "multiplier": 0.0001
+  },
+  "notes": "Trappole: (1) sconto 7% condizionato al gas Enel, da non leggere come prezzo base; (2) 0.16600 e 0,01249 compaiono in €/kWh vicino al prezzo ma non sono il prezzo di listino; (3) quota fissa annuale (144 €/POD/anno) da normalizzare in €/mese; (4) i riferimenti di piede di pagina non hanno una funzione confermata: non sono un codice offerta; (5) 01/10/2026 e' il termine di adesione (confermato), non la scadenza del prezzo; (6) la proroga tacita non e' un rinnovo incondizionato."
+}

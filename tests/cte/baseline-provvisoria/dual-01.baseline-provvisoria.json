@@ -1,0 +1,175 @@
+{
+  "avviso": "BASELINE PROVVISORIA - fotografia del parser attuale su testo estratto con una versione di pdf.js DIVERSA da quella dell'app (3.11.174). NON e' la baseline ufficiale, NON e' l'output corretto e non va copiata negli expected.",
+  "provenienza": {
+    "commit": "ef47b88",
+    "generato_il": "2026-10-01T19:43:41.002Z",
+    "parser_bolletta_sha256": "e4447c13ff09991f298235cfbe6ebdc38d7283316fd6ef9d8d9b5bb83464cfd2",
+    "index_html_sha256": "ce4e0f81167d0dad836cd9583bd3a3d54e13cd0ad06e84fde53c639ae4ef60ff",
+    "parser_bolletta_versione": "1.0.0",
+    "patch_cte_applicate": 1,
+    "pdfjs_usato": "6.2.108",
+    "pdfjs_dell_app": "3.11.174",
+    "baseline_ufficiale": false
+  },
+  "documento": {
+    "id": "dual-01",
+    "sha256": "ade493a0847e9314e736a0df964fc35edbe203b00cacb563ecb2aa9ade4e1a69",
+    "tipo_pdf": "nativo"
+  },
+  "estrazione": {
+    "numero_pagine": 3,
+    "caratteri": 16819,
+    "pagine": [
+      {
+        "pagina": 1,
+        "testo": "Proposta di Contratto per la fornitura Luce e/o Gas V-0026 CODICE OFFERTA STANDARD LUCE A FASCE: 000774ESVFL01XXRT3D4027030000000 L’offerta è riservata agli usi «non domestici», per persone fisiche con punti di fornitura relativi a pertinenze o per persone giuridiche con Partita IVA, per le quali valgono le seguenti limitazioni: Energia elettrica alimentata in bassa tensione (BT), potenza contrattuale non superiore a 100 kW e consumi annui inferiori a 35000 kWh; Gas per riscaldare o produrre, con consumi di gas fino a 25000 Smc annui. Sono esclusi: Condomini, Siti di Pubblica Illuminazione, Pubblica Amministrazione ed Enti Pubblici (rif. Elenco Istat) e tutti i punti di fornitura relativi al teleriscaldamento. A seconda della modalità di adesione scelta dal cliente, si riserva la facoltà di rendere disponibile la presente offerta per alcuni processi di attivazione, dandone opportuna informazione al cliente. Le richieste di voltura per luce saranno accettate esclusivamente su punti di fornitura con un’offerta WINDTRE LUCE&GAS Powered by Acea Energia già attiva o su punti di fornitura con fornitore diverso da Acea Energia, mentre per il gas saranno accettate esclusivamente le volture su punti di fornitura con un’offerta WINDTRE LUCE&GAS Powered by Acea Energia già attiva. Spesa per la vendita di energia elettrica La Componente Energia è il corrispettivo a copertura dei costi di approvvigionamento di energia elettrica ed è, per ogni mese, data dalla somma di: • PUN Index GME (differenziato nelle fasce orarie F1, F2 e F3) dato dalla media aritmetica mensile del PUN Index GME calcolato dal Gestore dei Mercati Energetici come media dei prezzi zonali ponderata per gli acquisti sul mercato del giorno prima in ciascuna zona con riferimento ai portafogli zonali di prelievo. Il PUN Index GME (euro/kWh) mensile è applicato all’energia prelevata comprensiva delle relative perdite di rete attualmente pari al 10,0% ed è consultabile sul sito www.mercatoelettrico.org. Nel caso di misuratore non abilitato alla lettura su fascia oraria verrà applicato il valore del PUN Index GME monorario mensile (F0) così come determinato dal Gestore dei Mercati Energetici . • Corrispettivo al consumo a copertura dei costi non coperti dal PUN Index GME. Il valore è pari a 0,02785 euro/kWh ed è comprensivo delle relative perdite di rete attualmente pari al 10,0%e fisso per la durata dell’offerta. Verrà, inoltre, addebitato e resterà a carico del cliente il Contributo Fisso a copertura dei costi sostenuti per l’erogazione del servizio. Il contributo fisso è pari a 204 euro/punto di prelievo/anno applicato in quote mensili. Altri oneri • corrispettivo per il servizio di dispacciamento (c.d. dispacciamento) comprensivo: • dei corrispettivi di cui all’Art. 4–25.2 dell’allegato A alla Del. 227/2025/R/eel (TIDE), al lordo delle perdite di rete, che per il 4° trimestre 2025 è pari a 0,010780 euro/kWh (valore definito da Terna e aggiornato trimestralmente) • del corrispettivo mercato capacità, al lordo delle perdite di rete, che per il 4° trimestre 2025 è pari a 0,006280 euro/kWh (come definita da ARERA per il servizio di maggior tutela e aggiornato trimestralmente). • corrispettivo di cui all’articolo 25bis del TIS (c.d. corrispettivo unitario di reintegrazione oneri salvaguardia) ai clienti aventi diritto alla salvaguardia al lordo delle perdite di rete, che per il 4° trimestre 2025 è pari a 0,000572 euro/kWh (valore definito da ARERA ed è soggetto ad eventuali aggiornamenti da parte di ARERA) oppure di cui all’art. 25 ter del TIS ai clienti finali aventi diritto al servizio a tutele graduali (piccole imprese) al lordo delle perdite di rete, che per il 4° trimestre 2025 è pari a 0 euro/kWh (valore definito da ARERA ed è soggetto ad eventuali aggiornamenti da parte di ARERA). Spesa per la tariffa per l’uso della rete di energia elettrica Verranno addebitati e resteranno a carico del cliente i sostenuti per le attività di trasporto dell’energia elettrica sulle reti di trasmissione nazionali, di distribuzione locale e per l’attività di misura che comprende anche la gestione del contatore come definiti dagli Allegati alle Delibere n. 615/2023/R/eel e n. 616/2023/R/eel e s.m.i. e periodicamente aggiornati da ARERA Spesa per gli oneri generali di sistema Verranno addebitati e resteranno a carico del cliente i costi relativi ad attività di interesse generale per il sistema elettrico come definiti dalla Delibera n. 618/2023/R/eel e s.m.i. e periodicamente aggiornati da ARERA. Imposte Tutti i prezzi e i corrispettivi sopra indicati sono da in tendersi IVA e imposte escluse che verranno applicate. Le imposte e le relative aliquote sono consultabili alla pagina www.acea.it/trova-e-risolvi/come-leggere-la-bolletta/imposte-iva. Impatti sulla stima di spesa annua Valori dei corrispettivi e relativo impatto sulla spesa annua per l’elettricità per gli usi diversi dall’abitazione con un punto di prelievo avente consumi pari a 10.000 kWh/ anno (6 kW di potenza impegnata) ed un profilo di consumo pari a 39,5% in F1, 27% in F2 e 33,5% in F3 calcolati prendendo a riferimento i valori forward del PUN Index GME così come utilizzati da Acquirente Unico per il calcolo della spesa annua sul Portale Offerte per il mese di dicembre 2025. Valore unitario Oneri generali di sistema di cui Componente tariffaria Asos* *La componente tariffaria Asos, inclusa negli oneri generali, serve per finanziare il sistema di incentivi riconosciuti per la produzione di energia elettrica da fonti rinnovabili è a carico di tutti i clienti elettrici. da Lunedì a Venerdì dalle 8:00 alle 19:00 da Lunedì a Sabato dalle 23:00 alle 7:00, Domenica e festivi tutto il giorno da Lunedì a Venerdì dalle 7:00 alle 8:00 e dalle 19:00 alle 23:00 e Sabato dalle 7:00 alle 23:00 Tutti i giorni, 24 ore su 24 euro/kWh euro/kWh 0,017000 0,038000 % % % % 52, 2 6,1 euro/kWh euro/kWh 0,0590 0 0 0, 042293 % % 2 0 , 9 15, 1 0 13,5 7,3 0,14 6 000 euro/kWh 204,000000 euro/anno Componente Energia incluse le perdite di rete Dispacciamento incluse perdite di rete Tariffa per l’uso della rete di energia elettrica Contributo fisso Incidenza % sulla spesa F1 - F3 - F2 - F0 - Offerta ECO SMART PRO MERCATO LIBERO Documenti Contrattuali *A partire dal 1° gennaio 2025 l’indice denominato «PUN» è stato sostituito con «PUN Index GME» calcolato dal Gestore dei Mercati Energetici (“GME”) in continuità con il precedente. Valore massimo raggiunto dall’indice* negli ultimi 12 mesi Fascia oraria F1 0,15848 12/2024 F2 0,15896 02/2025 F3 0,13991 02/2025 F0 0,15037 02/2025 euro/kWh mese/anno ( Dicembre 2024 - Novembre 2025) Dual - RT3D402703",
+        "caratteri": 6631,
+        "parole": 1047
+      },
+      {
+        "pagina": 2,
+        "testo": "Proposta di Contratto per la fornitura Luce e/o Gas V-0026 Dual - RT3D402703 I valori dei corrispettivi sopra riportati sono calcolati considerando, oltre allo specifico ambito territoriale e al trimestre di riferimento, il potere calorifico superiore. I corrispettivi applicati in fase di fatturazione verranno adeguati tenendo conto sia dell’ambito territoriale che del potere calorifico superiore dell’impianto di distribuzione nel quale ricade il Punto di Riconsegna (PdR) secondo le disposizioni dell’Allegato “A” della Delibera 100/2023/R/com (TIVG ) e s.m.i. Negli ultimi 12 mesi ( Dicembre 2024 – Novembre 2025) il valore massimo dell’indice PSV è stato raggiunto nel mese di febbraio 2025 per un valore pari a 52,9159 euro/MWh che, moltiplicando per il fattore di conversione 0,0107 riferito a un potere calorifico superiore convenzionale (P) pari a 0,03852 GJ/Smc, corrisponde a 0,5662 euro/Smc. Tutti i corrispettivi unitari dovuti in proporzione al consumo di gas naturale della presente offerta sono relativi ad un valore di coefficiente di conversione dei volumi C=1. Nel caso in cui presso il punto di riconsegna sia installato un gruppo di misura non dotato di apparecchiatura per la correzione delle misure alle condizioni standard, i volumi di gas misurati verranno adeguati in base al valore del coefficiente C applicabile. Durata e prezzi Le presenti condizioni economiche sono valide per 24 mesi a partire mese di applicazione dell’offerta. Qualora, in caso di subentro, voltura e nuova attivazione, l’attivazione della fornitura, e nel caso di cambio uso, la decorrenza dell’offerta intervengano dal secondo all’ultimo giorno del mese, il termine di durata delle condizioni economiche – che si applicheranno in ogni caso a partire dalla data attivazione delle fornitura/decorrenza offerta - decorrerà dal primo giorno del mese successivo a quello di attivazione. Allo scadere di tale periodo di validità, Acea Energia si riserva la facoltà di comunicare nuove condizioni economiche in conformità a quanto previsto all’art. 25 e 34 delle Condizioni Generali di contratto. In assenza di tali comunicazioni le presenti Condizioni Economiche si rinnoveranno tacitamente a tempo determinato per periodi di sei mesi in sei mesi, esclusi eventuali sconti e bonus. In tal caso, in occasione di ciascuna successiva scadenza, il Fornitore ha la facoltà di comunicare le nuove Condizioni Economiche, in conformità a quanto previsto agli artt. 25 e 34 delle Condizioni Generali di contratto, indicando il periodo di validità delle stesse. Altri dettagli dell’offerta L’offerta prevede che l’energia elettrica fornita è attestata da “Garanzia d’Origine” ossia dalla certificazione elettronica che attesta l’origine rinnovabile delle fonti utilizzate per la produzione di energia elettrica, nel rispetto della disciplina stabilita dalla delibera ARERA ARG/elt/104/11 e s.m.i. Il Gas fornito prevede la compensazione delle emissioni di CO2 tramite l’acquisto di crediti di carbonio certificati volti a finanziare e sostenere progetti di mitigazione con benefici concreti per le comunità locali. Scopri di più su: www.windtre.it/luce-gas/sostenibilita. Da gennaio 2026 consulta la pagina sul sito di Acea Energia acea.it/sostenibile. L’offerta include il servizio di Bolletta web che ti permette di ricevere la bolletta via e-mail appena emessa. La disattivazione del servizio di Bolletta Web non comporterà alcun addebito. Note Nel caso in cui, successivamente alla richiesta di attivazione del servizio di trasmissione e distribuzione di energia elettrica, il distributore competente comunichi una tipologia d’uso diversa (Uso Domestico) da quella dichiarata dal Cliente con l’adesione a questa offerta, farà fede la comunicazione del distributore, pertanto saranno applicate per i successivi 24 mesi, a partire dal mese di applicazione dell’offerta le condizioni economiche identificate dal codice offerta standard 000774ESVFL01XXRT4D4027010000000, di seguito indicate: la componente energia sarà pari, per ogni singola fascia oraria, a PUN Index GME +0,02785 euro/kWh (prezzi comprensivi delle perdite di rete così come definite da ARERA) per i ventiquattro (24) mesi di fornitura e il Contributo Fisso verrà fatturato al prezzo di 144 euro/punto di prelievo/anno per i ventiquattro (24) mesi di fornitura con un addebito in quote mensili. CODICE OFFERTA STANDARD GAS: 000774GSVML01XXRT3D4027030000000 Spesa per la vendita di gas naturale La Componente Gas è il corrispettivo applicato al gas naturale prelevato a copertura esclusivamente dei costi di approvvigionamento. Questa componente è data dalla somma di: • Psv calcolato per ogni mese come la media aritmetica dei prezzi giornalieri delle quotazioni Bid ed Offer pubblicati nel “Continental Price Assessment Table” di ICIS HEREN per i prodotti Day Ahead, negoziati nel virtual point PSV. Il prezzo giornaliero Day Ahead è riferito al primo giorno lavorativo successivo alla pubblicazione giornaliera. Per i prezzi durante i fine settimana e i giorni festivi, dovranno essere presi in considerazione gli indici pubblicati da ICIS HEREN ogni venerdì, o il primo giorno lavorativo immediatamente prima se c’è una festa o un altro giorno non lavorativo. L’indice week end PSV è la media aritmetica tra le quotazioni “Bid” e “Offer”, dei prezzi pubblicati nel “Continental Price Assessment Table” di ICIS HEREN nei week end. Il prezzo è pubblicato in euro/MWh e viene convertito in euro/Smc, moltiplicando per il fattore di conversione 0,0107, riferito al potere calorifico superiore (PCS) convenzionale pari a 0,03852 GJ/ Smc, il valore fatturato sarà adeguato al PCS dell’impianto di distribuzione nel quale ricade il Punto di Riconsegna (PdR) secondo le disposizioni dell’Allegato “A” della Delibera 100/2023/R/com (TIVG) e s.m.i. • Corrispettivo al consumo a copertura dei costi non coperti dal PSV pari a 0,0965 euro/Smc. Verrà, inoltre, addebitato e resterà a carico del cliente il contributo fisso a copertura dei costi sostenuti per l’erogazione del servizio. Il contributo fisso è pari a 204 euro/punto di prelievo/anno applicato in quote mensili. Spesa per la tariffa per l’uso della rete di gas naturale Verranno addebitati e resteranno a carico del cliente i costi sostenuti per le attività necessarie a portare il gas ai clienti, trasportandolo nei gasdotti nazionali e nelle reti di Allegato B 13 distribuzione locale fino alle abitazioni e per l’attività di misura che comprende anche la gestione del contatore così come definiti dall’ARERA con le Delibere n. 737/2022/R/gas e n. 139/2023/R/gas e s.m.i. e periodicamente aggiornati da ARERA. Spesa per gli oneri generali di sistema Verranno addebitati e resteranno a carico del cliente i costi relativi ad attività di interesse generale per il sistema gas così come definiti dall’ARERA con la Delibera n.737/2022/R/gas e s.m.i. e periodicamente aggiornati da ARERA. euro/SMC Incidenza % Imposte Tutti i prezzi e i corrispettivi sopra indicati sono da intendersi IVA e imposte escluse che verranno applicate. Le imposte e le relative aliquote sono consultabili alla pagina www.acea.it/trova-e-risolvi/come-leggere-la-bolletta/imposte-iva. Impatti sulla stima di spesa annua Valori dei corrispettivi e relativo impatto sulla spesa annua per il gas naturale di un cliente tipo con consumi pari a 1400 Smc/anno, nell’ambito tariffario Centro-Sud Occidentale, considerando un potere calorifico superiore pari a 0,03852 GJ/Smc, calcolati prendendo a riferimento i valori forward del PSV così come utilizzati da Acquirente Unico per il calcolo della spesa annua sul Portale Offerte per il mese di dicembre 2025. Valore unitario euro/Smc euro/Smc euro/Smc 0,4 46 000 0,334000 0,057000 % % % % 4 5 , 4 2 4 , 4 15, 4 14, 8 euro/anno 204,000000 Componente Gas Tariffa per l’uso della rete di gas naturale Oneri generali di sistema Contributo fisso Incidenza % sulla spesa Offerta ECO SMART PRO MERCATO LIBERO Documenti Contrattuali",
+        "caratteri": 7948,
+        "parole": 1185
+      },
+      {
+        "pagina": 3,
+        "testo": "Proposta di Contratto per la fornitura Luce e/o Gas V-0026 Dual - RT3D402703 Verranno, inoltre, addebitati e resteranno a carico del cliente i seguenti costi: corrispettivo per il servizio di dispacciamento (c.d. dispacciamento) cosi come indicato al paragrafo «Spesa per la vendita di energia elettrica» di questo documento; corrispettivo di cui all’Art. 25 del TIS e s.m.i. (c.d. componente di dispacciamento), che per il 4° trimestre 2025 è pari a 1,2311 euro/punto/anno (valore definito da ARERA e aggiornato annualmente). Le restanti componenti, relative ai servizi per l’uso della rete di energia elettrica e agli oneri generali di sistema verranno fatturate secondo quanto indicato nei paragrafi «Spesa per la tariffa per l’uso della rete di energia elettrica» e «Spesa per gli oneri generali» di questo documento. Tutti i prezzi e i corrispettivi indicati sono da intendersi IVA e imposte escluse che verranno applicate in bolletta. I corrispettivi sopra indicati incidono sulla spesa annua per l’elettricità nell’abitazione di residenza di una famiglia tipo con un punto di prelievo avente consumi pari a 2700 kWh/anno(3 kW di potenza impegnata) e un profilo di consumo ripartito in 33% in F1, 31% in F2 e 36% in F3, calcolati prendendo a riferimento i valori forward del PUN Index GME così come utilizzati da Acquirente Unico per il calcolo della spesa annua sul Portale Offerte per il mese di dicembre 2025, come di seguito indicato: Componente Energia incluse le perdite di rete paria 48, 9 0%; Contributo Fisso pari a 17,90%, Dispacciamento incluse perdite di rete pari a 5, 7 0%, Componente di dispacciamento pari a 0,20% ; Tariffa per l’uso della rete di energia elettrica pari a 16,20%; Oneri generali di sistema pari a 11, 1 0% di cui Componente tariffaria Asos 10,00%. Inoltre, al verificarsi di tali disallineamenti, non sarà riconosciuto alcuno sconto/bonus e/o vantaggio di quelli eventualmente previsti nell’offerta. Allo scadere dei primi ventiquattro (24) mesi di fornitura, Acea Energia si riserva la facoltà di procedere come indicato nel paragrafo «Durata e prezzi» di questo documento. Scadenza L’offerta è valida se sottoscritta entro il 31/12/2025. Offerta ECO SMART PRO MERCATO LIBERO Documenti Contrattuali",
+        "caratteri": 2238,
+        "parole": 350
+      }
+    ]
+  },
+  "ocr": {
+    "testo_nativo_leggibile": true,
+    "app_avvierebbe_ocr": true,
+    "pagine_ocr_app": 1,
+    "ocr_eseguito_nel_test": false,
+    "nota": "FASE 0: l'OCR non viene eseguito dal runner. Per i documenti 'scansionato' il risultato del test riflette solo il testo nativo."
+  },
+  "parser_cte_attuale": {
+    "fornitore": "",
+    "fornitoreAffidabile": false,
+    "contestoFornitoreEsplicito": "",
+    "contestoFornitoreFallback": "",
+    "nomeOfferta": "identificate dal codice offerta standard",
+    "codiceOfferta": "000774ESVFL01XXRT4D4027010000000",
+    "commodity": "luce",
+    "segmento": "domestico",
+    "validitaDa": null,
+    "validitaAl": null,
+    "dateTrovateCTE": [
+      "31/12/2025"
+    ],
+    "classificazioneDateNumericheCTE": [
+      {
+        "data": "31/12/2025",
+        "tipo": "altro"
+      }
+    ],
+    "contestiDateNumericheCTE": [
+      "rgia si riserva la facoltà di procedere come indicato nel paragrafo «Durata e prezzi» di questo documento. Scadenza L’offerta è valida se sottoscritta entro il 31/12/2025. Offerta ECO SMART PRO MERCATO LIBERO Documenti Contrattuali"
+    ],
+    "dateTestualiCTE": [
+      "dicembre 2025",
+      "gennaio 2025",
+      "Dicembre 2024",
+      "Novembre 2025",
+      "Dicembre 2024",
+      "Novembre 2025",
+      "febbraio 2025",
+      "gennaio 2026"
+    ],
+    "contestiDateTestualiCTE": [
+      "Index GME così come utilizzati da Acquirente Unico per il calcolo della spesa annua sul Portale Offerte per il mese di dicembre 2025. Valore unitario Oneri generali di sistema di cui Componente tariffaria Asos* *La componente tariffaria Asos, inclusa n",
+      "cidenza % sulla spesa F1 - F3 - F2 - F0 - Offerta ECO SMART PRO MERCATO LIBERO Documenti Contrattuali *A partire dal 1° gennaio 2025 l’indice denominato «PUN» è stato sostituito con «PUN Index GME» calcolato dal Gestore dei Mercati Energetici (“GME”) i",
+      "12 mesi Fascia oraria F1 0,15848 12/2024 F2 0,15896 02/2025 F3 0,13991 02/2025 F0 0,15037 02/2025 euro/kWh mese/anno ( Dicembre 2024 - Novembre 2025) Dual - RT3D402703 Proposta di Contratto per la fornitura Luce e/o Gas V-0026 Dual - RT3D402703 I valor",
+      "oraria F1 0,15848 12/2024 F2 0,15896 02/2025 F3 0,13991 02/2025 F0 0,15037 02/2025 euro/kWh mese/anno ( Dicembre 2024 - Novembre 2025) Dual - RT3D402703 Proposta di Contratto per la fornitura Luce e/o Gas V-0026 Dual - RT3D402703 I valori dei corrispett",
+      "12 mesi Fascia oraria F1 0,15848 12/2024 F2 0,15896 02/2025 F3 0,13991 02/2025 F0 0,15037 02/2025 euro/kWh mese/anno ( Dicembre 2024 - Novembre 2025) Dual - RT3D402703 Proposta di Contratto per la fornitura Luce e/o Gas V-0026 Dual - RT3D402703 I valor",
+      "oraria F1 0,15848 12/2024 F2 0,15896 02/2025 F3 0,13991 02/2025 F0 0,15037 02/2025 euro/kWh mese/anno ( Dicembre 2024 - Novembre 2025) Dual - RT3D402703 Proposta di Contratto per la fornitura Luce e/o Gas V-0026 Dual - RT3D402703 I valori dei corrispett",
+      ". Negli ultimi 12 mesi ( Dicembre 2024 – Novembre 2025) il valore massimo dell’indice PSV è stato raggiunto nel mese di febbraio 2025 per un valore pari a 52,9159 euro/MWh che, moltiplicando per il fattore di conversione 0,0107 riferito a un potere calo",
+      "i mitigazione con benefici concreti per le comunità locali. Scopri di più su: www.windtre.it/luce-gas/sostenibilita. Da gennaio 2026 consulta la pagina sul sito di Acea Energia acea.it/sostenibile. L’offerta include il servizio di Bolletta web che ti p"
+    ]
+  },
+  "adattato_schema_v1": {
+    "document.supplier": null,
+    "document.offer_name": {
+      "value": "identificate dal codice offerta standard"
+    },
+    "document.offer_code": {
+      "value": "000774ESVFL01XXRT4D4027010000000"
+    },
+    "document.supply_type": {
+      "value": "luce"
+    },
+    "document.customer_segment": {
+      "value": "domestico"
+    },
+    "validity.from": null,
+    "validity.to": null,
+    "document.market": null,
+    "document.document_date": null,
+    "validity.duration_months": null,
+    "validity.renewal": null,
+    "electricity.enabled": null,
+    "electricity.price_type": null,
+    "electricity.fixed_price": null,
+    "electricity.band_prices": null,
+    "electricity.index": null,
+    "electricity.spread": null,
+    "electricity.multiplier": null,
+    "electricity.formula_text": null,
+    "electricity.fixed_fee": null,
+    "gas.enabled": null,
+    "gas.price_type": null,
+    "gas.fixed_price": null,
+    "gas.band_prices": null,
+    "gas.index": null,
+    "gas.spread": null,
+    "gas.multiplier": null,
+    "gas.formula_text": null,
+    "gas.fixed_fee": null,
+    "electricity.other_recurring_fees": [],
+    "gas.other_recurring_fees": [],
+    "discounts": []
+  },
+  "informativo_parser_bollette_su_testo_cte": {
+    "nota": "L'app NON usa il parser bollette sulle CTE: dato solo diagnostico.",
+    "tipo": {
+      "tipo": "🔥 Gas naturale",
+      "codice": "gas",
+      "confidenza": 100
+    },
+    "prezzoEnergia": {
+      "valore": "Non rilevato",
+      "numero": null,
+      "unita": null,
+      "confidenza": 0,
+      "candidati": [
+        {
+          "prezzo": 0.0965,
+          "unita": "Smc",
+          "categoria": "indice",
+          "score": 100,
+          "contesto": "ra 100/2023/r/com (tivg) e s.m.i. • corrispettivo al consumo a copertura dei costi non coperti dal psv pari a 0,0965 euro/smc. verrà, inoltre, addebitato e resterà a carico del cliente il contributo fisso a copertur"
+        },
+        {
+          "prezzo": 0.5662,
+          "unita": "Smc",
+          "categoria": "prezzo_generico",
+          "score": 20,
+          "contesto": "sione 0,0107 riferito a un potere calorifico superiore convenzionale (p) pari a 0,03852 gj/smc, corrisponde a 0,5662 euro/smc. tutti i corrispettivi unitari dovuti in proporzione al consumo di gas naturale della pre"
+        }
+      ],
+      "multiplo": false,
+      "indiceMercato": {
+        "prezzo": 0.0965,
+        "unita": "Smc",
+        "categoria": "indice",
+        "score": 100,
+        "contesto": "ra 100/2023/r/com (tivg) e s.m.i. • corrispettivo al consumo a copertura dei costi non coperti dal psv pari a 0,0965 euro/smc. verrà, inoltre, addebitato e resterà a carico del cliente il contributo fisso a copertur"
+      },
+      "spread": null
+    }
+  }
+}

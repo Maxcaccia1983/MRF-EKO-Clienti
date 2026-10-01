@@ -1,0 +1,267 @@
+{
+  "schema_version": "1.0",
+  "suite": "unita",
+  "descrizione": "Riconoscimento e normalizzazione delle unita' di misura (regola 26). Ogni conversione deve essere esplicita. Casi sintetici proposti da Claude: da rivedere e approvare da Max.",
+  "revisione": {
+    "state": "da_rivedere",
+    "nota": "Nessun caso e' approvato: ogni caso ha il proprio stato_revisione. Gli esiti su casi 'da_rivedere' sono PROVVISORI.",
+    "by": null,
+    "at": null
+  },
+  "casi": [
+    {
+      "id": "U01",
+      "commodity": "luce",
+      "input": "Prezzo energia: 0,145 €/kWh",
+      "atteso": {
+        "prezzo_energia": {
+          "status": "presente",
+          "value": 0.145,
+          "unit": "€/kWh"
+        }
+      },
+      "motivazione": "Caso base: €/kWh gia' nell'unita' normalizzata.",
+      "stato_revisione": "da_rivedere"
+    },
+    {
+      "id": "U02",
+      "commodity": "luce",
+      "input": "Prezzo energia: 145 €/MWh",
+      "atteso": {
+        "prezzo_energia": {
+          "status": "presente",
+          "value": 0.145,
+          "unit": "€/kWh"
+        }
+      },
+      "motivazione": "€/MWh -> €/kWh: divisione per 1000, conversione esplicita.",
+      "stato_revisione": "da_rivedere"
+    },
+    {
+      "id": "U03",
+      "commodity": "luce",
+      "input": "Prezzo energia: 14,5 c€/kWh",
+      "atteso": {
+        "prezzo_energia": {
+          "status": "presente",
+          "value": 0.145,
+          "unit": "€/kWh"
+        }
+      },
+      "motivazione": "c€/kWh (centesimi) -> €/kWh: divisione per 100.",
+      "stato_revisione": "da_rivedere"
+    },
+    {
+      "id": "U04",
+      "commodity": "luce",
+      "input": "Prezzo energia: 14,5 cent€/kWh",
+      "atteso": {
+        "prezzo_energia": {
+          "status": "presente",
+          "value": 0.145,
+          "unit": "€/kWh"
+        }
+      },
+      "motivazione": "Variante testuale 'cent€/kWh' dei centesimi.",
+      "stato_revisione": "da_rivedere"
+    },
+    {
+      "id": "U05",
+      "commodity": "luce",
+      "input": "Prezzo energia: € 0,145/kWh",
+      "descrizione": "Simbolo euro prima del numero",
+      "atteso": {
+        "prezzo_energia": {
+          "status": "presente",
+          "value": 0.145,
+          "unit": "€/kWh"
+        }
+      },
+      "motivazione": "Simbolo € prima del numero e unita' dopo: formulazione frequente nei documenti.",
+      "stato_revisione": "da_rivedere"
+    },
+    {
+      "id": "U06",
+      "commodity": "luce",
+      "input": "Prezzo energia (€/kWh) 0,145",
+      "descrizione": "Unita' nell'intestazione, valore dopo (tipico delle tabelle)",
+      "atteso": {
+        "prezzo_energia": {
+          "status": "presente",
+          "value": 0.145,
+          "unit": "€/kWh"
+        }
+      },
+      "motivazione": "Unita' nell'intestazione e valore dopo, tipico delle tabelle delle CTE.",
+      "stato_revisione": "da_rivedere"
+    },
+    {
+      "id": "U07",
+      "commodity": "luce",
+      "input": "Prezzo energia: 0,145 euro/kWh",
+      "atteso": {
+        "prezzo_energia": {
+          "status": "presente",
+          "value": 0.145,
+          "unit": "€/kWh"
+        }
+      },
+      "motivazione": "'euro' scritto per esteso al posto del simbolo.",
+      "stato_revisione": "da_rivedere"
+    },
+    {
+      "id": "U08",
+      "commodity": "gas",
+      "input": "Prezzo gas naturale: 0,62 €/Smc",
+      "atteso": {
+        "prezzo_energia": {
+          "status": "presente",
+          "value": 0.62,
+          "unit": "€/Smc"
+        }
+      },
+      "motivazione": "Caso base gas: €/Smc gia' normalizzato.",
+      "stato_revisione": "da_rivedere"
+    },
+    {
+      "id": "U09",
+      "commodity": "gas",
+      "input": "Prezzo gas naturale: 62 c€/Smc",
+      "atteso": {
+        "prezzo_energia": {
+          "status": "presente",
+          "value": 0.62,
+          "unit": "€/Smc"
+        }
+      },
+      "motivazione": "c€/Smc -> €/Smc: divisione per 100.",
+      "stato_revisione": "da_rivedere"
+    },
+    {
+      "id": "U10",
+      "commodity": "luce",
+      "input": "Commercializzazione: 144 €/anno",
+      "descrizione": "Quota fissa annuale: normalizzata in €/mese, conservando l'originale. NON e' un prezzo dell'energia.",
+      "atteso": {
+        "quota_fissa_mensile": {
+          "status": "presente",
+          "value": 12,
+          "unit": "€/mese",
+          "original": {
+            "value": 144,
+            "unit": "€/anno"
+          }
+        },
+        "prezzo_energia": {
+          "status": "non_presente",
+          "value": null
+        }
+      },
+      "motivazione": "Quota fissa annuale: 144 €/anno = 12 €/mese, conservando l'originale (regola 9). Non deve mai diventare prezzo dell'energia (regola 27).",
+      "stato_revisione": "da_rivedere"
+    },
+    {
+      "id": "U11",
+      "commodity": "luce",
+      "input": "Quota fissa di commercializzazione: 12 €/mese",
+      "atteso": {
+        "quota_fissa_mensile": {
+          "status": "presente",
+          "value": 12,
+          "unit": "€/mese"
+        },
+        "prezzo_energia": {
+          "status": "non_presente",
+          "value": null
+        }
+      },
+      "motivazione": "Quota fissa gia' mensile; non e' un prezzo dell'energia.",
+      "stato_revisione": "da_rivedere"
+    },
+    {
+      "id": "U12",
+      "commodity": "luce",
+      "input": "PCV: 7,50 €/POD/mese",
+      "atteso": {
+        "quota_fissa_mensile": {
+          "status": "presente",
+          "value": 7.5,
+          "unit": "€/mese",
+          "original": {
+            "value": 7.5,
+            "unit": "€/mese"
+          },
+          "per": "POD"
+        },
+        "prezzo_energia": {
+          "status": "non_presente",
+          "value": null
+        }
+      },
+      "motivazione": "PCV espressa per punto di prelievo al mese: 7,50 €/mese. Il riferimento 'per POD' va conservato (campo 'per'), insieme al valore originale e alla periodicita' originale (regola 9).",
+      "stato_revisione": "da_rivedere",
+      "modifica": {
+        "tipo": "corretto",
+        "data": "2026-09-30",
+        "nota": "Prima si verificava solo il valore mensile. Ora il test richiede anche il riferimento POD e l'originale."
+      }
+    },
+    {
+      "id": "U13",
+      "commodity": "gas",
+      "input": "CCV gas: 96 €/PDR/anno",
+      "atteso": {
+        "quota_fissa_mensile": {
+          "status": "presente",
+          "value": 8,
+          "unit": "€/mese",
+          "original": {
+            "value": 96,
+            "unit": "€/anno"
+          },
+          "per": "PDR"
+        },
+        "prezzo_energia": {
+          "status": "non_presente",
+          "value": null
+        }
+      },
+      "motivazione": "CCV gas annuale: 96 €/anno = 8 €/mese. Vanno conservati l'originale (96 €/anno) e il riferimento 'per PDR' (punto di riconsegna del gas), distinto dal POD della luce.",
+      "stato_revisione": "da_rivedere",
+      "modifica": {
+        "tipo": "corretto",
+        "data": "2026-09-30",
+        "nota": "Prima si verificava solo la conversione mensile e l'originale. Ora il test richiede anche il riferimento PDR."
+      }
+    },
+    {
+      "id": "U14",
+      "commodity": "luce",
+      "input": "Consumo annuo stimato 2.700 kWh",
+      "descrizione": "Un consumo non deve diventare un prezzo",
+      "atteso": {
+        "prezzo_energia": {
+          "status": "non_presente",
+          "value": null
+        }
+      },
+      "motivazione": "Un consumo in kWh non contiene il simbolo €: non deve diventare un prezzo.",
+      "stato_revisione": "da_rivedere"
+    },
+    {
+      "id": "U15",
+      "commodity": "gas",
+      "input": "Prezzo materia gas: 45 €/MWh",
+      "descrizione": "Gas in €/MWh: la conversione in €/Smc richiede il PCS, quindi l'unita' originale va conservata e non convertita d'ufficio",
+      "atteso": {
+        "prezzo_energia": {
+          "status": "presente",
+          "value": 45,
+          "unit": "€/MWh"
+        }
+      },
+      "motivazione": "Gas in €/MWh: la conversione in €/Smc richiede il potere calorifico (PCS) del documento; senza di esso si conserva l'unita' originale invece di inventare un fattore.",
+      "stato_revisione": "da_rivedere"
+    }
+  ]
+}
