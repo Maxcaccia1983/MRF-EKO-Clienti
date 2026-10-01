@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "note": "Registro dei documenti di test. Solo CTE pubbliche ufficiali. Vedi tests/README.md. Dove fonte_url/data_download sono null il dato e' DA INTEGRARE da parte di Max: non va inventato.",
+  "note": "Registro dei documenti di test. Solo CTE pubbliche ufficiali. Vedi tests/README.md. data_download indicata da Max (01/10/2026) per tutti i PDF di sviluppo ricevuti. Dove fonte_url e' null l'URL e' DA INTEGRARE da parte di Max: non va inventato.",
   "documenti": [
     {
       "id": "luce-fisso-02",
@@ -12,10 +12,9 @@
       ],
       "fornitore_dichiarato": "Enel Energia",
       "fonte_url": null,
-      "data_download": null,
+      "data_download": "2026-10-01",
       "campi_da_integrare": [
-        "fonte_url",
-        "data_download"
+        "fonte_url"
       ],
       "nome_file_originale": "enel-fix-web-luce-cte.pdf",
       "tipo_pdf": "nativo",
@@ -36,10 +35,9 @@
       ],
       "fornitore_dichiarato": "WindTre Luce&Gas powered by Acea Energia",
       "fonte_url": null,
-      "data_download": null,
+      "data_download": "2026-10-01",
       "campi_da_integrare": [
-        "fonte_url",
-        "data_download"
+        "fonte_url"
       ],
       "nome_file_originale": "CONDIZIONI-ECONOMICHE-ECO-SMART-PRO.pdf",
       "tipo_pdf": "nativo",
@@ -60,10 +58,9 @@
       ],
       "fornitore_dichiarato": "Eni Plenitude",
       "fonte_url": null,
-      "data_download": null,
+      "data_download": "2026-10-01",
       "campi_da_integrare": [
-        "fonte_url",
-        "data_download"
+        "fonte_url"
       ],
       "nome_file_originale": "CE_DUAL_BASE_LTCASAV-GTCASA.pdf",
       "tipo_pdf": "nativo",
@@ -84,10 +81,9 @@
       ],
       "fornitore_dichiarato": "Sorgenia",
       "fonte_url": null,
-      "data_download": null,
+      "data_download": "2026-10-01",
       "campi_da_integrare": [
-        "fonte_url",
-        "data_download"
+        "fonte_url"
       ],
       "nome_file_originale": "NEXTENERGYSunlightDUAL_LUCE_080825.pdf",
       "tipo_pdf": "nativo",

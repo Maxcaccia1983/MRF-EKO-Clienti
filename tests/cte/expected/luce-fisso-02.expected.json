@@ -5,7 +5,7 @@
     "state": "bozza",
     "reviewed_by": null,
     "reviewed_at": null,
-    "notes": "BOZZA di Claude del 01/10/2026, compilata leggendo il PDF (pdftotext + lettura diretta), non la baseline. Nessun campo e' verificato: tocca a Max controllare ogni valore sul PDF alla pagina indicata."
+    "notes": "BOZZA di Claude del 01/10/2026. Frasi controllate sulle pagine 1-3 del PDF originale (rese nella pagina di confronto). NESSUN campo e' verificato: i valori restano 'non_verificato' finche' Max non conferma i singoli campi sul PDF."
   },
   "document": {
     "supplier": {
@@ -42,7 +42,7 @@
         "state": "non_verificato",
         "by": null,
         "at": null,
-        "note": "Nessun campo etichettato come codice offerta. In piede di pagina compaiono 'Enel_Fix_Web_Luce_26WR12K' e '74326 ML_RedKitSwaResCteEl', che sembrano riferimenti del modulo. DECISIONE DI MAX: sono un codice offerta o no?"
+        "note": "Funzione dei riferimenti NON chiarita: nessun campo e' etichettato 'codice offerta'. Stringhe originali conservate (piede di pagina, ogni pagina): 'Enel_Fix_Web_Luce_26WR12K' e '74326 ML_RedKitSwaResCteEl'. Non usate come codice offerta finche' Max non ne chiarisce la funzione."
       },
       "source_text": null,
       "page": null
@@ -115,14 +115,14 @@
       "page": null
     },
     "to": {
-      "value": "2026-10-01",
+      "value": null,
       "unit": null,
-      "status": "presente",
+      "status": "ambiguo",
       "verification": {
         "state": "non_verificato",
         "by": null,
         "at": null,
-        "note": "Interpretazione: ultimo giorno per aderire. DECISIONE DI MAX: validity.to deve contenere il termine di adesione?"
+        "note": "Il documento dice 'Validità per adesioni entro il 01/10/2026': e' il TERMINE PER ADERIRE, non la scadenza del prezzo. SCHEMA_CTE_v1.md definisce validity.to solo come data YYYY-MM-DD, senza dire che sia la fine della finestra di adesione: per questo il campo resta vuoto. La data resta tracciata in source_text e pagina. Nessuna data finale calcolata: manca la decorrenza (le condizioni durano 36 mesi dalla data di attivazione)."
       },
       "source_text": "Validità per adesioni entro il 01/10/2026",
       "page": 1
@@ -135,7 +135,7 @@
         "state": "non_verificato",
         "by": null,
         "at": null,
-        "note": "Durata di validita' dei corrispettivi, non una durata contrattuale con vincolo."
+        "note": "Durata delle condizioni economiche (corrispettivi definiti dal venditore), dall'attivazione. Resta separata da validity.to: senza data di attivazione non si calcola alcuna data finale."
       },
       "source_text": "I corrispettivi definiti dal venditore hanno una validità di 36 mesi decorrenti dalla data di attivazione della fornitura.",
       "page": 1
@@ -273,7 +273,7 @@
         "state": "non_verificato",
         "by": null,
         "at": null,
-        "note": "144 €/anno diviso 12. Somma di CCV e DispBT, applicata su base mensile."
+        "note": "Conservata come 144 €/POD/anno (original). Normalizzata: 12 €/POD/mese (value 12, unit €/mese, per POD, come da SCHEMA_CTE_v1.md). Somma di CCV e DispBT, applicata su base mensile."
       },
       "source_text": "Quota fissa 144 €/POD/anno",
       "page": 1,
@@ -303,7 +303,7 @@
         "state": "non_verificato",
         "by": null,
         "at": null,
-        "note": "L'offerta riguarda solo energia elettrica."
+        "note": "Significa solo che QUESTA CTE regola la fornitura luce e non quella gas. NON significa che il cliente non abbia un contratto gas: lo sconto sul prezzo luce presuppone proprio una fornitura gas."
       },
       "source_text": "Enel Fix Web Luce è l'offerta di Energia Elettrica dedicata ai siti ad uso domestico",
       "page": 1
@@ -432,7 +432,7 @@
       "state": "non_verificato",
       "by": null,
       "at": null,
-      "note": "Lo sconto dipende dal gas: vale solo se il cliente ha gia' una fornitura gas attiva o in attivazione, o aderisce a un'offerta gas Enel (escluse le offerte Placet), e per 36 mesi. Valore equivalente 0,01249 €/kWh, per un prezzo di 0.16600 €/kWh."
+      "note": "Sconto condizionato alla fornitura gas Enel. Valore equivalente 0,01249 €/kWh (prezzo scontato 0.16600 €/kWh). Non e' il prezzo base e non va in fixed_price."
     },
     "items": [
       {
@@ -442,8 +442,9 @@
         "duration": "36 mesi",
         "commodity": "luce",
         "affects_energy_price": false,
-        "source_text": "sconto del 7% sul Prezzo Luce (valore dello sconto pari a 0,01249€/kWh)",
-        "page": 2
+        "source_text": "SCONTO ENEL FIX WEB LUCE: sconto del 7% sul Prezzo Luce (valore dello sconto pari a 0,01249€/kWh), per un Prezzo Luce di 0.16600 €/kWh solo se il Cliente è già intestatario di una fornitura Gas naturale attiva o in attivazione oppure se aderisce, contestualmente alla presente offerta, ad una offerta di Gas naturale con Enel Energia (escluse forniture con offerta Placet).",
+        "page": 2,
+        "condition": "Solo se il Cliente è già intestatario di una fornitura Gas naturale attiva o in attivazione, oppure aderisce contestualmente ad un'offerta Gas naturale con Enel Energia (escluse forniture con offerta Placet). Vale per i primi 36 mesi e a condizione che resti attiva la fornitura gas. Se il requisito manca o viene meno si applica il Prezzo Luce di listino 0,17849 €/kWh."
       }
     ]
   },
@@ -452,5 +453,5 @@
     "fee": 0.01,
     "multiplier": 0.0001
   },
-  "notes": "Trappole del documento: (1) sconto 7% condizionato al gas Enel, da non leggere come prezzo base; (2) 0.16600 e 0,01249 compaiono come numeri in €/kWh vicini al prezzo ma non sono il prezzo di listino; (3) la quota fissa e' annuale (144 €/POD/anno), da normalizzare in €/mese; (4) 'Pag. 1 di 4' e i riferimenti del modulo non sono codici offerta."
+  "notes": "Trappole: (1) sconto 7% condizionato al gas Enel, da non leggere come prezzo base; (2) 0.16600 e 0,01249 compaiono in €/kWh vicino al prezzo ma non sono il prezzo di listino; (3) quota fissa annuale (144 €/POD/anno) da normalizzare in €/mese; (4) i riferimenti di piede di pagina non sono (ancora) un codice offerta; (5) 01/10/2026 e' il termine per aderire."
 }

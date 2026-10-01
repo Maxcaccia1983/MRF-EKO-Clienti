@@ -66,6 +66,7 @@
               "value": { "type": ["number", "null"] },
               "unit": { "type": ["string", "null"] },
               "duration": { "type": ["string", "null"] },
+              "condition": { "type": ["string", "null"], "description": "Condizione da cui dipende lo sconto (es. fornitura gas dello stesso fornitore), come scritta nel documento." },
               "commodity": { "enum": ["luce", "gas", "entrambe", null] },
               "affects_energy_price": { "type": "boolean", "description": "Deve essere false: i bonus non alterano la componente energia (regola 11)." },
               "source_text": { "type": ["string", "null"] },

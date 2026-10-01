@@ -50,6 +50,20 @@ jobs:
           node genera-schede-casi.mjs
           git diff --exit-code ../unit/CASI_SINTETICI.md
 
+      # Testo e baseline con la versione di pdf.js dell'app (3.11.174). Non vengono
+      # scritti nel repository: restano negli artifact, da scaricare ed esaminare.
+      # Anche se i test falliscono, i file servono per capire perche'.
+      - name: Genera testo e baseline con pdf.js dell'app
+        if: always()
+        run: |
+          node genera-baseline.mjs
+          {
+            npm ls pdfjs-dist ajv --depth=0
+            echo "node: $(node -v)"
+            echo "commit: $(git rev-parse --short HEAD)"
+            echo "generato_il: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          } > ../cte/VERSIONI_CI.txt
+
       - name: Report
         if: always()
         uses: actions/upload-artifact@v4
@@ -57,4 +71,17 @@ jobs:
           name: report-regressione-cte
           path: tests/runner/report/
           if-no-files-found: ignore
+          retention-days: 30
+
+      - name: Testo e baseline (pdf.js 3.11.174)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: testo-e-baseline-cte
+          path: |
+            tests/cte/testo/
+            tests/cte/baseline/
+            tests/cte/VERSIONI_CI.txt
+            tests/unit/baseline-attuale.json
+          if-no-files-found: warn
           retention-days: 30
