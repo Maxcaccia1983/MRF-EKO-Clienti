@@ -35,9 +35,9 @@ Le quattro posizioni sono definite ora. Il PDF specifico lo sceglie e lo scarica
 
 | Posto | Categoria richiesta | Fornitore assegnato (primo della lista) | Fornitore nuovo | Motivo |
 |---|---|---|---|---|
-| `H1` | luce · indicizzato | Edison Energia | **sì**, se assente dai 78 record | verifica la formula indice + spread su un fornitore mai visto |
-| `H2` | gas · fisso oppure indicizzato | Hera Comm | **sì**, se assente dai 78 record | verifica la separazione luce/gas e prezzo/spread su un fornitore mai visto |
-| `H3` | struttura diversa da quelle di sviluppo: luce a fasce, oppure offerta con sconto o bonus ben visibili | A2A Energia | no (può comparire nei 78 record) | verifica sconti e fasce su un layout nuovo (regola 11) |
+| `H1` | luce · indicizzato | Edison Energia | **sì** (assente dai 78 record, verificato il 01/10/2026) | verifica la formula indice + spread su un fornitore mai visto |
+| `H2` | gas · fisso oppure indicizzato | Hera Comm | **sì** (assente dai 78 record, verificato il 01/10/2026) | verifica la separazione luce/gas e prezzo/spread su un fornitore mai visto |
+| `H3` | struttura diversa da quelle di sviluppo: luce a fasce, oppure offerta con sconto o bonus ben visibili | A2A Energia | **sì** (assente dai 78 record, verificato il 01/10/2026) | verifica sconti e fasce su un layout nuovo (regola 11) |
 | `H4` | DUAL in **un solo documento**, se esiste | da cercare (vedi sotto) | da decidere | copre la categoria oggi scoperta |
 
 **Come si assegnano i fornitori.** Il primo fornitore della lista per ogni posto è la proposta. Se compare tra i 78 record di `cte_offerte`, il posto passa al successivo **nello stesso ordine**, senza guardare i documenti:
@@ -58,6 +58,25 @@ order by fornitore nulls last;
 ```
 
 I fornitori NULL (13 record) non contano come presenti. Il risultato va in `riferimento/fornitori-noti.txt` (un nome per riga): il controllo di universalità lo usa anche per cercare nomi dentro le condizioni del parser.
+
+### Risultato della query (01/10/2026, 78 record)
+
+| Valore della colonna `fornitore` | Record | Nota |
+|---|---|---|
+| Duferco Energia Spa | 12 | fornitore plausibile |
+| EUREKA GAS & POWER S.R.L. | 24 | fornitore plausibile |
+| Sorgenia S.p.A. | 14 | fornitore plausibile; è anche in sviluppo (`gas-indicizzato-01`) |
+| Eko 360 Srl | 6 | fornitore plausibile |
+| Eko | 1 | variante del precedente? |
+| Plenitude | 2 | fornitore plausibile |
+| Profilati S.p.A. | 3 | probabile errore di lettura (non è un fornitore di energia noto) |
+| un frammento di frase del contratto | 3 | **errore di estrazione**: una frase presa come nome del fornitore |
+| NULL | 13 | fornitore non riconosciuto |
+
+Conseguenze:
+- Edison, Hera Comm e A2A non compaiono: **H1, H2 e H3 restano assegnate come sopra e sono `fornitore_nuovo: true`**. Se si dovesse ricorrere al fornitore successivo di `H2`, attenzione: Eni Plenitude **è** tra i 78 record e non sarebbe nuova.
+- Su 78 record, 19 hanno il fornitore mancante o con ogni probabilità sbagliato: 13 NULL, 3 frasi di contratto e 3 "Profilati S.p.A." (quest'ultimo è un'ipotesi mia, da confermare aprendo i documenti). Il campo non è quindi affidabile come riferimento.
+- Nel file `fornitori-noti.txt` sono entrati solo i nomi plausibili (6 righe). "Eko" ha 3 lettere: il controllo di universalità ignora i token sotto le 4 lettere, quindi quel nome non è coperto in automatico (verificato a mano: nel parser compare solo in un commento di intestazione).
 
 ## Come si verificano i valori attesi
 
