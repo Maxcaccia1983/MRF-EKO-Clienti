@@ -19,7 +19,23 @@
         "note": "Confermato da Max il 01/10/2026. Il valore atteso resta 'Enel Energia'; la ragione sociale completa 'Enel Energia S.p.A.' (piede di pagina, ogni pagina) e' confermata e conservata qui, non sostituisce il valore."
       },
       "source_text": "Enel Energia - Mercato libero dell'energia",
-      "page": 1
+      "page": 1,
+      "denominations": [
+        {
+          "value": "Enel Energia",
+          "kind": "denominazione_commerciale",
+          "source_text": "Enel Energia - Mercato libero dell'energia",
+          "page": 1,
+          "verification": { "state": "verificato", "by": "Max", "at": "2026-10-01", "note": "Denominazione confermata da Max il 01/10/2026 (vedi nota del campo)." }
+        },
+        {
+          "value": "Enel Energia S.p.A.",
+          "kind": "ragione_sociale",
+          "source_text": "Enel Energia S.p.A. - Società con unico socio",
+          "page": 1,
+          "verification": { "state": "verificato", "by": "Max", "at": "2026-10-01", "note": "Denominazione confermata da Max il 01/10/2026 (vedi nota del campo)." }
+        }
+      ]
     },
     "offer_name": {
       "value": "Enel Fix Web Luce",

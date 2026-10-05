@@ -98,6 +98,22 @@ const PROVE = [
   ["attribuzione", "spread letto come valore dell'indice nel documento -> INVENTATO attribuzione_errata",
     () => classificaCampo({ status: "non_presente", value: null }, { value: 0.025, unit: "€/kWh" }, T, "Prezzo energia: PUN + 0,025 €/kWh"), "INVENTATO"],
 
+  // ---- denominazioni equivalenti (identita' del nome; l'affidabilita' del ruolo e' fuori dal classificatore)
+  ["denominazioni", "denominazione verificata elencata -> CORRETTO, testo originale conservato",
+    () => classificaCampo(FORN_DEN, { value: "Enel Energia S.p.A" }), "CORRETTO", "denominazione_verificata"],
+  ["denominazioni", "stessa denominazione ma NON verificata (stato non_verificato) -> ERRATO",
+    () => classificaCampo({ ...FORN_DEN, denominations: [{ ...FORN_DEN.denominations[1], verification: { state: "non_verificato" } }] }, { value: "Enel Energia S.p.A" }), "ERRATO"],
+  ["denominazioni", "campo senza denominations: forma societaria diversa -> ERRATO (confronto invariato)",
+    () => classificaCampo({ status: "presente", value: "Enel Energia" }, { value: "Enel Energia S.p.A" }), "ERRATO"],
+  ["denominazioni", "denominazione non elencata (altra societa' del gruppo) -> ERRATO",
+    () => classificaCampo(FORN_DEN, { value: "Enel S.p.A" }), "ERRATO"],
+  ["denominazioni", "valore atteso esatto -> CORRETTO estratto (modo invariato)",
+    () => classificaCampo(FORN_DEN, { value: "Enel Energia" }), "CORRETTO", "estratto"],
+  ["denominazioni", "nessun valore restituito -> MANCANTE anche con denominations",
+    () => classificaCampo(FORN_DEN, null), "MANCANTE"],
+  ["denominazioni", "il valore originale del parser resta in valore_estratto",
+    () => { const r = classificaCampo(FORN_DEN, { value: "Enel Energia S.p.A" }); return r.valore_estratto === "Enel Energia S.p.A" && r.denominazione.kind === "ragione_sociale" ? { esito: "CORRETTO" } : { esito: "ERRATO" }; }, "CORRETTO"],
+
   // ---- verificabilita' dei valori attesi (pagina + testo originale)
   ["fonte", "frase presente alla pagina dichiarata -> ok",
     () => verificaFonte({ source_text: "PUN Index GME + 0,020 €/kWh", page: 2 }, PAGINE_PROVA).ok ? { esito: "CORRETTO" } : { esito: "ERRATO" }, "CORRETTO"],
@@ -114,6 +130,14 @@ const PROVE = [
   ["fonte", "pagina inesistente -> problema",
     () => verificaFonte({ source_text: "PUN Index GME", page: 9 }, PAGINE_PROVA).ok ? { esito: "CORRETTO" } : { esito: "ERRATO" }, "ERRATO"],
 ];
+
+const FORN_DEN = {
+  status: "presente", value: "Enel Energia",
+  denominations: [
+    { value: "Enel Energia", kind: "denominazione_commerciale", source_text: "x", page: 1, verification: { state: "verificato", by: "Max", at: "2026-10-01", note: "prova" } },
+    { value: "Enel Energia S.p.A.", kind: "ragione_sociale", source_text: "y", page: 1, verification: { state: "verificato", by: "Max", at: "2026-10-01", note: "prova" } },
+  ],
+};
 
 const PAGINE_PROVA = [
   { pagina: 1, testo: "Condizioni tecnico economiche Offerta luce domestici" },

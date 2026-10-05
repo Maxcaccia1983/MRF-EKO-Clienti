@@ -195,6 +195,12 @@ function controllaFonteCampo(doc, campo, atteso, estratto) {
     const r = verificaFonte(voce, estratto.pagine);
     if (!r.ok) bloccanti.push(doc.id + " " + campo + ": valore atteso non verificabile sul documento - " + r.problema);
   }
+  // Ogni denominazione equivalente VERIFICATA deve avere frase e pagina ritrovabili nel PDF, come il valore atteso.
+  for (const den of Array.isArray(atteso.denominations) ? atteso.denominations : []) {
+    if (!den.verification || den.verification.state !== "verificato") continue;
+    const r = verificaFonte(den, estratto.pagine);
+    if (!r.ok) bloccanti.push(doc.id + " " + campo + ": denominazione " + JSON.stringify(den.value) + " non verificabile sul documento - " + r.problema);
+  }
 }
 
 // ---------------------------------------------------------------- 3. CTE
@@ -247,7 +253,7 @@ async function eseguiCTE(parser, validatori) {
 
     for (const [campo, atteso] of Object.entries(appiattisciExpected(exp))) {
       const tol = scegliTolleranza(campo, exp.tolerances);
-      const { esito, dettaglio, sottotipo, modo } = eLista(campo)
+      const { esito, dettaglio, sottotipo, modo, valore_estratto, denominazione } = eLista(campo)
         ? classificaLista(atteso, uscita[campo], tol)
         : classificaCampo(atteso, uscita[campo] ?? null, tol, estratto.testo);
       const verificato = atteso && atteso.verification && atteso.verification.state === "verificato";
@@ -258,6 +264,7 @@ async function eseguiCTE(parser, validatori) {
       risultati.push({
         chiave: "cte/" + doc.id + "/" + campo,
         gruppo: "cte", id: doc.id, campo, esito, modo, dettaglio, sottotipo,
+        ...(denominazione ? { valore_estratto, denominazione } : {}),
         conta_nel_giudizio: !!verificato,
         provvisorio: !verificato,
         insieme: doc.insieme, fornitore_nuovo: doc.fornitore_nuovo,

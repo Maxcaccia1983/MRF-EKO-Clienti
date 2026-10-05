@@ -143,6 +143,23 @@ export function classificaCampo(atteso, ottenuto, tolleranza = TOLLERANZE_DEFAUL
   // status === "presente"
   if (valoreVuoto(ottenuto)) return { esito: "MANCANTE", dettaglio: "atteso " + JSON.stringify(atteso.value) };
   if (!uguali(atteso.value, ottenuto.value, tolleranza)) {
+    // Denominazioni equivalenti: SOLO quelle elencate nell'expected (campo "denominations") E verificate a mano.
+    // Nessuna normalizzazione globale delle forme societarie: ogni equivalenza e' un dato esplicito con frase e pagina.
+    // Si ignorano solo maiuscole, spazi e punti finali; il testo ORIGINALE del parser non viene mai riscritto.
+    // Questo confronto riguarda l'identita' del nome, non l'affidabilita' del ruolo: quella e' decisa dal parser
+    // (fornitoreAffidabile) e l'adattatore passa al classificatore soltanto i fornitori affidabili.
+    const fineRiga = (x) => String(x).toLowerCase().normalize("NFKC").replace(/\s+/g, " ").replace(/[.\s]+$/, "");
+    const alt = Array.isArray(atteso.denominations)
+      ? atteso.denominations.find((d) => d.verification && d.verification.state === "verificato" && fineRiga(d.value) === fineRiga(ottenuto.value))
+      : null;
+    if (alt && !difettoAttributi(atteso, ottenuto)) {
+      return {
+        esito: "CORRETTO", modo: "denominazione_verificata",
+        valore_estratto: ottenuto.value,
+        denominazione: { value: alt.value, kind: alt.kind },
+        dettaglio: "denominazione verificata " + JSON.stringify(alt.value) + " (" + alt.kind + "); testo restituito dal parser: " + JSON.stringify(ottenuto.value),
+      };
+    }
     return { esito: "ERRATO", dettaglio: "atteso " + JSON.stringify(atteso.value) + ", ottenuto " + JSON.stringify(ottenuto.value) };
   }
   const difetto = difettoAttributi(atteso, ottenuto);

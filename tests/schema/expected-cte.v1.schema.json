@@ -125,7 +125,23 @@
         "status": { "$ref": "#/$defs/status" },
         "verification": { "$ref": "#/$defs/verifica" },
         "source_text": { "type": ["string", "null"] },
-        "page": { "type": ["integer", "null"], "minimum": 1 }
+        "page": { "type": ["integer", "null"], "minimum": 1 },
+        "denominations": {
+          "type": ["array", "null"],
+          "description": "Denominazioni dello stesso soggetto verificate a mano e ammesse come equivalenti al valore atteso (es. denominazione commerciale e ragione sociale). Ognuna conserva frase originale, pagina e verifica. Servono solo al confronto del valore: NON dicono nulla sull'affidabilita' del ruolo (fornitore, cliente, capogruppo...), che resta decisa dal parser.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["value", "kind", "source_text", "page", "verification"],
+            "properties": {
+              "value": { "type": "string", "minLength": 1 },
+              "kind": { "enum": ["denominazione_commerciale", "ragione_sociale"] },
+              "source_text": { "type": "string", "minLength": 1 },
+              "page": { "type": "integer", "minimum": 1 },
+              "verification": { "$ref": "#/$defs/verifica" }
+            }
+          }
+        }
       },
       "allOf": [
         {
