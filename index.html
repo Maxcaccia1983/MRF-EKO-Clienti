@@ -1961,7 +1961,9 @@ if (!fornitore) {
     /scheda\s+sintetica\s+per\s+l['’]?\s*offerta\s+(.+?)(?=\s+codice\s+offerta)/i,
     /(?:nome\s+commerciale\s+(?:dell['’]?\s*)?offerta|denominazione\s+commerciale\s+(?:dell['’]?\s*)?offerta|nome\s+offerta|denominazione\s+offerta|offerta\s+commerciale)\s*[:\-]?\s*([^;|]{2,120}?)(?=\s+(?:codice\s+offerta|codice|validit[aà]|durata|condizioni|fornitura|tipologia|mercato|$))/i,
 
-    /(?:offerta)\s*[:\-]\s*([^;|]{2,120}?)(?=\s+(?:codice|validit[aà]|durata|condizioni|fornitura|$))/i
+    /(?:offerta)\s*[:\-]\s*([^;|]{2,120}?)(?=\s+(?:codice|validit[aà]|durata|condizioni|fornitura|$))/i,
+
+    /\b[Ll]['’]\s*[Oo]fferta\s+([A-ZÀ-ÖØ-Þ0-9][A-Za-zÀ-ÿ0-9'’&+\-]*(?:\s+[A-ZÀ-ÖØ-Þ0-9][A-Za-zÀ-ÿ0-9'’&+\-]*){0,5})\s+è\s+[Ll]['’]\s*[Oo]fferta\s+di\s+(?:[Ee]nergia|[Gg]as)\b/
   ];
 
   for (const pattern of patternOfferta) {
