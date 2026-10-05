@@ -1861,7 +1861,8 @@ if (/telefono|tel\.?|numero\s+verde|recapiti|servizio\s+clienti/.test(intorno)) 
   punteggio += 20;
 }
      if (
-  /direzione\s+e\s+coordinamento|soggetta\s+ad\s+attivit[aà]\s+di\s+direzione|impresa\s+di\s+distribuzione|societ[aà]\s+controllante/.test(intorno)
+  (/(?:d[\s\-]*i[\s\-]*r[\s\-]*e[\s\-]*z[\s\-]*i[\s\-]*o[\s\-]*n[\s\-]*e\s+e\s+c[\s\-]*o[\s\-]*o[\s\-]*r[\s\-]*d[\s\-]*i[\s\-]*n[\s\-]*a[\s\-]*m[\s\-]*e[\s\-]*n[\s\-]*t[\s\-]*o|soggetta\s+ad\s+attivit[aà]\s+di\s+d[\s\-]*i[\s\-]*r[\s\-]*e[\s\-]*z[\s\-]*i[\s\-]*o[\s\-]*n[\s\-]*e|impresa\s+di\s+distribuzione|societ[aà]\s+controllante)[^.;\d]{0,60}$/.test(prima)
+        || /^\.?[^.;\d]{0,40}?(?:impresa\s+di\s+distribuzione|societ[aà]\s+controllante)/.test(t.slice(matchSocieta.index + nome.length, matchSocieta.index + nome.length + 80).toLowerCase()))
 ) {
   punteggio -= 120;
 }
