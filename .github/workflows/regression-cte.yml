@@ -1,0 +1,92 @@
+name: Test regressione lettore CTE
+
+# Solo test. Nessun deploy, nessuna pubblicazione, nessun APK, nessun accesso
+# a Supabase, nessun segreto. Permessi di sola lettura sul repository.
+on:
+  pull_request:
+    paths:
+      - 'tests/**'
+      - 'parser-bolletta.js'
+      - 'index.html'
+      - '.github/workflows/regression-cte.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: regression-cte-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  regressione:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: tests/runner
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Dipendenze di test (versioni esatte)
+        run: npm install --no-audit --no-fund
+
+      - name: Versioni installate (evidenza per il report)
+        run: |
+          echo "node $(node -v)"
+          npm ls ajv pdfjs-dist --depth=0
+
+      - name: Esegui test di regressione
+        run: node esegui-test.mjs --ci
+
+      - name: Scheda dei casi sintetici allineata ai JSON
+        run: |
+          node genera-schede-casi.mjs
+          git diff --exit-code ../unit/CASI_SINTETICI.md
+
+      # Testo e baseline con la versione di pdf.js dell'app (3.11.174). Non vengono
+      # scritti nel repository: restano negli artifact, da scaricare ed esaminare.
+      # Anche se i test falliscono, i file servono per capire perche'.
+      - name: Genera testo e baseline con pdf.js dell'app
+        if: always()
+        run: |
+          node genera-baseline.mjs
+          {
+            npm ls pdfjs-dist ajv --depth=0
+            echo "node: $(node -v)"
+            echo "commit: $(git rev-parse --short HEAD)"
+            echo "generato_il: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          } > ../cte/VERSIONI_CI.txt
+
+      # Riepilogo leggibile (riepilogo del run + annotazioni): non blocca e non promuove nulla.
+      - name: Riepilogo baseline e frasi fonte
+        if: always()
+        run: node riepilogo-ci.mjs
+
+      - name: Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: report-regressione-cte
+          path: tests/runner/report/
+          if-no-files-found: ignore
+          retention-days: 30
+
+      - name: Testo e baseline (pdf.js 3.11.174)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: testo-e-baseline-cte
+          path: |
+            tests/cte/testo/
+            tests/cte/baseline/
+            tests/cte/VERSIONI_CI.txt
+            tests/unit/baseline-attuale.json
+          if-no-files-found: warn
+          retention-days: 30

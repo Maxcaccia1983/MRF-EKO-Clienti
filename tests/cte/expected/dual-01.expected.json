@@ -1,0 +1,453 @@
+{
+  "schema_version": "1.0",
+  "document_id": "dual-01",
+  "document_review": {
+    "state": "bozza",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": "BOZZA di Claude del 01/10/2026, compilata leggendo il PDF (non la baseline). NESSUN campo e' verificato: tocca a Max controllare ogni valore sul PDF alla pagina indicata."
+  },
+  "document": {
+    "supplier": {
+      "value": "Acea Energia",
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Marchio commerciale WindTre; il venditore che emette e comunica le condizioni e' Acea Energia ('Acea Energia si riserva la facolta' di comunicare nuove condizioni', pag. 2)."
+      },
+      "source_text": "WINDTRE LUCE&GAS Powered by Acea Energia",
+      "page": 1
+    },
+    "offer_name": {
+      "value": "ECO SMART PRO",
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": "Offerta ECO SMART PRO",
+      "page": 1
+    },
+    "offer_code": {
+      "value": null,
+      "unit": null,
+      "status": "ambiguo",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Il campo e' unico ma il documento ha DUE codici etichettati, uno per commodity. Stringhe originali: luce 'CODICE OFFERTA STANDARD LUCE A FASCE: 000774ESVFL01XXRT3D4027030000000' (pag. 1); gas 'CODICE OFFERTA STANDARD GAS: 000774GSVML01XXRT3D4027030000000' (pag. 2). In piu' un codice alternativo luce per uso domestico accertato dal distributore: '000774ESVFL01XXRT4D4027010000000' (pag. 2, Note). Riferimento del modulo a pie' di pagina: 'Dual - RT3D402703'. DECISIONE DI MAX: come si rappresentano due codici in un campo unico?"
+      },
+      "source_text": null,
+      "page": null
+    },
+    "supply_type": {
+      "value": "dual",
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Il titolo del modulo dice 'Luce e/o Gas', ma il documento contiene le condizioni economiche di entrambe le forniture (luce pag. 1, gas pag. 2)."
+      },
+      "source_text": "Proposta di Contratto per la fornitura Luce e/o Gas V-0026",
+      "page": 1
+    },
+    "market": {
+      "value": "libero",
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": "MERCATO LIBERO",
+      "page": 1
+    },
+    "customer_segment": {
+      "value": "non_domestico",
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Persone fisiche con punti di fornitura relativi a pertinenze o persone giuridiche con Partita IVA; BT, fino a 100 kW e 35000 kWh/anno; gas fino a 25000 Smc/anno. Vocabolario da definire: il parser usa 'business'."
+      },
+      "source_text": "L’offerta è riservata agli usi «non domestici»",
+      "page": 1
+    },
+    "document_date": {
+      "value": null,
+      "unit": null,
+      "status": "non_presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Nessuna data di emissione. 'dicembre 2025' e '4° trimestre 2025' sono riferimenti dei valori forward e ARERA, non la data del documento."
+      },
+      "source_text": null,
+      "page": null
+    }
+  },
+  "validity": {
+    "from": {
+      "value": null,
+      "unit": null,
+      "status": "non_presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Nessuna data di inizio."
+      },
+      "source_text": null,
+      "page": null
+    },
+    "to": {
+      "value": null,
+      "unit": null,
+      "status": "ambiguo",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "E' il termine per sottoscrivere, non la scadenza del prezzo. Lo schema non definisce validity.to come fine della finestra di adesione: campo vuoto, data tracciata qui. Nessuna data finale calcolata dai 24 mesi (decorrono dal mese di applicazione)."
+      },
+      "source_text": "L’offerta è valida se sottoscritta entro il 31/12/2025.",
+      "page": 3
+    },
+    "duration_months": {
+      "value": 24,
+      "unit": "mesi",
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Durata delle condizioni economiche. Resta separata da validity.to."
+      },
+      "source_text": "Le presenti condizioni economiche sono valide per 24 mesi a partire mese di applicazione dell’offerta.",
+      "page": 2
+    },
+    "renewal": {
+      "value": "rinnovo tacito a tempo determinato di sei mesi in sei mesi (esclusi sconti e bonus), salvo nuove condizioni comunicate",
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Valore in testo libero: lo schema non ha un vocabolario per il rinnovo."
+      },
+      "source_text": "si rinnoveranno tacitamente a tempo determinato per periodi di sei mesi in sei mesi, esclusi eventuali sconti e bonus",
+      "page": 2
+    }
+  },
+  "electricity": {
+    "enabled": {
+      "value": true,
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": "Spesa per la vendita di energia elettrica",
+      "page": 1
+    },
+    "price_type": {
+      "value": "indicizzato",
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": "PUN Index GME (differenziato nelle fasce orarie F1, F2 e F3)",
+      "page": 1
+    },
+    "fixed_price": {
+      "value": null,
+      "unit": null,
+      "status": "non_applicabile",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Offerta indicizzata. ATTENZIONE: 'Componente Energia incluse le perdite di rete 0,146000 euro/kWh' (pag. 1) e i massimi dell'indice (F1 0,15848, F2 0,15896, F3 0,13991, F0 0,15037) sono stime forward o valori storici, non prezzi dell'offerta."
+      },
+      "source_text": null,
+      "page": null
+    },
+    "band_prices": {
+      "value": null,
+      "unit": null,
+      "status": "non_applicabile",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Il PUN Index GME e' differenziato per fascia F1/F2/F3 ma lo spread e' unico: nessun prezzo per fascia nel documento."
+      },
+      "source_text": null,
+      "page": null
+    },
+    "index": {
+      "value": "PUN",
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Media aritmetica mensile del PUN Index GME, per fascia oraria (F0 se il misuratore non e' orario)."
+      },
+      "source_text": "PUN Index GME (differenziato nelle fasce orarie F1, F2 e F3)",
+      "page": 1,
+      "variant": "index_gme",
+      "original_text": "PUN Index GME"
+    },
+    "spread": {
+      "value": 0.02785,
+      "unit": "€/kWh",
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Corrispettivo al consumo fisso per la durata dell'offerta, comprensivo delle perdite di rete (10,0%)."
+      },
+      "source_text": "Il valore è pari a 0,02785 euro/kWh ed è comprensivo delle relative perdite di rete",
+      "page": 1,
+      "original": {
+        "value": 0.02785,
+        "unit": "euro/kWh"
+      }
+    },
+    "multiplier": {
+      "value": null,
+      "unit": null,
+      "status": "ambiguo",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Il PUN e' applicato 'all'energia prelevata comprensiva delle relative perdite di rete attualmente pari al 10,0%' (pag. 1): un coefficiente implicito 1,10 che il documento non scrive come moltiplicatore. DECISIONE DI MAX."
+      },
+      "source_text": null,
+      "page": null
+    },
+    "formula_text": {
+      "value": null,
+      "unit": null,
+      "status": "non_valutato",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Il documento descrive la componente energia come 'somma di' due voci, senza una riga di formula."
+      },
+      "source_text": null,
+      "page": null
+    },
+    "fixed_fee": {
+      "value": 17,
+      "unit": "€/mese",
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "204 €/anno diviso 12 = 17 €/mese, applicato in quote mensili. Nella Nota di pag. 2 compare 144 €/anno, ma e' il valore del codice alternativo per uso domestico accertato dal distributore, non dell'offerta."
+      },
+      "source_text": "Il contributo fisso è pari a 204 euro/punto di prelievo/anno",
+      "page": 1,
+      "original": {
+        "value": 204,
+        "unit": "euro/punto di prelievo/anno"
+      },
+      "per": "POD"
+    },
+    "other_recurring_fees": {
+      "status": "ambiguo",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Corrispettivi regolati con valori trimestrali (dispacciamento 0,010780 €/kWh, mercato capacita' 0,006280 €/kWh, art. 25bis TIS 0,000572 €/kWh, componente di dispacciamento 1,2311 €/punto/anno al 4° trimestre 2025): sono passanti ARERA/Terna, non prezzi dell'offerta. Nessun elemento inserito: DECISIONE DI MAX se vanno in other_recurring_fees."
+      },
+      "items": []
+    }
+  },
+  "gas": {
+    "enabled": {
+      "value": true,
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": "Spesa per la vendita di gas naturale",
+      "page": 2
+    },
+    "price_type": {
+      "value": "indicizzato",
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": "Psv calcolato per ogni mese come la media aritmetica dei prezzi giornalieri delle quotazioni Bid ed Offer",
+      "page": 2
+    },
+    "fixed_price": {
+      "value": null,
+      "unit": null,
+      "status": "non_applicabile",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Offerta indicizzata. ATTENZIONE: 'Componente Gas 0,446000 euro/Smc' e il massimo PSV 52,9159 euro/MWh = 0,5662 euro/Smc (pag. 2) sono stime/valori storici, non prezzi dell'offerta."
+      },
+      "source_text": null,
+      "page": null
+    },
+    "band_prices": {
+      "value": null,
+      "unit": null,
+      "status": "non_applicabile",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Nessuna fascia per il gas."
+      },
+      "source_text": null,
+      "page": null
+    },
+    "index": {
+      "value": "PSV",
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Media mensile delle quotazioni giornaliere Day Ahead ICIS Heren al PSV. Prezzo in euro/MWh convertito in euro/Smc con il fattore 0,0107 (PCS 0,03852 GJ/Smc)."
+      },
+      "source_text": "Psv calcolato per ogni mese come la media aritmetica dei prezzi giornalieri delle quotazioni Bid ed Offer",
+      "page": 2,
+      "variant": "day_ahead",
+      "original_text": "Psv"
+    },
+    "spread": {
+      "value": 0.0965,
+      "unit": "€/Smc",
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": "Corrispettivo al consumo a copertura dei costi non coperti dal PSV pari a 0,0965 euro/Smc.",
+      "page": 2,
+      "original": {
+        "value": 0.0965,
+        "unit": "euro/Smc"
+      }
+    },
+    "multiplier": {
+      "value": null,
+      "unit": null,
+      "status": "non_presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Il fattore 0,0107 converte €/MWh in €/Smc: non e' un moltiplicatore commerciale."
+      },
+      "source_text": null,
+      "page": null
+    },
+    "formula_text": {
+      "value": null,
+      "unit": null,
+      "status": "non_valutato",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Componente Gas descritta come 'somma di' due voci."
+      },
+      "source_text": null,
+      "page": null
+    },
+    "fixed_fee": {
+      "value": 17,
+      "unit": "€/mese",
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Il documento scrive 'punto di prelievo' anche per il gas: il riferimento PDR e' una normalizzazione dello schema (SCHEMA_CTE_v1.md). 204/12 = 17 €/mese."
+      },
+      "source_text": "Il contributo fisso è pari a 204 euro/punto di prelievo/anno",
+      "page": 2,
+      "original": {
+        "value": 204,
+        "unit": "euro/punto di prelievo/anno"
+      },
+      "per": "PDR"
+    },
+    "other_recurring_fees": {
+      "status": "non_presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Nessun altro corrispettivo ricorrente del venditore indicato per il gas."
+      },
+      "items": []
+    }
+  },
+  "discounts": {
+    "status": "non_presente",
+    "verification": {
+      "state": "non_verificato",
+      "by": null,
+      "at": null,
+      "note": "Nessuno sconto o bonus descritto. Pag. 2 e 3 citano 'eventuali sconti e bonus' solo per escluderli dal rinnovo e dal caso di disallineamento d'uso, senza indicarne alcuno."
+    },
+    "items": []
+  },
+  "tolerances": {
+    "price": 1e-06,
+    "fee": 0.01,
+    "multiplier": 0.0001
+  },
+  "notes": "Trappole: (1) luce e gas nello stesso file: indice, spread e quota fissa vanno attribuiti alla commodity giusta (regola 10); (2) due codici offerta; (3) tabelle 'Impatti sulla stima di spesa annua' con valori forward (0,146 e 0,446) e massimi storici dell'indice: non sono prezzi; (4) 144 €/anno nella Nota di pag. 2 e' del codice alternativo per uso domestico; (5) 31/12/2025 e' il termine per sottoscrivere; (6) offerta per usi non domestici, quindi la tabella incidenze di pag. 3 (famiglia tipo 2700 kWh) e' un riferimento al caso di uso domestico accertato dal distributore; (7) il documento e' scaduto, irrilevante per il test."
+}

@@ -1,0 +1,159 @@
+{
+  "avviso": "BASELINE PROVVISORIA - fotografia del parser attuale su testo estratto con una versione di pdf.js DIVERSA da quella dell'app (3.11.174). NON e' la baseline ufficiale, NON e' l'output corretto e non va copiata negli expected.",
+  "provenienza": {
+    "commit": "ef47b88",
+    "generato_il": "2026-10-01T19:43:41.002Z",
+    "parser_bolletta_sha256": "e4447c13ff09991f298235cfbe6ebdc38d7283316fd6ef9d8d9b5bb83464cfd2",
+    "index_html_sha256": "ce4e0f81167d0dad836cd9583bd3a3d54e13cd0ad06e84fde53c639ae4ef60ff",
+    "parser_bolletta_versione": "1.0.0",
+    "patch_cte_applicate": 1,
+    "pdfjs_usato": "6.2.108",
+    "pdfjs_dell_app": "3.11.174",
+    "baseline_ufficiale": false
+  },
+  "documento": {
+    "id": "luce-fisso-02",
+    "sha256": "856c255272a61013b0652e383851237f4cd90b7c223b57625c4828e3048c8378",
+    "tipo_pdf": "nativo"
+  },
+  "estrazione": {
+    "numero_pagine": 4,
+    "caratteri": 9384,
+    "pagine": [
+      {
+        "pagina": 1,
+        "testo": "Enel Energia - Mercato libero dell'energia Casella Postale 8080 - 85100 Potenza Condizioni tecnico economiche Validità per adesioni entro il 01/10/2026 Enel Fix Web Luce Per brevità, Enel Energia è chiamata sempre “Enel” nel modulo. L'Offerta Enel Fix Web Luce è l'offerta di Energia Elettrica dedicata ai siti ad uso domestico. Le presenti Condizioni Tecnico Economiche (“CTE”) integrano le clausole delle condizioni generali di fornitura (“CGF”) e prevalgono in caso di contrasto con queste ultime. Requisiti per aderire • l'attivazione del servizio gratuito \"Bolletta Web” che prevede la ricezione delle fatture, esclusivamente, all’indirizzo di posta elettronica indicato dal Cliente e il metodo di pagamento delle fatture a mezzo SDD bancario/postale, o tramite carta di credito emessa in area SEPA, dei circuiti Visa, MasterCard, Maestro, American Express. A seconda della modalità di adesione scelta dal cliente, Enel Energia si riserva la facoltà di rendere disponibile la presente offerta per alcuni processi di attivazione, dandone opportuna informazione al cliente. Per informazioni è possibile contattare il Servizio Clienti. Cosa ti forniamo Quale energia? Energia rinnovabile 100% L’energia venduta è certificata dal Gestore dei Servizi Energetici (GSE) come proveniente da fonti rinnovabili (Garanzie d’Origine rilasciate come da Direttiva (UE) 2018/2001 e Decreto MASE del 14/07/2023). In linea con le disposizioni regolatorie vigenti, in relazione al presente contratto Enel Energia è tenuta ad approvvigionarsi di, e ad annullare, una quantità di Garanzie d’Origine pari all’energia elettrica venduta come rinnovabile. Qual è la tipologia di prezzo? Offerta a prezzo fisso. Periodo di validità I corrispettivi definiti dal venditore hanno una validità di 36 mesi decorrenti dalla data di attivazione della fornitura. Vendita di energia elettrica Corrispettivi definiti dal venditore Corrispettivi Valore Prezzo Luce 0,17849 €/kWh Quota fissa 144 €/POD/anno Il Prezzo Luce è comprensivo delle perdite di rete, determinate e aggiornate da ARERA e attualmente pari al 10% del consumo. La Quota fissa è data dalla somma del Corrispettivo di Commercializzazione e Vendita (CCV) definito da Enel Energia, e dalla componente DispBT definita dall’Autorità di Regolazione per Energia Reti e Ambiente (di seguito ARERA). Il corrispettivo CCV e la componente DispBT sono applicati su base mensile. Si applica, inoltre, il corrispettivo di dispacciamento CDISPD definito da ARERA nel Testo integrato delle disposizioni per l’erogazione dei servizi di vendita dell’energia elettrica di ultima istanza (TIV). Enel_Fix_Web_Luce_26WR12K Enel Energia S.p.A. - Società con unico socio Enel Energia S.p.A. -Via Luigi Boccherini, 15 00198 Roma - Registro Imprese di Roma Codice Fiscale 06655971007 - R.E.A. 1150724 Gruppo IVA Enel 15844561009 - Capitale Sociale Euro 10.000.000,00 i.v. - Direzione e Coordinamento di Enel S.p.A. Canale : Sottocanale : Codice Incaricato: Codice Channel: Codice Partnership: 0 74326 ML_RedKitSwaResCteEl Pag. 1 di 4",
+        "caratteri": 3045,
+        "parole": 441
+      },
+      {
+        "pagina": 2,
+        "testo": "Enel Energia - Mercato libero dell'energia Casella Postale 8080 - 85100 Potenza Condizioni tecnico economiche Sconti e/o Bonus SCONTO ENEL FIX WEB LUCE: sconto del 7% sul Prezzo Luce (valore dello sconto pari a 0,01 2 4 9 €/kWh), per un Prezzo Luce di 0.1 6600 €/kWh solo se il Cliente è già intestatario di una fornitura Gas naturale attiva o in attivazione oppure se aderisce, contestualmente alla presente offerta, ad una offerta di Gas naturale con Enel Energia (escluse forniture con offerta Placet). Lo sconto si applica per i primi 36 mesi di fornitura e a condizione che resti attiva la suddetta fornitura gas. Nel caso in cui, a seguito di verifiche, Enel Energia rilevi che non sono rispettati i requisiti per il riconoscimento dello SCONTO ENEL FIX WEB LUCE o qualora tale requisito venga meno nel corso del rapporto contrattuale, si applicherà alla presente offerta Enel Fix Web Luce il Prezzo Luce di listino, come sopra indicato. Prodotti e/o servizi aggiuntivi Non previsti. Tariffa per l’uso della rete elettrica Corrispettivi definiti e aggiornati da ARERA relativi ai servizi di trasporto, distribuzione e misura dell’energia elettrica. Delibera ARERA n. 568/2019/R/eel e s.m.i – “Testo integrato delle disposizioni per l’erogazione dei servizi di trasmissione e distribuzione dell’energia elettrica” (TIT) e nella delibera ARERA n. 481/2017/R/eel e s.m.i. Potranno inoltre essere applicati, in conformità alla normativa vigente in materia di morosità del Cliente, eventuali ulteriori corrispettivi sulla fornitura di energia elettrica. Secondo quanto previsto dalla delibera ARERA 593/2017/R/com e s.m.i. Oneri generali di sistema Corrispettivi definiti e aggiornati da ARERA, inclusa la componente Asos, che serve per finanziare il sistema di incentivi riconosciuti per la produzione di energia elettrica da fonti rinnovabili. È a carico di tutti i clienti elettrici. Valore dei corrispettivi ARERA Qui puoi trovare i valori aggiornati dei corrispettivi ARERA Tutti i prezzi e i corrispettivi indicati sono da intendersi IVA e imposte escluse. Enel_Fix_Web_Luce_26WR12K Enel Energia S.p.A. - Società con unico socio Enel Energia S.p.A. -Via Luigi Boccherini, 15 00198 Roma - Registro Imprese di Roma Codice Fiscale 06655971007 - R.E.A. 1150724 Gruppo IVA Enel 15844561009 - Capitale Sociale Euro 10.000.000,00 i.v. - Direzione e Coordinamento di Enel S.p.A. Canale : Sottocanale : Codice Incaricato: Codice Channel: Codice Partnership: 74326 ML_RedKitSwaResCteEl Pag. 2 di 4",
+        "caratteri": 2494,
+        "parole": 378
+      },
+      {
+        "pagina": 3,
+        "testo": "Enel Energia - Mercato libero dell'energia Casella Postale 8080 - 85100 Potenza Condizioni tecnico economiche Incidenza % delle voci di spesa Spesa per la vendita di energia elettrica 74% Prezzo Luce 50% Quota fissa 20% Corrispettivo CDISPD 4% Tariffa per l’uso della rete elettrica 17% Oneri generali di sistema 9% di cui ASOS 0 % Sconti e/o Bonus 0% L'incidenza percentuale delle voci di spesa sopra indicate, rispetto alla spesa annua per l'energia elettrica, IVA e imposte escluse, è calcolata con riferimento a un cliente domestico tipo: residente, con consumi annui pari a 2700 kWh e una potenza impegnata pari a 3kW. Aggiornamenti e Rinnovo Gli aggiornamenti dei corrispettivi sopra indicati, verranno comunicati in fattura. Allo scadere del periodo di validità indicato nella sezione “ Periodo di validità ”, Enel Energia potrà inviare una comunicazione scritta con l’indicazione dei nuovi valori degli stessi, secondo modalità e tempistiche previste dall’art. 7.2 delle CGF. In assenza di questa comunicazione, le condizioni economiche della presente offerta, ad eccezione di eventuali sconti e/o bonus, si intenderanno tacitamente prorogate secondo quanto previsto dall’art. 7.2 delle CGF. Pagamenti e Fatturazione Cos’è compreso nei pagamenti? Il Cliente è tenuto al pagamento degli importi e degli oneri indicati nelle CGF, oltre IVA e imposte, anche relativi a richieste che lo stesso rivolge al distributore per il tramite del Fornitore. Per informazioni sulle aliquote delle imposte consultare il sito www.enel.it. Emissione bolletta Fatturazione In deroga a quanto previsto dall’art. 14.1 delle CGF, la frequenza di emissione della bolletta sintetica sarà mensile. In deroga a quanto previsto all'art. 14.6 delle CGF il pagamento delle fatture inviate esclusivamente tramite posta elettronica dovrà avvenire obbligatoriamente tramite addebito diretto sul conto corrente bancario o postale del Cliente (“procedura SDD”). Agevolazioni fiscali Tariffa \"residente\" Puoi avere la tariffa per uso domestico “residente” solo su una fornitura. Se si accerta che hai dichiarato di avere più forniture come “residente”, Enel manterrà la tariffa “residente” solo sull’ultima fornitura attivata. Bonus sociale A favore di: • famiglie in disagio economico. Se ne hai diritto, devi presentare ogni anno la Dichiarazione Sostitutiva Unica tramite ad esempio, il Comune, i CAF, o il sito INPS, per ottenere l’attestato ISEE; • famiglie con persone in gravi condizioni di salute che richiedono l’uso di apparecchi salvavita alimentati a energia elettrica. Per riceverlo in bolletta, devi fare domanda al Comune di residenza o a un ente indicato dal Comune stesso. Per informazioni, www.arera.it o n° verde 800.166.654. Enel_Fix_Web_Luce_26WR12K Enel Energia S.p.A. - Società con unico socio Enel Energia S.p.A. -Via Luigi Boccherini, 15 00198 Roma - Registro Imprese di Roma Codice Fiscale 06655971007 - R.E.A. 1150724 Gruppo IVA Enel 15844561009 - Capitale Sociale Euro 10.000.000,00 i.v. - Direzione e Coordinamento di Enel S.p.A. Canale : Sottocanale : Codice Incaricato: Codice Channel: Codice Partnership: 74326 ML_RedKitSwaResCteEl Pag. 3 di 4",
+        "caratteri": 3148,
+        "parole": 467
+      },
+      {
+        "pagina": 4,
+        "testo": "Enel Energia - Mercato libero dell'energia Casella Postale 8080 - 85100 Potenza Condizioni tecnico economiche Entra in un mondo di vantaggi, sconti e premi esclusivi. Come? Scarica l'App Enel Energia e quando la tua fornitura sarà attiva, i scriviti al programma! Enel_Fix_Web_Luce_26WR12K Enel Energia S.p.A. - Società con unico socio Enel Energia S.p.A. -Via Luigi Boccherini, 15 00198 Roma - Registro Imprese di Roma Codice Fiscale 06655971007 - R.E.A. 1150724 Gruppo IVA Enel 15844561009 - Capitale Sociale Euro 10.000.000,00 i.v. - Direzione e Coordinamento di Enel S.p.A. Canale : Sottocanale : Codice Incaricato: Codice Channel: Codice Partnership: 74326 ML_RedKitSwaResCteEl Pag. 4 di 4",
+        "caratteri": 694,
+        "parole": 103
+      }
+    ]
+  },
+  "ocr": {
+    "testo_nativo_leggibile": true,
+    "app_avvierebbe_ocr": true,
+    "pagine_ocr_app": 1,
+    "ocr_eseguito_nel_test": false,
+    "nota": "FASE 0: l'OCR non viene eseguito dal runner. Per i documenti 'scansionato' il risultato del test riflette solo il testo nativo."
+  },
+  "parser_cte_attuale": {
+    "fornitore": "Enel Energia S.p.A",
+    "fornitoreAffidabile": false,
+    "contestoFornitoreEsplicito": "",
+    "contestoFornitoreFallback": "erlo in bolletta, devi fare domanda al Comune di residenza o a un ente indicato dal Comune stesso. Per informazioni, www.arera.it o n° verde 800.166.654. Enel_Fix_Web_Luce_26WR12K Enel Energia S.p.A. - Società con unico socio Enel Energia S.p.A. -Via Luigi Boccherini, 15 00198 Roma - Registro Imprese di Roma Codice Fiscale 06655971007 - R.E.A. 1150724 Gruppo IVA Enel 15844561",
+    "nomeOfferta": "",
+    "codiceOfferta": "",
+    "commodity": "luce",
+    "segmento": "domestico",
+    "validitaDa": null,
+    "validitaAl": null,
+    "dateTrovateCTE": [
+      "01/10/2026",
+      "14/07/2023"
+    ],
+    "classificazioneDateNumericheCTE": [
+      {
+        "data": "01/10/2026",
+        "tipo": "altro"
+      },
+      {
+        "data": "14/07/2023",
+        "tipo": "altro"
+      }
+    ],
+    "contestiDateNumericheCTE": [
+      "Enel Energia - Mercato libero dell'energia Casella Postale 8080 - 85100 Potenza Condizioni tecnico economiche Validità per adesioni entro il 01/10/2026 Enel Fix Web Luce Per brevità, Enel Energia è chiamata sempre “Enel” nel modulo. L'Offerta Enel Fix Web Luce è l'offerta di Energia Elettrica dedicata ai siti",
+      "l Gestore dei Servizi Energetici (GSE) come proveniente da fonti rinnovabili (Garanzie d’Origine rilasciate come da Direttiva (UE) 2018/2001 e Decreto MASE del 14/07/2023). In linea con le disposizioni regolatorie vigenti, in relazione al presente contratto Enel Energia è tenuta ad approvvigionarsi di, e ad annullare, una quanti"
+    ],
+    "dateTestualiCTE": [],
+    "contestiDateTestualiCTE": []
+  },
+  "adattato_schema_v1": {
+    "document.supplier": null,
+    "document.offer_name": null,
+    "document.offer_code": null,
+    "document.supply_type": {
+      "value": "luce"
+    },
+    "document.customer_segment": {
+      "value": "domestico"
+    },
+    "validity.from": null,
+    "validity.to": null,
+    "document.market": null,
+    "document.document_date": null,
+    "validity.duration_months": null,
+    "validity.renewal": null,
+    "electricity.enabled": null,
+    "electricity.price_type": null,
+    "electricity.fixed_price": null,
+    "electricity.band_prices": null,
+    "electricity.index": null,
+    "electricity.spread": null,
+    "electricity.multiplier": null,
+    "electricity.formula_text": null,
+    "electricity.fixed_fee": null,
+    "gas.enabled": null,
+    "gas.price_type": null,
+    "gas.fixed_price": null,
+    "gas.band_prices": null,
+    "gas.index": null,
+    "gas.spread": null,
+    "gas.multiplier": null,
+    "gas.formula_text": null,
+    "gas.fixed_fee": null,
+    "electricity.other_recurring_fees": [],
+    "gas.other_recurring_fees": [],
+    "discounts": []
+  },
+  "informativo_parser_bollette_su_testo_cte": {
+    "nota": "L'app NON usa il parser bollette sulle CTE: dato solo diagnostico.",
+    "tipo": {
+      "tipo": "⚡ Energia elettrica",
+      "codice": "electricity",
+      "confidenza": 100
+    },
+    "prezzoEnergia": {
+      "valore": "Non rilevato",
+      "numero": null,
+      "unita": null,
+      "confidenza": 0,
+      "candidati": [
+        {
+          "prezzo": 9,
+          "unita": "kWh",
+          "categoria": "prezzo_generico",
+          "score": 20,
+          "contesto": "sconti e/o bonus sconto enel fix web luce: sconto del 7% sul prezzo luce (valore dello sconto pari a 0,01 2 4 9 €/kwh), per un prezzo luce di 0.1 6600 €/kwh solo se il cliente è già intestatario di una forni"
+        },
+        {
+          "prezzo": 0.17849,
+          "unita": "kWh",
+          "categoria": "quota_fissa",
+          "score": -110,
+          "contesto": "fornitura. vendita di energia elettrica corrispettivi definiti dal venditore corrispettivi valore prezzo luce 0,17849 €/kwh quota fissa 144 €/pod/anno il prezzo luce è comprensivo delle perdite di rete, determinat"
+        }
+      ],
+      "multiplo": false,
+      "indiceMercato": null,
+      "spread": null
+    }
+  }
+}
