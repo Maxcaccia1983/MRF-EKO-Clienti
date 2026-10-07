@@ -1905,6 +1905,56 @@ fornitoreAffidabile = candidato.punteggio >= 60;
       candidato.posizione + candidato.nome.length + 180
     )
     .trim();
+
+  // Prova contrattuale del ruolo: la societa' definisce il corrispettivo
+  // di commercializzazione e vendita incluso nella quota dell'offerta.
+  // Non basta ripetere il nome; il riferimento deve essere univoco.
+  if (!fornitoreAffidabile) {
+    const normalizzaNome = nome => nome.toLowerCase().replace(/\s+/g, " ").replace(/[.\s]+$/, "");
+    const suffissoFinale = new RegExp("\\s+" + suffissoSocietario + "$", "i");
+    const baseNome = nome => normalizzaNome(nome.replace(suffissoFinale, ""));
+    const escapePattern = valore => valore.replace(/[.*+?$^{}()|[\]\\]/g, "\\$&").replace(/\s+/g, "\\s+");
+    const societa = new Map();
+    for (const voce of candidatiSocieta) societa.set(normalizzaNome(voce.nome), voce.nome);
+
+    const proveRuolo = [];
+    for (const [identita, nome] of societa) {
+      const base = baseNome(nome);
+      // Non risolvere riferimenti abbreviati condivisi da ragioni sociali diverse.
+      if ([...societa.values()].filter(n => baseNome(n) === base).length !== 1) continue;
+      // Non tentare di separare nomi societari fusi dall'estrazione.
+      if (new RegExp(suffissoSocietario, "i").test(base)) continue;
+      const riferimento = "(?:" + escapePattern(normalizzaNome(nome)) + "\\.?|" + escapePattern(base) + ")";
+      const fineNome = "(?=\\s*(?:[,;.]|$))";
+      const ccv = "corrispettivo\\s+di\\s+commercializzazione\\s+e\\s+vendita\\s*(?:\\(ccv\\)\\s*)?";
+      const clausola = new RegExp(
+        "(?:^|[.;!?]\\s+)(?:la\\s+quota\\s+fissa\\s+è\\s+data\\s+dalla\\s+somma\\s+del\\s+" + ccv +
+        "definito|il\\s+" + ccv + "è\\s+definito)\\s+da\\s+" + riferimento + fineNome, "gi"
+      );
+      const prova = clausola.exec(t);
+      if (!prova) continue;
+      // Non usare esempi, ipotesi o clausole riferite ad altre offerte.
+      const premessa = t.slice(Math.max(0, prova.index - 180), prova.index);
+      if (/esempio|ipotetic|simulazion|altr[aoe]\s+(?:offert|contratt)|precedente\s+(?:offert|contratt)/i.test(premessa)) continue;
+      // Un ruolo contrario esplicito rende il collegamento da verificare.
+      const altroRuolo = new RegExp(
+        "\\b(?:cliente|contraente|intestatario|distributore|capogruppo|societ[aà]\\s+controllante|" +
+        "impresa\\s+di\\s+distribuzione|direzione\\s+e\\s+coordinamento\\s+di)" +
+        "\\s*[:\\-]?\\s*" + riferimento + fineNome, "i"
+      );
+      const altroRuoloDopo = new RegExp(
+        riferimento + "\\.?\\s*[,;:\\-]\\s*(?:cliente|contraente|intestatario|distributore|capogruppo|" +
+        "societ[aà]\\s+controllante|impresa\\s+di\\s+distribuzione)\\b", "i"
+      );
+      if (altroRuolo.test(t) || altroRuoloDopo.test(t)) continue;
+      proveRuolo.push({ identita, testo: prova[0].replace(/^[.;!?]\s*/, "").trim() });
+    }
+    if (proveRuolo.length === 1 && proveRuolo[0].identita === normalizzaNome(candidato.nome)) {
+      fornitoreAffidabile = true;
+      contestoFornitoreFallback = proveRuolo[0].testo;
+    }
+  }
+
 }
   }
 if (!fornitore) {
