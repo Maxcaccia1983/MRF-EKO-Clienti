@@ -1600,6 +1600,107 @@ function convertiNumeroEconomicoCTEMRF(valore) {
   const risultato = Number(numero);
   return Number.isFinite(risultato) ? risultato : null;
 }
+  
+function rilevaTipologiaPrezzoCTEMRF(testo) {
+  const t = String(testo || "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  const risultato = {
+    luce: {
+      tipoPrezzo: null,
+      indice: null,
+      evidenze: []
+    },
+    gas: {
+      tipoPrezzo: null,
+      indice: null,
+      evidenze: []
+    }
+  };
+
+  const candidati = {
+    luce: [],
+    gas: []
+  };
+
+  const segnali = [
+    ...t.matchAll(
+      /\bprezzo\s+(?:fisso|fissa|variabile|indicizzato|indicizzata)\b/gi
+    )
+  ];
+
+  for (const segnale of segnali) {
+    const posizione = segnale.index ?? 0;
+
+    const contesto = t.slice(
+      Math.max(0, posizione - 90),
+      Math.min(t.length, posizione + segnale[0].length + 90)
+    );
+
+    const luce =
+      /\b(?:energia elettrica|luce)\b/i.test(contesto);
+
+    const gas =
+      /\b(?:gas naturale|gas)\b/i.test(contesto);
+
+    // Non assegnare un prezzo se il settore è ambiguo.
+    if (luce === gas) continue;
+
+    const settore = luce ? "luce" : "gas";
+
+    const tipo = /fiss/i.test(segnale[0])
+      ? "fisso"
+      : "variabile";
+
+    candidati[settore].push({
+      tipo,
+      contesto
+    });
+  }
+
+  for (const settore of ["luce", "gas"]) {
+    const voci = candidati[settore];
+
+    const tipi = [
+      ...new Set(voci.map(voce => voce.tipo))
+    ];
+
+    risultato[settore].evidenze =
+      voci.map(voce => voce.contesto);
+
+    // Tipi discordanti: serve verifica manuale.
+    if (tipi.length !== 1) continue;
+
+    risultato[settore].tipoPrezzo = tipi[0];
+
+    if (tipi[0] !== "variabile") continue;
+
+    const indiceAtteso =
+      settore === "luce"
+        ? /\bPUN(?:\s+Index)?\b/i
+        : /\bPSV\b/i;
+
+    const indiceOpposto =
+      settore === "luce"
+        ? /\bPSV\b/i
+        : /\bPUN(?:\s+Index)?\b/i;
+
+    const provaIndice = voci.some(voce =>
+      voce.tipo === "variabile" &&
+      indiceAtteso.test(voce.contesto) &&
+      !indiceOpposto.test(voce.contesto)
+    );
+
+    if (provaIndice) {
+      risultato[settore].indice =
+        settore === "luce" ? "PUN" : "PSV";
+    }
+  }
+
+  return risultato;
+}
+
   function analizzaTestoCTEMRF(testo) {
   let nomeOfferta = "";
 
