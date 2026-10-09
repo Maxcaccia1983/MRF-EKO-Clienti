@@ -978,6 +978,13 @@ if (event !== "PASSWORD_RECOVERY" || !paginaRecoveryMRF) return;
   id="anteprimaCTEMRF"
   style="display:none; margin:15px 0; padding:15px; border:1px solid #ddd; border-radius:10px;"
 ></div>
+   <button
+  type="button"
+  onclick="provaLetturaCTEAdminMRF()"
+  style="width:100%; padding:13px; margin-bottom:12px; border:1px solid #2563eb; border-radius:10px; font-weight:700; background:#eff6ff; color:#1d4ed8;"
+>
+  🔎 PROVA LETTURA CTE - SENZA SALVARE
+</button>
   <button
     type="button"
     onclick="caricaCTEAdminMRF()"
@@ -2339,6 +2346,83 @@ classificazionePrezzoCTE: rilevaTipologiaPrezzoCTEMRF(t),
     contestiDateTestualiCTE
 };
 }
+  
+async function provaLetturaCTEAdminMRF() {
+  const input = document.getElementById("cteFileMRF");
+  const anteprima = document.getElementById("anteprimaCTEMRF");
+  const stato = document.getElementById("statoCaricamentoCTEMRF");
+
+  if (!input || !anteprima || !stato) return;
+
+  const file = input.files[0];
+
+  anteprima.style.display = "none";
+  anteprima.textContent = "";
+
+  if (!file) {
+    stato.textContent = "⚠️ Seleziona una CTE PDF.";
+    return;
+  }
+
+  if (file.type !== "application/pdf" &&
+      !file.name.toLowerCase().endsWith(".pdf")) {
+    stato.textContent = "⚠️ Seleziona un file PDF.";
+    return;
+  }
+
+  if (file.size > 20 * 1024 * 1024) {
+    stato.textContent = "⚠️ PDF superiore a 20 MB.";
+    return;
+  }
+
+  stato.textContent = "⏳ Lettura CTE in corso...";
+
+  try {
+    const testo = await leggiTestoCTEMRF(file);
+    const dati = analizzaTestoCTEMRF(testo);
+    const prezzi = dati.classificazionePrezzoCTE || {};
+
+    function descriviPrezzo(settore) {
+      const p = prezzi[settore] || {};
+      const tipo = p.tipoPrezzo || "Da verificare";
+      const indice = tipo === "fisso"
+        ? "Non applicabile"
+        : (p.indice || "Da verificare");
+
+      return settore.toUpperCase() +
+        "\nTipo prezzo: " + tipo +
+        "\nIndice: " + indice +
+        "\nEvidenze: " +
+        ((p.evidenze || []).slice(0, 3).join(" | ") ||
+          "Nessuna evidenza riconosciuta");
+    }
+
+    anteprima.textContent = [
+      "🔎 TEST CTE - SENZA SALVATAGGIO",
+      "File: " + file.name,
+      "Fornitore: " + (dati.fornitore || "Da verificare"),
+      "Offerta: " + (dati.nomeOfferta || "Da verificare"),
+      "Codice: " + (dati.codiceOfferta || "Da verificare"),
+      "Fornitura: " + (dati.commodity || "Da verificare"),
+      "",
+      descriviPrezzo("luce"),
+      "",
+      descriviPrezzo("gas")
+    ].join("\n");
+
+    anteprima.style.whiteSpace = "pre-wrap";
+    anteprima.style.display = "block";
+
+    stato.textContent =
+      "✅ Test completato. Nessun documento salvato.";
+
+  } catch (errore) {
+    console.error("Errore lettura CTE:", errore);
+    stato.textContent =
+      "❌ Lettura non riuscita. Verificare il PDF.";
+  }
+}
+
 async function caricaCTEAdminMRF() {
   const stato = document.getElementById("statoCaricamentoCTEMRF");
   const anteprima =
