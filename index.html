@@ -2455,6 +2455,18 @@ anteprima.textContent =
   "Fornitura: " + (commodity || "Non rilevata") + "\n" +
   "Cliente: " + (segmento || "Non rilevato") + "\n" +
  
+"TIPOLOGIA PREZZO LUCE: " +
+(datiCTE.classificazionePrezzoCTE?.luce?.tipoPrezzo || "Da verificare") + "\n" +
+
+"INDICE LUCE: " +
+(datiCTE.classificazionePrezzoCTE?.luce?.indice || "Non rilevato") + "\n" +
+
+"TIPOLOGIA PREZZO GAS: " +
+(datiCTE.classificazionePrezzoCTE?.gas?.tipoPrezzo || "Da verificare") + "\n" +
+
+"INDICE GAS: " +
+(datiCTE.classificazionePrezzoCTE?.gas?.indice || "Non rilevato") + "\n" +
+
   "Validità: " +
 (validitaDa || "Non rilevata") +
 " → " +
