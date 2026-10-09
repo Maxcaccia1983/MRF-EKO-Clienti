@@ -1562,6 +1562,44 @@ return (testoPulito + " " + testoOCR)
   .replace(/\s+/g, " ")
   .trim();
 }
+    
+function convertiNumeroEconomicoCTEMRF(valore) {
+  if (valore === null || valore === undefined) {
+    return null;
+  }
+
+  let numero = String(valore)
+    .trim()
+    .replace(/\s/g, "")
+    .replace(/[−–]/g, "-");
+
+  if (!/^-?\d[\d.,]*$/.test(numero)) {
+    return null;
+  }
+
+  const virgola = numero.lastIndexOf(",");
+  const punto = numero.lastIndexOf(".");
+
+  if (virgola !== -1 && punto !== -1) {
+    if (virgola > punto) {
+      numero = numero.replace(/\./g, "").replace(",", ".");
+    } else {
+      numero = numero.replace(/,/g, "");
+    }
+  } else if (virgola !== -1) {
+    numero = numero.replace(",", ".");
+  } else if ((numero.match(/\./g) || []).length > 1) {
+    if (!/^-?\d{1,3}(\.\d{3})+$/.test(numero)) {
+      return null;
+    }
+    numero = numero.replace(/\./g, "");
+  } else if (/^-?[1-9]\d{0,2}\.\d{3}$/.test(numero)) {
+    return null;
+  }
+
+  const risultato = Number(numero);
+  return Number.isFinite(risultato) ? risultato : null;
+}
   function analizzaTestoCTEMRF(testo) {
   let nomeOfferta = "";
 
