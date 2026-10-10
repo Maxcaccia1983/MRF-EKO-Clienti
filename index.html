@@ -1708,6 +1708,69 @@ function rilevaTipologiaPrezzoCTEMRF(testo) {
   return risultato;
 }
 
+function rilevaSpreadCTEMRF(testo) {
+  const t = String(testo || "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  const risultato = {
+    luce: { valore: null, unita: null, evidenze: [] },
+    gas: { valore: null, unita: null, evidenze: [] }
+  };
+
+  const candidati = { luce: [], gas: [] };
+
+  const regole = [
+    {
+      regex: /\bspread\b.{0,70}?(-?\d+(?:[.,]\d+)?)\s*(?:€|euro)\s*\/\s*(kWh|Smc)\b/gi,
+      numero: 1,
+      misura: 2
+    },
+    {
+      regex: /\bspread\b.{0,70}?(?:€|euro)\s*\/\s*(kWh|Smc)\s*\)?\s*[:=]?\s*(-?\d+(?:[.,]\d+)?)/gi,
+      numero: 2,
+      misura: 1
+    }
+  ];
+
+  for (const regola of regole) {
+    for (const match of t.matchAll(regola.regex)) {
+      const valore = convertiNumeroEconomicoCTEMRF(
+        match[regola.numero]
+      );
+
+      if (valore === null) continue;
+
+      const settore = /kwh/i.test(match[regola.misura])
+        ? "luce"
+        : "gas";
+
+      candidati[settore].push({
+        valore,
+        evidenza: match[0]
+      });
+    }
+  }
+
+  for (const settore of ["luce", "gas"]) {
+    const voci = candidati[settore];
+
+    risultato[settore].evidenze =
+      voci.map(voce => voce.evidenza);
+
+    const valori = [...new Set(voci.map(voce => voce.valore))];
+
+    // Valori discordanti: non scegliere arbitrariamente.
+    if (valori.length !== 1) continue;
+
+    risultato[settore].valore = valori[0];
+    risultato[settore].unita =
+      settore === "luce" ? "€/kWh" : "€/Smc";
+  }
+
+  return risultato;
+}
+
   function analizzaTestoCTEMRF(testo) {
   let nomeOfferta = "";
 
@@ -2329,6 +2392,7 @@ if (puntiGas > puntiLuce) {
   return {
     
 classificazionePrezzoCTE: rilevaTipologiaPrezzoCTEMRF(t),
+classificazioneSpreadCTE: rilevaSpreadCTEMRF(t),
   fornitore,
     fornitoreAffidabile,
     contestoFornitoreEsplicito,
@@ -2382,20 +2446,39 @@ async function provaLetturaCTEAdminMRF() {
     const dati = analizzaTestoCTEMRF(testo);
     const prezzi = dati.classificazionePrezzoCTE || {};
 
-    function descriviPrezzo(settore) {
-      const p = prezzi[settore] || {};
-      const tipo = p.tipoPrezzo || "Da verificare";
-      const indice = tipo === "fisso"
-        ? "Non applicabile"
-        : (p.indice || "Da verificare");
+    
+function descriviPrezzo(settore) {
+  const p = prezzi[settore] || {};
+  const s = (dati.classificazioneSpreadCTE || {})[settore] || {};
 
-      return settore.toUpperCase() +
-        "\nTipo prezzo: " + tipo +
-        "\nIndice: " + indice +
-        "\nEvidenze: " +
-        ((p.evidenze || []).slice(0, 3).join(" | ") ||
-          "Nessuna evidenza riconosciuta");
-    }
+  const tipo = p.tipoPrezzo || "Da verificare";
+
+  const indice = tipo === "fisso"
+    ? "Non applicabile"
+    : (p.indice || "Da verificare");
+
+  const spreadVerificato =
+    typeof s.valore === "number" &&
+    Number.isFinite(s.valore) &&
+    !!s.unita &&
+    (s.evidenze || []).length > 0;
+
+  const spreadTesto = spreadVerificato
+    ? String(s.valore).replace(".", ",") + " " + s.unita
+    : "Da verificare";
+
+  return settore.toUpperCase() +
+    "\nTipo prezzo: " + tipo +
+    "\nIndice: " + indice +
+    "\nSpread: " + spreadTesto +
+    "\nEvidenze prezzo: " +
+    ((p.evidenze || []).slice(0, 3).join(" | ") ||
+      "Nessuna evidenza riconosciuta") +
+    "\nEvidenze spread: " +
+    ((s.evidenze || []).slice(0, 3).join(" | ") ||
+      "Nessuna evidenza riconosciuta");
+}
+
 
     anteprima.textContent = [
       "🔎 TEST CTE - SENZA SALVATAGGIO",
