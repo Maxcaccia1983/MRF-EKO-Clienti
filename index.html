@@ -2571,6 +2571,15 @@ function descriviPrezzo(settore) {
   const p = prezzi[settore] || {};
   const s = (dati.classificazioneSpreadCTE || {})[settore] || {};
 
+const c = (dati.classificazioneCostiFissiCTE || {})[settore] || {};
+
+const costoFissoTesto =
+  typeof c.valoreMensile === "number" &&
+  Number.isFinite(c.valoreMensile) &&
+  (c.evidenze || []).length > 0
+    ? String(c.valoreMensile).replace(".", ",") + " €/mese"
+    : "Da verificare";
+
   const tipo = p.tipoPrezzo || "Da verificare";
 
   const indice = tipo === "fisso"
@@ -2590,15 +2599,18 @@ function descriviPrezzo(settore) {
   return settore.toUpperCase() +
     "\nTipo prezzo: " + tipo +
     "\nIndice: " + indice +
-    "\nSpread: " + spreadTesto +
+    "\nSpread: " + spreadTesto +    
+    "\nCosto fisso mensile: " + costoFissoTesto +
     "\nEvidenze prezzo: " +
     ((p.evidenze || []).slice(0, 3).join(" | ") ||
       "Nessuna evidenza riconosciuta") +
     "\nEvidenze spread: " +
     ((s.evidenze || []).slice(0, 3).join(" | ") ||
+      "Nessuna evidenza riconosciuta") +
+    "\nEvidenze costo fisso: " +
+    ((c.evidenze || []).slice(0, 3).join(" | ") ||
       "Nessuna evidenza riconosciuta");
 }
-
 
     anteprima.textContent = [
       "🔎 TEST CTE - SENZA SALVATAGGIO",
