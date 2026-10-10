@@ -1812,6 +1812,84 @@ function rilevaSpreadCTEMRF(testo) {
   return risultato;
 }
 
+function rilevaCostiFissiCTEMRF(testo, settoreDocumento = null) {
+  const t = String(testo || "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  const risultato = {
+    luce: {
+      valoreMensile: null,
+      unita: "€/mese",
+      evidenze: []
+    },
+    gas: {
+      valoreMensile: null,
+      unita: "€/mese",
+      evidenze: []
+    }
+  };
+
+  const candidati = { luce: [], gas: [] };
+
+  // Riconosce i corrispettivi commerciali ricorrenti.
+  // Non considera le spese occasionali.
+
+  const regola =
+    /\b(?:CCV|componente\s+(?:di\s+)?commercializzazione|quota\s+fissa\s+(?:di\s+)?(?:commercializzazione|vendita)|corrispettivo\s+(?:annuo|mensile)|costo\s+fisso\s+(?:annuo|mensile))\b.{0,90}?(\d+(?:[.,]\d+)?)\s*(?:€|euro)\s*\/\s*(?:(POD|PDR)\s*\/\s*)?(anno|mese)\b/gi;
+
+  for (const match of t.matchAll(regola)) {
+    const valore = convertiNumeroEconomicoCTEMRF(
+      match[1]
+    );
+
+    if (valore === null || valore < 0) continue;
+
+    const punto = (match[2] || "").toUpperCase();
+    const periodo = match[3].toLowerCase();
+
+    let settore = null;
+
+    if (punto === "POD") settore = "luce";
+    if (punto === "PDR") settore = "gas";
+
+    // Per importi senza POD/PDR occorre
+    // una commodity già identificata.
+    if (!settore && ["luce", "gas"].includes(settoreDocumento)) {
+      settore = settoreDocumento;
+    }
+
+    if (!settore) continue;
+
+    const mensile = periodo === "anno"
+      ? valore / 12
+      : valore;
+
+    candidati[settore].push({
+      valore: Number(mensile.toFixed(6)),
+      evidenza: match[0]
+    });
+  }
+
+  for (const settore of ["luce", "gas"]) {
+    const voci = candidati[settore];
+
+    risultato[settore].evidenze =
+      voci.map(voce => voce.evidenza);
+
+    const valori = [
+      ...new Set(voci.map(voce => voce.valore))
+    ];
+
+    // Valori discordanti: verifica manuale.
+    if (valori.length !== 1) continue;
+
+    risultato[settore].valoreMensile = valori[0];
+  }
+
+  return risultato;
+}
+
   function analizzaTestoCTEMRF(testo) {
   let nomeOfferta = "";
 
@@ -2433,7 +2511,8 @@ if (puntiGas > puntiLuce) {
   return {
     
 classificazionePrezzoCTE: rilevaTipologiaPrezzoCTEMRF(t),
-classificazioneSpreadCTE: rilevaSpreadCTEMRF(t),
+classificazioneSpreadCTE: rilevaSpreadCTEMRF(t),    
+classificazioneCostiFissiCTE: rilevaCostiFissiCTEMRF(t, commodity),
   fornitore,
     fornitoreAffidabile,
     contestoFornitoreEsplicito,
