@@ -1666,6 +1666,29 @@ function rilevaTipologiaPrezzoCTEMRF(testo) {
     });
   }
 
+  // Riconoscimento del prezzo variabile tramite formula economica.
+  // Funziona anche senza la dicitura "prezzo variabile".
+
+  const formuleIndicizzate = [
+    {
+      settore: "luce",
+      regex: /\bPUN(?:\s+Index)?\s*\+\s*-?\d+(?:[.,]\d+)?\s*(?:€|euro)\s*\/\s*kWh\b/gi
+    },
+    {
+      settore: "gas",
+      regex: /\b(?:PSV|PSbG)\s*\+\s*-?\d+(?:[.,]\d+)?\s*(?:€|euro)\s*\/\s*Smc\b/gi
+    }
+  ];
+
+  for (const formula of formuleIndicizzate) {
+    for (const match of t.matchAll(formula.regex)) {
+      candidati[formula.settore].push({
+        tipo: "variabile",
+        contesto: match[0]
+      });
+    }
+  }
+
   for (const settore of ["luce", "gas"]) {
     const voci = candidati[settore];
 
@@ -1683,26 +1706,32 @@ function rilevaTipologiaPrezzoCTEMRF(testo) {
 
     if (tipi[0] !== "variabile") continue;
 
-    const indiceAtteso =
-      settore === "luce"
-        ? /\bPUN(?:\s+Index)?\b/i
-        : /\bPSV\b/i;
+   
+    const indiciDisponibili = settore === "luce"
+      ? [
+          { nome: "PUN", regex: /\bPUN(?:\s+Index)?\b/i }
+        ]
+      : [
+          { nome: "PSV", regex: /\bPSV\b/i },
+          { nome: "PSbG", regex: /\bPSbG\b/i }
+        ];
 
-    const indiceOpposto =
-      settore === "luce"
-        ? /\bPSV\b/i
-        : /\bPUN(?:\s+Index)?\b/i;
+    const indiceOpposto = settore === "luce"
+      ? /\b(?:PSV|PSbG)\b/i
+      : /\bPUN(?:\s+Index)?\b/i;
 
-    const provaIndice = voci.some(voce =>
-      voce.tipo === "variabile" &&
-      indiceAtteso.test(voce.contesto) &&
-      !indiceOpposto.test(voce.contesto)
+    const indiciRilevati = indiciDisponibili.filter(opzione =>
+      voci.some(voce =>
+        voce.tipo === "variabile" &&
+        opzione.regex.test(voce.contesto) &&
+        !indiceOpposto.test(voce.contesto)
+      )
     );
 
-    if (provaIndice) {
-      risultato[settore].indice =
-        settore === "luce" ? "PUN" : "PSV";
+    if (indiciRilevati.length === 1) {
+      risultato[settore].indice = indiciRilevati[0].nome;
     }
+
   }
 
   return risultato;
@@ -1721,6 +1750,18 @@ function rilevaSpreadCTEMRF(testo) {
   const candidati = { luce: [], gas: [] };
 
   const regole = [
+    
+    {
+      regex: /\bPUN(?:\s+Index)?\s*\+\s*(-?\d+(?:[.,]\d+)?)\s*(?:€|euro)\s*\/\s*(kWh)\b/gi,
+      numero: 1,
+      misura: 2
+    },
+    {
+      regex: /\b(?:PSV|PSbG)\s*\+\s*(-?\d+(?:[.,]\d+)?)\s*(?:€|euro)\s*\/\s*(Smc)\b/gi,
+      numero: 1,
+      misura: 2
+    },
+
     {
       regex: /\bspread\b.{0,70}?(-?\d+(?:[.,]\d+)?)\s*(?:€|euro)\s*\/\s*(kWh|Smc)\b/gi,
       numero: 1,
