@@ -1748,7 +1748,20 @@ function rilevaSpreadCTEMRF(testo) {
   };
 
   const candidati = { luce: [], gas: [] };
+const componentiCandidate = { luce: [], gas: [] };
+  const regolaComponentiVariabili = /\b(CVD\s*variabile|Qrap|Qmod|Qsr)\b\s*[:=]?\s*(-?\d+(?:[.,]\d+)?)\s*(?:€|euro)\s*\/\s*(kWh|Smc)\b/gi;
+  for (const match of t.matchAll(regolaComponentiVariabili)) {
+  const valore = convertiNumeroEconomicoCTEMRF(match[2]);
+  if (valore === null) continue;
 
+  const settore = /kwh/i.test(match[3]) ? "luce" : "gas";
+
+  componentiCandidate[settore].push({
+    nome: match[1],
+    valore,
+    evidenza: match[0]
+  });
+}
   const regole = [
     
     {
@@ -1796,6 +1809,7 @@ const contestoPrima = t.slice(Math.max(0, (match.index ?? 0) - 35), match.index 
 
   for (const settore of ["luce", "gas"]) {
     const voci = candidati[settore];
+    risultato[settore].componentiAggiuntive = componentiCandidate[settore];
 const totaliIndicati = [...new Set(
   voci.filter(voce => voce.origine === "totale_indicato")
       .map(voce => voce.valore)
