@@ -1788,7 +1788,8 @@ function rilevaSpreadCTEMRF(testo) {
 
       candidati[settore].push({
         valore,
-        evidenza: match[0]
+        evidenza: match[0],
+        origine: /\bspread\b/i.test(match[0]) ? "spread_esplicito" : "formula_indice"
       });
     }
   }
@@ -1798,8 +1799,9 @@ function rilevaSpreadCTEMRF(testo) {
 
     risultato[settore].evidenze =
       voci.map(voce => voce.evidenza);
-
-    const valori = [...new Set(voci.map(voce => voce.valore))];
+const espliciti = voci.filter(voce => voce.origine === "spread_esplicito");
+    const vociPerSpread = espliciti.length ? espliciti : voci;
+    const valori = [...new Set(vociPerSpread.map(voce => voce.valore))];
 
     // Valori discordanti: non scegliere arbitrariamente.
     if (valori.length !== 1) continue;
