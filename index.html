@@ -1835,8 +1835,13 @@ function rilevaCostiFissiCTEMRF(testo, settoreDocumento = null) {
   // Riconosce i corrispettivi commerciali ricorrenti.
   // Non considera le spese occasionali.
 
-  const regola =
-    /\b(?:CCV|componente\s+(?:di\s+)?commercializzazione|quota\s+fissa\s+(?:di\s+)?(?:commercializzazione|vendita)|corrispettivo\s+(?:annuo|mensile)|costo\s+fisso\s+(?:annuo|mensile))\b.{0,90}?(\d+(?:[.,]\d+)?)\s*(?:€|euro)\s*\/\s*(?:(POD|PDR)\s*\/\s*)?(anno|mese)\b/gi;
+
+const regola = new RegExp(
+  String.raw`\b(?:CCV|componente\s+(?:di\s+)?commercializzazione|quota\s+fissa\s+(?:di\s+)?(?:commercializzazione|vendita)|corrispettivo\s+(?:annuo|mensile)|costo\s+fisso\s+(?:anno|annuo|mese|mensile))\b` +
+  String.raw`.{0,90}?(\d+(?:[.,]\d+)?)\s*(?:€|euro)\s*\/\s*(?:(POD|PDR)\s*\/\s*)?(anno|mese)\b`,
+  "gi"
+);
+
 
   for (const match of t.matchAll(regola)) {
     const valore = convertiNumeroEconomicoCTEMRF(
