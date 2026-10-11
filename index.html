@@ -1809,7 +1809,14 @@ const contestoPrima = t.slice(Math.max(0, (match.index ?? 0) - 35), match.index 
 
   for (const settore of ["luce", "gas"]) {
     const voci = candidati[settore];
-    risultato[settore].componentiAggiuntive = componentiCandidate[settore];
+    const viste = new Set();
+risultato[settore].componentiAggiuntive =
+  componentiCandidate[settore].filter(voce => {
+    const chiave = voce.nome.toLowerCase().replace(/\s+/g, "") + "|" + voce.valore;
+    if (viste.has(chiave)) return false;
+    viste.add(chiave);
+    return true;
+  });
 const totaliIndicati = [...new Set(
   voci.filter(voce => voce.origine === "totale_indicato")
       .map(voce => voce.valore)
