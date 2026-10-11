@@ -1824,6 +1824,12 @@ risultato[settore].componentiDiscordanti = componenti.filter(voce =>
     altra.valore !== voce.valore
   )
 );
+    const componentiValide = componenti.length > 0 &&
+  risultato[settore].componentiDiscordanti.length === 0;
+
+risultato[settore].sommaComponentiAggiuntive = componentiValide
+  ? Number(componenti.reduce((somma, voce) => somma + voce.valore, 0).toFixed(6))
+  : null;
 const totaliIndicati = [...new Set(
   voci.filter(voce => voce.origine === "totale_indicato")
       .map(voce => voce.valore)
