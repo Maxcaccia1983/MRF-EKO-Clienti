@@ -1817,6 +1817,13 @@ risultato[settore].componentiAggiuntive =
     viste.add(chiave);
     return true;
   });
+    const componenti = risultato[settore].componentiAggiuntive;
+risultato[settore].componentiDiscordanti = componenti.filter(voce =>
+  componenti.some(altra =>
+    altra.nome.toLowerCase().replace(/\s+/g, "") === voce.nome.toLowerCase().replace(/\s+/g, "") &&
+    altra.valore !== voce.valore
+  )
+);
 const totaliIndicati = [...new Set(
   voci.filter(voce => voce.origine === "totale_indicato")
       .map(voce => voce.valore)
