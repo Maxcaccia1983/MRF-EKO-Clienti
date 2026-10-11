@@ -1785,22 +1785,29 @@ function rilevaSpreadCTEMRF(testo) {
       const settore = /kwh/i.test(match[regola.misura])
         ? "luce"
         : "gas";
-
+const contestoPrima = t.slice(Math.max(0, (match.index ?? 0) - 35), match.index ?? 0);
       candidati[settore].push({
         valore,
         evidenza: match[0],
-        origine: /\bspread\b/i.test(match[0]) ? "spread_esplicito" : "formula_indice"
+       origine: /\bspread\b/i.test(match[0]) ? "spread_esplicito" : /\bTOTALE\s*$/i.test(contestoPrima) ? "totale_indicato" : "formula_indice"
       });
     }
   }
 
   for (const settore of ["luce", "gas"]) {
     const voci = candidati[settore];
+const totaliIndicati = [...new Set(
+  voci.filter(voce => voce.origine === "totale_indicato")
+      .map(voce => voce.valore)
+)];
 
+if (totaliIndicati.length === 1) {
+  risultato[settore].maggiorazioneComplessiva = totaliIndicati[0];
+}
     risultato[settore].evidenze =
       voci.map(voce => voce.evidenza);
 const espliciti = voci.filter(voce => voce.origine === "spread_esplicito");
-    const vociPerSpread = espliciti.length ? espliciti : voci;
+    const vociPerSpread = espliciti.length ? espliciti : voci.filter(voce => voce.origine === "formula_indice");
     const valori = [...new Set(vociPerSpread.map(voce => voce.valore))];
 
     // Valori discordanti: non scegliere arbitrariamente.
