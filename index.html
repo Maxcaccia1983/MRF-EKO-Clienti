@@ -1608,7 +1608,7 @@ function convertiNumeroEconomicoCTEMRF(valore) {
   return Number.isFinite(risultato) ? risultato : null;
 }
   
-function rilevaTipologiaPrezzoCTEMRF(testo) {
+function rilevaTipologiaPrezzoCTEMRF(testo, settoreDocumento = null) {
   const t = String(testo || "")
     .replace(/\s+/g, " ")
     .trim();
@@ -1732,6 +1732,20 @@ function rilevaTipologiaPrezzoCTEMRF(testo) {
       risultato[settore].indice = indiciRilevati[0].nome;
     }
 
+  }
+
+  // L'intestazione esplicita prevale su eventuali esempi/comparazioni
+  // di prezzi variabili riportati nelle condizioni dell'offerta fissa.
+  if (["luce", "gas"].includes(settoreDocumento)) {
+    const intestazione = t.slice(0, 1800);
+    const offertaFissa = intestazione.match(
+      /\bofferta\s+a\s+prezzo\s+fiss[oa]\s*[-–—]\s*mercato\s+libero\b/i
+    );
+    if (offertaFissa) {
+      risultato[settoreDocumento].tipoPrezzo = "fisso";
+      risultato[settoreDocumento].indice = null;
+      risultato[settoreDocumento].evidenze.unshift(offertaFissa[0]);
+    }
   }
 
   return risultato;
@@ -1933,6 +1947,84 @@ const regola = new RegExp(
     if (valori.length !== 1) continue;
 
     risultato[settore].valoreMensile = valori[0];
+  }
+
+  return risultato;
+}
+
+function rilevaPrezzoFissoCTEMRF(testo, settoreDocumento, classificazionePrezzoCTE) {
+  const risultato = {
+    luce: { valore: null, unita: "€/kWh", prezziFasce: {}, evidenze: [] },
+    gas: { valore: null, unita: "€/Smc", prezziFasce: {}, evidenze: [] }
+  };
+
+  // Nessuna deduzione di prezzi fissi per offerte indicizzate o settore incerto.
+  if (
+    !["luce", "gas"].includes(settoreDocumento) ||
+    classificazionePrezzoCTE?.[settoreDocumento]?.tipoPrezzo !== "fisso"
+  ) {
+    return risultato;
+  }
+
+  const t = String(testo || "").replace(/\s+/g, " ").trim();
+  const unitaRegex = settoreDocumento === "luce" ? "kWh" : "Smc";
+  const settore = risultato[settoreDocumento];
+  const segnale = /\bcorrispettivo\s+per\s+il\s+consumo\b/gi;
+
+  // Si cerca il prezzo nel contesto della riga contrattuale, non nelle tabelle
+  // di spesa annuale né nelle componenti regolate (es. CDISPD).
+  for (const voce of t.slice(0, 18000).matchAll(segnale)) {
+    const posizione = (voce.index ?? 0) + voce[0].length;
+    const contesto = t.slice(posizione, posizione + 620)
+      .split(/\b(?:componente\s+(?:di\s+)?commercializzazione|corrispettivo\s+annuo)\b/i)[0];
+
+    const regolaFasce = new RegExp(
+      "\\b(F[0-3])\\s*[:=]\\s*(\\d+(?:[.,]\\d+)?)\\s*(?:€|euro)\\s*\\/\\s*" + unitaRegex + "\\b",
+      "gi"
+    );
+    const fasce = {};
+    let incoerente = false;
+
+    for (const match of contesto.matchAll(regolaFasce)) {
+      const valore = convertiNumeroEconomicoCTEMRF(match[2]);
+      if (valore === null || valore < 0) continue;
+      const fascia = match[1].toUpperCase();
+      if (Object.prototype.hasOwnProperty.call(fasce, fascia) && fasce[fascia] !== valore) {
+        incoerente = true;
+        break;
+      }
+      fasce[fascia] = valore;
+    }
+
+    if (incoerente) continue;
+
+    if (Object.keys(fasce).length) {
+      settore.prezziFasce = fasce;
+      settore.evidenze.push(voce[0] + " " +
+        Object.entries(fasce).map(([f, v]) => f + ": " + v + " " + settore.unita).join(" | "));
+      if (Object.prototype.hasOwnProperty.call(fasce, "F0")) {
+        settore.valore = fasce.F0;
+      } else if (
+        ["F1", "F2", "F3"].every(f => Object.prototype.hasOwnProperty.call(fasce, f)) &&
+        fasce.F1 === fasce.F2 && fasce.F2 === fasce.F3
+      ) {
+        settore.valore = fasce.F1;
+      }
+      return risultato;
+    }
+
+    // Offerte monorarie senza etichette di fascia.
+    const regolaSemplice = new RegExp(
+      "^\\s*[:=]?\\s*(\\d+(?:[.,]\\d+)?)\\s*(?:€|euro)\\s*\\/\\s*" + unitaRegex + "\\b",
+      "i"
+    );
+    const semplice = contesto.match(regolaSemplice);
+    if (!semplice) continue;
+    const valore = convertiNumeroEconomicoCTEMRF(semplice[1]);
+    if (valore === null || valore < 0) continue;
+    settore.valore = valore;
+    settore.evidenze.push(voce[0] + " " + semplice[0].trim());
+    return risultato;
   }
 
   return risultato;
@@ -2556,9 +2648,12 @@ if (puntiGas > puntiLuce) {
     segmento = "domestico";
   }
 
+  const classificazionePrezzoCTE = rilevaTipologiaPrezzoCTEMRF(t, commodity);
+  const classificazionePrezzoFissoCTE = rilevaPrezzoFissoCTEMRF(t, commodity, classificazionePrezzoCTE);
+
   return {
-    
-classificazionePrezzoCTE: rilevaTipologiaPrezzoCTEMRF(t),
+    classificazionePrezzoCTE,
+    classificazionePrezzoFissoCTE,
 classificazioneSpreadCTE: rilevaSpreadCTEMRF(t),    
 classificazioneCostiFissiCTE: rilevaCostiFissiCTEMRF(t, commodity),
   fornitore,
@@ -2613,6 +2708,7 @@ async function provaLetturaCTEAdminMRF() {
     const testo = await leggiTestoCTEMRF(file);
     const dati = analizzaTestoCTEMRF(testo);
     const prezzi = dati.classificazionePrezzoCTE || {};
+    const prezziFissi = dati.classificazionePrezzoFissoCTE || {};
 
     
 function descriviPrezzo(settore) {
@@ -2629,6 +2725,17 @@ const costoFissoTesto =
     : "Da verificare";
 
   const tipo = p.tipoPrezzo || "Da verificare";
+  const fisso = prezziFissi[settore] || {};
+  const prezzoFissoTesto = tipo !== "fisso"
+    ? "Non applicabile"
+    : typeof fisso.valore === "number" && Number.isFinite(fisso.valore)
+      ? String(fisso.valore).replace(".", ",") + " " + (fisso.unita || "")
+      : "Da verificare";
+  const fasce = fisso.prezziFasce || {};
+  const prezziFasceTesto = ["F0", "F1", "F2", "F3"]
+    .filter(fascia => typeof fasce[fascia] === "number")
+    .map(fascia => fascia + ": " + String(fasce[fascia]).replace(".", ",") + " " + (fisso.unita || ""))
+    .join(" | ") || "Non rilevati";
 
   const indice = tipo === "fisso"
     ? "Non applicabile"
@@ -2647,8 +2754,11 @@ const costoFissoTesto =
   return settore.toUpperCase() +
     "\nTipo prezzo: " + tipo +
     "\nIndice: " + indice +
-    "\nSpread: " + spreadTesto +    
+    "\nSpread: " + spreadTesto +
+    "\nPrezzo fisso energia: " + prezzoFissoTesto +
+    "\nPrezzi per fascia: " + prezziFasceTesto +    
     "\nCosto fisso mensile: " + costoFissoTesto +
+    "\nEvidenze prezzo fisso: " + ((fisso.evidenze || []).slice(0, 2).join(" | ") || "Nessuna") +
     "\nEvidenze prezzo: " +
     ((p.evidenze || []).slice(0, 3).join(" | ") ||
       "Nessuna evidenza riconosciuta") +
