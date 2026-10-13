@@ -3004,6 +3004,32 @@ anteprima.textContent =
     return;
   }
 
+const tipoPrezzoCTE =
+  datiCTE.classificazionePrezzoCTE?.[commodity]?.tipoPrezzo;
+
+const prezzoFissoCTE =
+  datiCTE.classificazionePrezzoFissoCTE?.[commodity] || {};
+
+const spreadCTE =
+  datiCTE.classificazioneSpreadCTE?.[commodity] || {};
+
+const costoMensileCTE =
+  datiCTE.classificazioneCostiFissiCTE?.[commodity]?.valoreMensile;
+
+const cteDaVerificare =
+  !datiCTECompleti ||
+  !Number.isFinite(costoMensileCTE) ||
+  (
+    tipoPrezzoCTE === "fisso"
+      ? !Number.isFinite(prezzoFissoCTE.valore) &&
+        !Object.values(prezzoFissoCTE.prezziFasce || {})
+          .some(valore => Number.isFinite(valore))
+      : tipoPrezzoCTE === "variabile"
+        ? !datiCTE.classificazionePrezzoCTE?.[commodity]?.indice ||
+          !Number.isFinite(spreadCTE.valore)
+        : true
+  );
+
   const { error: dbError } =
     await supabaseClient
       .from("cte_offerte")
@@ -3012,6 +3038,54 @@ anteprima.textContent =
 nome_offerta: nomeOfferta || null,
 codice_offerta: codiceOfferta || null,
 commodity: commodity || null,
+        tipo_prezzo:
+  datiCTE.classificazionePrezzoCTE?.[commodity]?.tipoPrezzo === "variabile"
+    ? "indicizzato"
+    : (datiCTE.classificazionePrezzoCTE?.[commodity]?.tipoPrezzo || null),
+
+indice_nome:
+  datiCTE.classificazionePrezzoCTE?.[commodity]?.indice || null,
+        
+spread_valore:
+  datiCTE.classificazionePrezzoCTE?.[commodity]?.tipoPrezzo === "variabile" &&
+  Number.isFinite(datiCTE.classificazioneSpreadCTE?.[commodity]?.valore)
+    ? datiCTE.classificazioneSpreadCTE[commodity].valore
+    : null,
+
+spread_unita:
+  datiCTE.classificazionePrezzoCTE?.[commodity]?.tipoPrezzo === "variabile" &&
+  Number.isFinite(datiCTE.classificazioneSpreadCTE?.[commodity]?.valore)
+    ? (datiCTE.classificazioneSpreadCTE[commodity].unita || null)
+    : null,
+
+prezzo_fisso_valore:
+  datiCTE.classificazionePrezzoCTE?.[commodity]?.tipoPrezzo === "fisso" &&
+  Number.isFinite(datiCTE.classificazionePrezzoFissoCTE?.[commodity]?.valore)
+    ? datiCTE.classificazionePrezzoFissoCTE[commodity].valore
+    : null,
+
+prezzo_fisso_unita:
+  datiCTE.classificazionePrezzoCTE?.[commodity]?.tipoPrezzo === "fisso" &&
+  Number.isFinite(datiCTE.classificazionePrezzoFissoCTE?.[commodity]?.valore)
+    ? (datiCTE.classificazionePrezzoFissoCTE[commodity].unita || null)
+    : null,
+
+prezzi_fasce:
+  datiCTE.classificazionePrezzoCTE?.[commodity]?.tipoPrezzo === "fisso"
+    ? (datiCTE.classificazionePrezzoFissoCTE?.[commodity]?.prezziFasce || {})
+    : {},
+
+quota_fissa_annua:
+  Number.isFinite(datiCTE.classificazioneCostiFissiCTE?.[commodity]?.valoreMensile)
+    ? Number((datiCTE.classificazioneCostiFissiCTE[commodity].valoreMensile * 12).toFixed(6))
+    : null,
+
+quota_fissa_unita:
+  Number.isFinite(datiCTE.classificazioneCostiFissiCTE?.[commodity]?.valoreMensile)
+    ? (commodity === "luce" ? "€/POD/anno"
+      : commodity === "gas" ? "€/PDR/anno" : null)
+    : null,
+
 segmento: segmento || null,
 validita_da: validitaDa || null,
 validita_a: validitaAl || null,
@@ -3020,7 +3094,8 @@ storage_path: storagePath,
 mime_type: "application/pdf",
 file_size: file.size,
 attiva: true,
- da_verificare: !datiCTECompleti       
+ 
+da_verificare: cteDaVerificare  
       });
 
   if (dbError) {
@@ -3033,7 +3108,7 @@ attiva: true,
     return;
   }
 
-  stato.textContent = datiCTECompleti
+  stato.textContent = !cteDaVerificare
   ? "✅ CTE caricata correttamente."
   : "⚠️ CTE caricata correttamente, ma alcuni dati sono da verificare.";
 
