@@ -2747,9 +2747,11 @@ const costoFissoTesto =
     !!s.unita &&
     (s.evidenze || []).length > 0;
 
-  const spreadTesto = spreadVerificato
-    ? String(s.valore).replace(".", ",") + " " + s.unita
-    : "Da verificare";
+  const spreadTesto = tipo === "fisso"
+    ? "Non applicabile"
+    : spreadVerificato
+      ? String(s.valore).replace(".", ",") + " " + s.unita
+      : "Da verificare";
 
   return settore.toUpperCase() +
     "\nTipo prezzo: " + tipo +
