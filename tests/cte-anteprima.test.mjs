@@ -204,3 +204,91 @@ test("PDF superiore a 20 MB rifiutato", async () => {
   assert.match(r.stato.textContent, /PDF superiore a 20 MB/);
   assert.equal(r.numeroLetture(), 0);
 });
+
+//
+// TEST CLASSIFICAZIONE CLIENTE CTE
+// Usa il codice reale dell'applicazione.
+//
+
+const inizioParserSegmento = html.indexOf(
+  "function analizzaTestoCTEMRF(testo) {"
+);
+
+const inizioSegmento = html.indexOf(
+  'let segmento = "";',
+  inizioParserSegmento
+);
+
+const fineSegmento = html.indexOf(
+  "const classificazionePrezzoCTE =",
+  inizioSegmento
+);
+
+assert.ok(
+  inizioParserSegmento >= 0 &&
+  inizioSegmento >= 0 &&
+  fineSegmento > inizioSegmento,
+  "Classificazione cliente CTE non trovata"
+);
+
+const codiceSegmento = html.slice(
+  inizioSegmento,
+  fineSegmento
+);
+
+const classificaCliente = new Function(
+  "testo",
+  'const minuscolo = String(testo).toLowerCase();\n' +
+  codiceSegmento +
+  "\nreturn segmento;"
+);
+
+test("CTE domestica con note business", () => {
+  const testo = [
+    "Condizioni tecnico economiche gas naturale",
+    "Nome Offerta: PSVSBIL 0 DOM 8CCV",
+    "Offerta a prezzo variabile",
+    "Clienti domestici",
+    "Condizioni contrattuali ".repeat(100),
+    "Nota: cliente domestico o cliente non domestico"
+  ].join(" ");
+
+  assert.equal(
+    classificaCliente(testo),
+    "domestico"
+  );
+});
+
+test("CTE clienti non domestici", () => {
+  const testo =
+    "Condizioni tecnico economiche gas " +
+    "Clienti non domestici " +
+    "Offerta business";
+
+  assert.equal(
+    classificaCliente(testo),
+    "business"
+  );
+});
+
+test("CTE clienti condominiali", () => {
+  const testo =
+    "Condizioni tecnico economiche gas " +
+    "Clienti condominiali";
+
+  assert.equal(
+    classificaCliente(testo),
+    "condominio"
+  );
+});
+
+test("CTE senza tipologia riconoscibile", () => {
+  const testo =
+    "Condizioni economiche fornitura gas " +
+    "Indice PSbG e quota annuale";
+
+  assert.equal(
+    classificaCliente(testo),
+    ""
+  );
+});
