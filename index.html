@@ -2628,28 +2628,51 @@ if (puntiGas > puntiLuce) {
   commodity = "gas";
 }
 
+  
   let segmento = "";
 
-  if (
-    minuscolo.includes("condominio") ||
-    minuscolo.includes("usi condominiali")
+  // Priorità alla destinazione dichiarata
+  // nell'intestazione commerciale della CTE.
+  const intestazioneCTE = minuscolo.slice(0, 2000);
+
+  const destinazioneEsplicita = intestazioneCTE.match(
+    /\bclienti\s+(non\s+domestici|domestici|business|condominiali)\b/
+  );
+
+  if (destinazioneEsplicita) {
+    const tipoCliente = destinazioneEsplicita[1];
+
+    segmento = tipoCliente === "domestici"
+      ? "domestico"
+      : tipoCliente === "condominiali"
+        ? "condominio"
+        : "business";
+
+  } else if (
+    intestazioneCTE.includes("condominio") ||
+    intestazioneCTE.includes("usi condominiali")
   ) {
     segmento = "condominio";
+
   } else if (
-    minuscolo.includes("business") ||
-    minuscolo.includes("non domestico") ||
-    minuscolo.includes("microimpresa") ||
-    minuscolo.includes("piccola impresa") ||
-    minuscolo.includes("altri usi")
+    intestazioneCTE.includes("business") ||
+    intestazioneCTE.includes("non domestico") ||
+    intestazioneCTE.includes("non domestici") ||
+    intestazioneCTE.includes("microimpresa") ||
+    intestazioneCTE.includes("piccola impresa") ||
+    intestazioneCTE.includes("altri usi")
   ) {
     segmento = "business";
+
   } else if (
-    minuscolo.includes("domestico") ||
-    minuscolo.includes("residente") ||
-    minuscolo.includes("abitazione")
+    intestazioneCTE.includes("domestico") ||
+    intestazioneCTE.includes("domestici") ||
+    intestazioneCTE.includes("residente") ||
+    intestazioneCTE.includes("abitazione")
   ) {
     segmento = "domestico";
   }
+
 
   const classificazionePrezzoCTE = rilevaTipologiaPrezzoCTEMRF(t, commodity);
   const classificazionePrezzoFissoCTE = rilevaPrezzoFissoCTEMRF(t, commodity, classificazionePrezzoCTE);
