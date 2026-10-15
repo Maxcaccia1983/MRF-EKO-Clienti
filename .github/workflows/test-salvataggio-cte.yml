@@ -7,7 +7,8 @@ on:
       - sviluppo-lettura-economica-cte
     paths:
       - index.html
-      - tests/cte-salvataggio-economico.test.mjs
+      - tests/cte-salvataggio-economico.test.mjs      
+      - tests/cte-anteprima.test.mjs
       - .github/workflows/test-salvataggio-cte.yml
 
 permissions:
@@ -27,5 +28,6 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Esegui i test CTE
-        run: node --test tests/cte-salvataggio-economico.test.mjs
+      - name: Esegui i test CTE  
+        run: node --test tests/cte-salvataggio-economico.test.mjs tests/cte-anteprima.test.mjs
+
