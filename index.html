@@ -2763,6 +2763,13 @@ const costoFissoTesto =
     "\nPrezzo fisso energia: " + prezzoFissoTesto +
     "\nPrezzi per fascia: " + prezziFasceTesto +    
     "\nCosto fisso mensile: " + costoFissoTesto +
+    
+"\nQuota fissa annua equivalente: " +
+  (costoFissoTesto === "Da verificare"
+    ? "Da verificare"
+    : (c.valoreMensile * 12).toFixed(2).replace(".", ",") +
+      (settore === "luce" ? " €/POD/anno" : " €/PDR/anno")) +
+
     "\nEvidenze prezzo fisso: " + ((fisso.evidenze || []).slice(0, 2).join(" | ") || "Nessuna") +
     "\nEvidenze prezzo: " +
     ((p.evidenze || []).slice(0, 3).join(" | ") ||
@@ -2782,10 +2789,21 @@ const costoFissoTesto =
       "Offerta: " + (dati.nomeOfferta || "Da verificare"),
       "Codice: " + (dati.codiceOfferta || "Da verificare"),
       "Fornitura: " + (dati.commodity || "Da verificare"),
+      
+"Tipologia cliente: " + (dati.segmento || "Da verificare"),
+"Validità offerta: " +
+  (dati.validitaDa || "Da verificare") +
+  " → " +
+  (dati.validitaAl || "Da verificare"),
+
       "",
-      descriviPrezzo("luce"),
-      "",
-      descriviPrezzo("gas")
+      
+dati.commodity === "luce"
+  ? descriviPrezzo("luce")
+  : dati.commodity === "gas"
+    ? descriviPrezzo("gas")
+    : [descriviPrezzo("luce"), descriviPrezzo("gas")].join("\n\n")
+
     ].join("\n");
 
     anteprima.style.whiteSpace = "pre-wrap";
