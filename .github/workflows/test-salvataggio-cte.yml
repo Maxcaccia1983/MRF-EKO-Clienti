@@ -1,0 +1,31 @@
+
+name: Test salvataggio economico CTE
+
+on:
+  push:
+    branches:
+      - sviluppo-lettura-economica-cte
+    paths:
+      - index.html
+      - tests/cte-salvataggio-economico.test.mjs
+      - .github/workflows/test-salvataggio-cte.yml
+
+permissions:
+  contents: read
+
+jobs:
+  test-cte:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Scarica il codice
+        uses: actions/checkout@v4
+
+      - name: Configura Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Esegui i test CTE
+        run: node --test tests/cte-salvataggio-economico.test.mjs
