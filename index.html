@@ -2628,6 +2628,24 @@ if (puntiGas > puntiLuce) {
   commodity = "gas";
 }
 
+  // Riconoscimento CTE DUAL luce + gas.
+  // Entrambe le forniture devono avere una sezione
+  // commerciale e un prezzo con la rispettiva unità.
+
+  const testoPerDualCTE = t.slice(0, 20000);
+
+  const sezioneLuceDualCTE =
+    /\b(?:vendita|fornitura)\s+(?:di\s+)?energia\s+elettrica\b/i.test(testoPerDualCTE) &&
+    /\b(?:corrispettivo|prezzo)\b.{0,140}?\d+(?:[.,]\d+)?\s*(?:€|euro)\s*\/\s*kWh\b/i.test(testoPerDualCTE);
+
+  const sezioneGasDualCTE =
+    /\b(?:vendita|fornitura)\s+(?:di\s+)?gas(?:\s+naturale)?\b/i.test(testoPerDualCTE) &&
+    /\b(?:corrispettivo|prezzo)\b.{0,140}?\d+(?:[.,]\d+)?\s*(?:€|euro)\s*\/\s*Smc\b/i.test(testoPerDualCTE);
+
+  if (sezioneLuceDualCTE && sezioneGasDualCTE) {
+    commodity = "dual";
+  }
+
   
   let segmento = "";
 
@@ -2891,6 +2909,16 @@ fornitore = datiCTE.fornitore;
   const contestoFornitoreFallback =
   datiCTE.contestoFornitoreFallback || "";
 commodity = datiCTE.commodity;
+
+if (commodity === "dual") {
+  stato.textContent =
+    "⛔ CTE DUAL riconosciuta: caricamento bloccato. " +
+    "I dati LUCE e GAS devono essere verificati " +
+    "separatamente prima del salvataggio.";
+
+  return;
+}
+
 segmento = datiCTE.segmento;
   validitaDa = datiCTE.validitaDa;
 validitaAl = datiCTE.validitaAl;
