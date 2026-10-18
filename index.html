@@ -1748,6 +1748,26 @@ function rilevaTipologiaPrezzoCTEMRF(testo, settoreDocumento = null) {
     }
   }
 
+
+  // DUAL_INVARIABILE_MRF
+  // Riconosce il corrispettivo invariabile, senza nomi di gestori.
+  if (settoreDocumento === "dual") {
+    for (const settore of ["luce", "gas"]) {
+      const rx = new RegExp(
+        "\\bcorrispettivo\\s+" + settore +
+        "\\b[^.]{0,135}\\s+è\\s+invariabile\\b", "i"
+      );
+      const evidenza = t.match(rx);
+
+      if (evidenza &&
+          risultato[settore].tipoPrezzo !== "variabile") {
+        risultato[settore].tipoPrezzo = "fisso";
+        risultato[settore].indice = null;
+        risultato[settore].evidenze.push(evidenza[0]);
+      }
+    }
+  }
+
   return risultato;
 }
 
@@ -1889,6 +1909,54 @@ function rilevaCostiFissiCTEMRF(testo, settoreDocumento = null) {
 
   const candidati = { luce: [], gas: [] };
 
+  // DUAL_COSTI_FISSI_SEZIONI_MRF
+  // Quote commerciali distinte per settore, non per fornitore.
+  if (settoreDocumento === "dual") {
+    const titoli = [...t.matchAll(
+      /\b(?:fornitura|vendita)\s+(?:di\s+|della\s+)?(energia\s+elettrica|gas(?:\s+naturale)?)\b/gi
+    )].map(m => ({
+      posizione: m.index ?? 0,
+      settore: /energia\s+elettrica/i.test(m[1])
+        ? "luce" : "gas"
+    }));
+
+    const quota = /\b(?:corrispettivo\s+(?:annuo|mensile)|commercializzazione\s+e\s+vendita|componente\s+(?:di\s+)?commercializzazione|CCV|quota\s+fissa(?:\s+di\s+(?:commercializzazione|vendita))?|costo\s+fisso(?:\s+(?:annuo|mensile))?)\b.{0,100}?(\d+(?:[.,]\d+)?)\s*(?:€|euro)\s*\/\s*(?:(POD|PDR)\s*\/\s*)?(anno|mese)\b/gi;
+
+    for (const m of t.matchAll(quota)) {
+      const posizione = m.index ?? 0;
+      const prima = titoli
+        .filter(x => x.posizione < posizione)
+        .at(-1);
+
+      if (!prima || posizione - prima.posizione > 2400) {
+        continue;
+      }
+
+      const puntoFornitura = (m[2] || "").toUpperCase();
+
+      if (puntoFornitura === "POD" &&
+          prima.settore !== "luce") continue;
+
+      if (puntoFornitura === "PDR" &&
+          prima.settore !== "gas") continue;
+
+      const valore = convertiNumeroEconomicoCTEMRF(m[1]);
+
+      if (valore === null || valore < 0) continue;
+
+      const mensile = m[3].toLowerCase() === "anno"
+        ? valore / 12
+        : valore;
+
+      candidati[prima.settore].push({
+        valore: Number(mensile.toFixed(6)),
+        evidenza: m[0]
+      });
+    }
+  }
+
+
+
   // Riconosce i corrispettivi commerciali ricorrenti.
   // Non considera le spese occasionali.
 
@@ -1957,6 +2025,59 @@ function rilevaPrezzoFissoCTEMRF(testo, settoreDocumento, classificazionePrezzoC
     luce: { valore: null, unita: "€/kWh", prezziFasce: {}, evidenze: [] },
     gas: { valore: null, unita: "€/Smc", prezziFasce: {}, evidenze: [] }
   };
+
+
+  // DUAL_PREZZI_GENERICI_MRF
+  // Riconoscimento indipendente dal fornitore.
+  if (settoreDocumento === "dual") {
+    const testoDual = String(testo || "")
+      .replace(/[⁄∕]/g, "/")
+      .replace(/\s+/g, " ").trim().slice(0, 20000);
+
+    const configurazioni = [
+      {
+        settore: "luce",
+        unita: "kWh",
+        voce: String.raw`(?:luce|energia(?:\s+elettrica)?|materia\s+prima\s+(?:energia|elettrica))`
+      },
+      {
+        settore: "gas",
+        unita: "Smc",
+        voce: String.raw`(?:gas(?:\s+naturale)?|materia\s+prima\s+gas)`
+      }
+    ];
+
+    for (const cfg of configurazioni) {
+      if (classificazionePrezzoCTE?.[cfg.settore]?.tipoPrezzo !== "fisso") {
+        continue;
+      }
+
+      const schema = new RegExp(
+        String.raw`\b(?:corrispettivo|prezzo)\s+(?:(?:fiss[oa]|unitario|di|della)\s+)?` +
+        cfg.voce +
+        String.raw`\s*[:=]?\s*(\d+(?:[.,]\d+)?)\s*(?:€|euro)\s*\/\s*` +
+        cfg.unita + String.raw`\b`,
+        "gi"
+      );
+
+      const candidati = [...testoDual.matchAll(schema)]
+        .map(m => ({
+          valore: convertiNumeroEconomicoCTEMRF(m[1]),
+          evidenza: m[0]
+        }))
+        .filter(v => v.valore !== null && v.valore >= 0);
+
+      const valori = [...new Set(candidati.map(v => v.valore))];
+
+      if (valori.length !== 1) continue;
+
+      risultato[cfg.settore].valore = valori[0];
+      risultato[cfg.settore].evidenze =
+        candidati.map(v => v.evidenza);
+    }
+
+    return risultato;
+  }
 
   // Nessuna deduzione di prezzi fissi per offerte indicizzate o settore incerto.
   if (
