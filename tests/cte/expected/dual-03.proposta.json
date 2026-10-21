@@ -1,0 +1,123 @@
+{
+  "schema": "mrf-cte-expected-dual-03.draft.v1",
+  "id": "dual-03",
+  "status": "bozza_gold_verificata_sul_pdf_non_ancora_collegata_ai_test",
+  "documento": {
+    "commodity": "dual",
+    "tipo_prezzo": "fisso",
+    "durata_condizioni_mesi": 24,
+    "sottoscrizione_dal": "2026-10-15",
+    "sottoscrizione_al": "2026-11-04",
+    "sha256": "88c7e16c5738c60cabc94561aa494483daddf9c0628dc3da38b81a5d6eb5638d"
+  },
+  "luce": {
+    "tipo_prezzo": "fisso",
+    "prezzo_listino_lordo_perdite": {
+      "valore": 0.2079,
+      "unita": "€/kWh",
+      "pagine": [
+        3,
+        11
+      ]
+    },
+    "prezzo_listino_netto_perdite": {
+      "valore": 0.189,
+      "unita": "€/kWh",
+      "pagine": [
+        11
+      ]
+    },
+    "prezzi_fasce_lordo_perdite": {
+      "F1": 0.2154,
+      "F23": 0.2036,
+      "unita": "€/kWh",
+      "pagine": [
+        3,
+        11
+      ]
+    },
+    "prezzi_fasce_netto_perdite": {
+      "F1": 0.1958,
+      "F23": 0.1851,
+      "unita": "€/kWh",
+      "pagine": [
+        11
+      ]
+    },
+    "sconto_special_days": {
+      "percentuale": 30,
+      "prezzo_dichiarato": 0.1455,
+      "unita": "€/kWh",
+      "durata": "intere condizioni economiche",
+      "pagine": [
+        3,
+        11
+      ]
+    },
+    "sconto_domiciliazione": {
+      "percentuale": 5,
+      "condizione": "addebito SEPA attivo e mantenuto",
+      "ammissibilita_cliente": "da_verificare",
+      "pagine": [
+        3,
+        11
+      ]
+    },
+    "quota_fissa": {
+      "valore_annuo_euro": 144,
+      "valore_mensile_euro": 12,
+      "pagine": [
+        3,
+        11
+      ]
+    }
+  },
+  "gas": {
+    "tipo_prezzo": "fisso",
+    "prezzo_listino": {
+      "valore": 0.87,
+      "unita": "€/Smc",
+      "pagine": [
+        8,
+        12
+      ]
+    },
+    "sconto_special_days": {
+      "percentuale": 30,
+      "prezzo_dichiarato": 0.61,
+      "unita": "€/Smc",
+      "durata": "intere condizioni economiche",
+      "pagine": [
+        8,
+        12
+      ]
+    },
+    "sconto_domiciliazione": {
+      "percentuale": 5,
+      "condizione": "addebito SEPA attivo e mantenuto",
+      "ammissibilita_cliente": "da_verificare",
+      "pagine": [
+        8,
+        12
+      ]
+    },
+    "quota_fissa": {
+      "valore_annuo_euro": 144,
+      "valore_mensile_euro": 12,
+      "pagine": [
+        8,
+        12
+      ]
+    }
+  },
+  "da_verificare": [
+    "condizioni personali per applicazione sconto domiciliazione",
+    "precedenza prezzi in scheda sintetica rispetto a condizioni dettagliate (in caso di apparente incoerenza)"
+  ],
+  "note": [
+    "Valori estratti dal documento come valori distinti, non intercambiabili.",
+    "Non imporre che un parser v1.0.0 legga correttamente questi slot: i nuovi test devono partire in TODO fino al miglioramento del parser.",
+    "Sconti percentuali non applicati tramite calcoli non dichiarati.",
+    "Il documento descrive sia luce sia gas; non è solo luce."
+  ]
+}

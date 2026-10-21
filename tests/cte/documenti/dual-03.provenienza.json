@@ -1,0 +1,19 @@
+{
+  "id": "dual-03",
+  "original_filename": "CE_LFIXA24V_GFIXA24_SMART-FacSimile.pdf",
+  "staged_filename": "dual-03.pdf",
+  "sha256": "88c7e16c5738c60cabc94561aa494483daddf9c0628dc3da38b81a5d6eb5638d",
+  "bytes": 487976,
+  "pages": 16,
+  "source": "PDF fac-simile caricato dall’utente nella conversazione MRF, 19/10/2026",
+  "source_url": null,
+  "source_url_status": "non_verificato: non pubblicare URL inventati",
+  "pdf_metadata": {
+    "title": "PLICO",
+    "creation_date": "2026-10-14T15:31:41 (fuso non dichiarato nel metadata)"
+  },
+  "offer_valid_from": "2026-10-15",
+  "offer_valid_through": "2026-11-04",
+  "status": "fixture inclusa nel pacchetto v1.1.0; CI non pubblicata fino ad autorizzazione al commit",
+  "note": "La data di creazione PDF non equivale alla data di pubblicazione del documento."
+}

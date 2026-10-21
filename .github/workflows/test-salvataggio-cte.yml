@@ -1,5 +1,4 @@
-
-name: Test salvataggio economico CTE
+name: Test CTE - salvataggio, anteprima e lettore universale
 
 on:
   push:
@@ -7,9 +6,20 @@ on:
       - sviluppo-lettura-economica-cte
     paths:
       - index.html
-      - tests/cte-salvataggio-economico.test.mjs      
-      - tests/cte-anteprima.test.mjs
+      - mrf-cte-lettore.js
+      - mrf-cte-v11-analisi.js
+      - 'tests/**'
       - .github/workflows/test-salvataggio-cte.yml
+  pull_request:
+    branches:
+      - sviluppo-lettura-economica-cte
+    paths:
+      - index.html
+      - mrf-cte-lettore.js
+      - mrf-cte-v11-analisi.js
+      - 'tests/**'
+      - .github/workflows/test-salvataggio-cte.yml
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -17,7 +27,7 @@ permissions:
 jobs:
   test-cte:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
 
     steps:
       - name: Scarica il codice
@@ -26,8 +36,15 @@ jobs:
       - name: Configura Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: '20'
 
-      - name: Esegui i test CTE  
-        run: node --test tests/cte-salvataggio-economico.test.mjs tests/cte-anteprima.test.mjs
+      - name: Installa PDF.js per i PDF reali
+        run: npm install --no-save --no-package-lock --ignore-scripts pdfjs-dist@3.11.174
 
+      - name: Controlla versione PDF.js
+        run: node -e "if (require('pdfjs-dist/package.json').version !== '3.11.174') process.exit(1)"
+
+      - name: Esegui tutti i test CTE, inclusi i PDF reali
+        env:
+          RICHIEDI_PDF_REALI: '1'
+        run: node --test tests/*.test.mjs
