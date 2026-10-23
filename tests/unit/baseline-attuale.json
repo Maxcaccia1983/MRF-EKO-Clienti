@@ -1,0 +1,507 @@
+{
+  "avviso": "BASELINE TECNICA - fotografia del parser attuale. NON e' l'output corretto e non va copiata negli expected.",
+  "provenienza": {
+    "commit": "95f228e",
+    "generato_il": "2026-09-30T16:30:11.654Z",
+    "parser_bolletta_sha256": "e4447c13ff09991f298235cfbe6ebdc38d7283316fd6ef9d8d9b5bb83464cfd2",
+    "index_html_sha256": "ce4e0f81167d0dad836cd9583bd3a3d54e13cd0ad06e84fde53c639ae4ef60ff",
+    "parser_bolletta_versione": "1.0.0",
+    "patch_cte_applicate": 1
+  },
+  "suite": {
+    "numeri": [
+      {
+        "id": "N01",
+        "input": "0,145",
+        "output_attuale": {
+          "valore": {
+            "value": 0.145
+          }
+        }
+      },
+      {
+        "id": "N02",
+        "input": "0,140",
+        "output_attuale": {
+          "valore": {
+            "value": 0.14
+          }
+        }
+      },
+      {
+        "id": "N03",
+        "input": "0,0250",
+        "output_attuale": {
+          "valore": {
+            "value": 0.025
+          }
+        }
+      },
+      {
+        "id": "N04",
+        "input": "1.234,56",
+        "output_attuale": {
+          "valore": {
+            "value": 1234.56
+          }
+        }
+      },
+      {
+        "id": "N05",
+        "input": "1234,56",
+        "output_attuale": {
+          "valore": {
+            "value": 1234.56
+          }
+        }
+      },
+      {
+        "id": "N06",
+        "input": "10.000,00",
+        "output_attuale": {
+          "valore": {
+            "value": 10000
+          }
+        }
+      },
+      {
+        "id": "N07",
+        "input": "2.423",
+        "output_attuale": {
+          "valore": {
+            "value": 2.423
+          }
+        }
+      },
+      {
+        "id": "N08",
+        "input": "12.345.678",
+        "output_attuale": {
+          "valore": null
+        }
+      },
+      {
+        "id": "N09",
+        "input": "1.500",
+        "output_attuale": {
+          "valore": {
+            "value": 1.5
+          }
+        }
+      },
+      {
+        "id": "N10",
+        "input": "144",
+        "output_attuale": {
+          "valore": {
+            "value": 144
+          }
+        }
+      },
+      {
+        "id": "N11",
+        "input": "1,234.56",
+        "output_attuale": {
+          "valore": {
+            "value": 1234.56
+          }
+        }
+      },
+      {
+        "id": "N12",
+        "input": "0.145",
+        "output_attuale": {
+          "valore": {
+            "value": 0.145
+          }
+        }
+      },
+      {
+        "id": "N13",
+        "input": "7,50",
+        "output_attuale": {
+          "valore": {
+            "value": 7.5
+          }
+        }
+      },
+      {
+        "id": "N14",
+        "input": "abc",
+        "output_attuale": {
+          "valore": null
+        }
+      },
+      {
+        "id": "N15",
+        "input": "1.234",
+        "output_attuale": {
+          "valore": {
+            "value": 1.234
+          }
+        }
+      }
+    ],
+    "unita": [
+      {
+        "id": "U01",
+        "input": "Prezzo energia: 0,145 €/kWh",
+        "output_attuale": {
+          "prezzo_energia": {
+            "value": 0.145,
+            "unit": "€/kWh"
+          },
+          "quota_fissa_mensile": null
+        }
+      },
+      {
+        "id": "U02",
+        "input": "Prezzo energia: 145 €/MWh",
+        "output_attuale": {
+          "prezzo_energia": {
+            "value": 0.145,
+            "unit": "€/kWh"
+          },
+          "quota_fissa_mensile": null
+        }
+      },
+      {
+        "id": "U03",
+        "input": "Prezzo energia: 14,5 c€/kWh",
+        "output_attuale": {
+          "prezzo_energia": null,
+          "quota_fissa_mensile": null
+        }
+      },
+      {
+        "id": "U04",
+        "input": "Prezzo energia: 14,5 cent€/kWh",
+        "output_attuale": {
+          "prezzo_energia": null,
+          "quota_fissa_mensile": null
+        }
+      },
+      {
+        "id": "U05",
+        "input": "Prezzo energia: € 0,145/kWh",
+        "output_attuale": {
+          "prezzo_energia": null,
+          "quota_fissa_mensile": null
+        }
+      },
+      {
+        "id": "U06",
+        "input": "Prezzo energia (€/kWh) 0,145",
+        "output_attuale": {
+          "prezzo_energia": null,
+          "quota_fissa_mensile": null
+        }
+      },
+      {
+        "id": "U07",
+        "input": "Prezzo energia: 0,145 euro/kWh",
+        "output_attuale": {
+          "prezzo_energia": {
+            "value": 0.145,
+            "unit": "€/kWh"
+          },
+          "quota_fissa_mensile": null
+        }
+      },
+      {
+        "id": "U08",
+        "input": "Prezzo gas naturale: 0,62 €/Smc",
+        "output_attuale": {
+          "prezzo_energia": {
+            "value": 0.62,
+            "unit": "€/Smc"
+          },
+          "quota_fissa_mensile": null
+        }
+      },
+      {
+        "id": "U09",
+        "input": "Prezzo gas naturale: 62 c€/Smc",
+        "output_attuale": {
+          "prezzo_energia": null,
+          "quota_fissa_mensile": null
+        }
+      },
+      {
+        "id": "U10",
+        "input": "Commercializzazione: 144 €/anno",
+        "output_attuale": {
+          "prezzo_energia": null,
+          "quota_fissa_mensile": null
+        }
+      },
+      {
+        "id": "U11",
+        "input": "Quota fissa di commercializzazione: 12 €/mese",
+        "output_attuale": {
+          "prezzo_energia": null,
+          "quota_fissa_mensile": null
+        }
+      },
+      {
+        "id": "U12",
+        "input": "PCV: 7,50 €/POD/mese",
+        "output_attuale": {
+          "prezzo_energia": null,
+          "quota_fissa_mensile": null
+        }
+      },
+      {
+        "id": "U13",
+        "input": "CCV gas: 96 €/PDR/anno",
+        "output_attuale": {
+          "prezzo_energia": null,
+          "quota_fissa_mensile": null
+        }
+      },
+      {
+        "id": "U14",
+        "input": "Consumo annuo stimato 2.700 kWh",
+        "output_attuale": {
+          "prezzo_energia": null,
+          "quota_fissa_mensile": null
+        }
+      },
+      {
+        "id": "U15",
+        "input": "Prezzo materia gas: 45 €/MWh",
+        "output_attuale": {
+          "prezzo_energia": null,
+          "quota_fissa_mensile": null
+        }
+      }
+    ],
+    "formule-indice": [
+      {
+        "id": "F01",
+        "input": "Prezzo energia: PUN + 0,025 €/kWh",
+        "output_attuale": {
+          "luce.price_type": null,
+          "luce.index": null,
+          "luce.multiplier": null,
+          "luce.spread": null,
+          "luce.fixed_price": null,
+          "luce.valore_indice_nel_documento": {
+            "value": 0.025,
+            "unit": "€/kWh"
+          }
+        }
+      },
+      {
+        "id": "F02",
+        "input": "Corrispettivo energia pari al PUN Index GME maggiorato di uno spread di 0,018 €/kWh",
+        "output_attuale": {
+          "luce.price_type": null,
+          "luce.index": null,
+          "luce.multiplier": null,
+          "luce.spread": {
+            "value": 0.018,
+            "unit": "€/kWh"
+          },
+          "luce.fixed_price": null,
+          "luce.valore_indice_nel_documento": null
+        }
+      },
+      {
+        "id": "F03",
+        "input": "Al valore del PUN sarà applicato un corrispettivo pari a 0,025 €/kWh",
+        "output_attuale": {
+          "luce.price_type": null,
+          "luce.index": null,
+          "luce.multiplier": null,
+          "luce.spread": null,
+          "luce.fixed_price": null,
+          "luce.valore_indice_nel_documento": {
+            "value": 0.025,
+            "unit": "€/kWh"
+          }
+        }
+      },
+      {
+        "id": "F04",
+        "input": "Prezzo energia: PUN + 2,5 c€/kWh",
+        "output_attuale": {
+          "luce.price_type": null,
+          "luce.index": null,
+          "luce.multiplier": null,
+          "luce.spread": null,
+          "luce.fixed_price": null,
+          "luce.valore_indice_nel_documento": null
+        }
+      },
+      {
+        "id": "F05",
+        "input": "Prezzo energia: PUN x 1,05 + 0,010 €/kWh",
+        "output_attuale": {
+          "luce.price_type": null,
+          "luce.index": null,
+          "luce.multiplier": null,
+          "luce.spread": null,
+          "luce.fixed_price": null,
+          "luce.valore_indice_nel_documento": {
+            "value": 0.01,
+            "unit": "€/kWh"
+          }
+        }
+      },
+      {
+        "id": "F06",
+        "input": "Prezzo energia fisso e invariabile per 12 mesi: 0,140 €/kWh",
+        "output_attuale": {
+          "luce.price_type": null,
+          "luce.index": null,
+          "luce.multiplier": null,
+          "luce.spread": null,
+          "luce.fixed_price": {
+            "value": 0.14,
+            "unit": "€/kWh"
+          },
+          "luce.valore_indice_nel_documento": null
+        }
+      },
+      {
+        "id": "F07",
+        "input": "Prezzo gas: PSV + 0,10 €/Smc",
+        "output_attuale": {
+          "gas.price_type": null,
+          "gas.index": null,
+          "gas.multiplier": null,
+          "gas.spread": null,
+          "gas.fixed_price": null,
+          "gas.valore_indice_nel_documento": {
+            "value": 0.1,
+            "unit": "€/Smc"
+          }
+        }
+      },
+      {
+        "id": "F08",
+        "input": "Corrispettivo materia gas pari al PSV Day Ahead maggiorato di 0,08 €/Smc",
+        "output_attuale": {
+          "gas.price_type": null,
+          "gas.index": null,
+          "gas.multiplier": null,
+          "gas.spread": null,
+          "gas.fixed_price": null,
+          "gas.valore_indice_nel_documento": {
+            "value": 0.08,
+            "unit": "€/Smc"
+          }
+        }
+      },
+      {
+        "id": "F09",
+        "input": "Prezzo gas naturale fisso: 0,62 €/Smc",
+        "output_attuale": {
+          "gas.price_type": null,
+          "gas.index": null,
+          "gas.multiplier": null,
+          "gas.spread": null,
+          "gas.fixed_price": {
+            "value": 0.62,
+            "unit": "€/Smc"
+          },
+          "gas.valore_indice_nel_documento": null
+        }
+      },
+      {
+        "id": "F10",
+        "input": "Prezzo materia gas: TTF + 1,50 €/MWh",
+        "output_attuale": {
+          "gas.price_type": null,
+          "gas.index": null,
+          "gas.multiplier": null,
+          "gas.spread": null,
+          "gas.fixed_price": null,
+          "gas.valore_indice_nel_documento": null
+        }
+      },
+      {
+        "id": "F11",
+        "input": "Prezzo gas: indice ZXGAS-M + 0,05 €/Smc",
+        "output_attuale": {
+          "gas.price_type": null,
+          "gas.index": null,
+          "gas.multiplier": null,
+          "gas.spread": null,
+          "gas.fixed_price": {
+            "value": 0.05,
+            "unit": "€/Smc"
+          },
+          "gas.valore_indice_nel_documento": null
+        }
+      },
+      {
+        "id": "F12",
+        "input": "Energia elettrica: PUN + 0,020 €/kWh. Gas naturale: PSV + 0,08 €/Smc.",
+        "output_attuale": {
+          "luce.price_type": null,
+          "luce.index": null,
+          "luce.multiplier": null,
+          "luce.spread": null,
+          "luce.fixed_price": null,
+          "luce.valore_indice_nel_documento": {
+            "value": 0.02,
+            "unit": "€/kWh"
+          },
+          "gas.price_type": null,
+          "gas.index": null,
+          "gas.multiplier": null,
+          "gas.spread": null,
+          "gas.fixed_price": null,
+          "gas.valore_indice_nel_documento": {
+            "value": 0.08,
+            "unit": "€/Smc"
+          }
+        }
+      },
+      {
+        "id": "F13",
+        "input": "Sconto di 0,010 €/kWh sul prezzo energia per i primi 12 mesi",
+        "output_attuale": {
+          "luce.price_type": null,
+          "luce.index": null,
+          "luce.multiplier": null,
+          "luce.spread": null,
+          "luce.fixed_price": {
+            "value": 0.01,
+            "unit": "€/kWh"
+          },
+          "luce.valore_indice_nel_documento": null
+        }
+      },
+      {
+        "id": "F14",
+        "input": "A titolo informativo, il PUN medio di agosto 2026 è stato pari a 0,108 €/kWh.",
+        "output_attuale": {
+          "luce.price_type": null,
+          "luce.index": null,
+          "luce.multiplier": null,
+          "luce.spread": null,
+          "luce.fixed_price": null,
+          "luce.valore_indice_nel_documento": {
+            "value": 0.108,
+            "unit": "€/kWh"
+          }
+        }
+      },
+      {
+        "id": "F15",
+        "input": "Quota fissa: 12 €/mese",
+        "output_attuale": {
+          "luce.price_type": null,
+          "luce.index": null,
+          "luce.multiplier": null,
+          "luce.spread": null,
+          "luce.fixed_price": null,
+          "luce.valore_indice_nel_documento": null
+        }
+      }
+    ]
+  }
+}

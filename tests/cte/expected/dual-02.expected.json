@@ -1,0 +1,463 @@
+{
+  "schema_version": "1.0",
+  "document_id": "dual-02",
+  "document_review": {
+    "state": "bozza",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": "BOZZA di Claude del 01/10/2026, compilata leggendo il PDF (non la baseline). NESSUN campo e' verificato: tocca a Max controllare ogni valore sul PDF alla pagina indicata."
+  },
+  "document": {
+    "supplier": {
+      "value": "Plenitude",
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Il documento scrive 'Plenitude' (e il portale eniplenitude.com); 'Eni Plenitude' e' il nome esteso."
+      },
+      "source_text": "Plenitude riconosce lo Sconto Domiciliazione",
+      "page": 1
+    },
+    "offer_name": {
+      "value": "Trend Casa",
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Il documento e' contrassegnato 'FAC-SIMILE'."
+      },
+      "source_text": "Trend Casa",
+      "page": 1
+    },
+    "offer_code": {
+      "value": null,
+      "unit": null,
+      "status": "ambiguo",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Il campo e' unico ma il documento ha piu' codici etichettati 'codice offerta'. Stringhe originali: luce '026160ESVML54XX0LTCASAVBAS160926' (pag. 1); gas '026160GSVML54XX00GTCASABAS160926' (pag. 2); luce con Opzione Bioraria '026160ESVFL54XX0LTCASAVBAS160926' (pag. 1). Riferimento a pie' di pagina: 'CE_LTCASAVBAS160926_GTCASABAS160926_BASE_20260916_20261014'. DECISIONE DI MAX: come si rappresentano piu' codici in un campo unico?"
+      },
+      "source_text": null,
+      "page": null
+    },
+    "supply_type": {
+      "value": "dual",
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Stesso file: Energia Elettrica a pag. 1 (con proprio codice offerta) e Gas Naturale a pag. 2."
+      },
+      "source_text": "Gas Naturale codice offerta 026160GSVML54XX00GTCASABAS160926",
+      "page": 2
+    },
+    "market": {
+      "value": "libero",
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": "Condizioni del mercato libero sottoscrivibili dal 16/09/26 al 14/10/26",
+      "page": 1
+    },
+    "customer_segment": {
+      "value": "domestico",
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Luce: abitazione e locali annessi, potenza fino a 15 kW. A pag. 3: 'punti di fornitura domestici'."
+      },
+      "source_text": "il PdP oggetto del Contratto rifornisce un’abitazione",
+      "page": 1
+    },
+    "document_date": {
+      "value": null,
+      "unit": null,
+      "status": "non_presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Nessuna data di emissione. 16/09/26 e 14/10/26 sono gli estremi di sottoscrizione."
+      },
+      "source_text": null,
+      "page": null
+    }
+  },
+  "validity": {
+    "from": {
+      "value": null,
+      "unit": null,
+      "status": "ambiguo",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "16/09/26 e' l'inizio della finestra di sottoscrizione, non l'inizio di validita' del prezzo. Lo schema non definisce validity.from/to come estremi della finestra di adesione: campi vuoti, date tracciate qui."
+      },
+      "source_text": "Condizioni del mercato libero sottoscrivibili dal 16/09/26 al 14/10/26",
+      "page": 1
+    },
+    "to": {
+      "value": null,
+      "unit": null,
+      "status": "ambiguo",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "14/10/26 e' la fine della finestra di sottoscrizione. Nessuna data finale calcolata dai 24 mesi (mancano le date di attivazione)."
+      },
+      "source_text": "Condizioni del mercato libero sottoscrivibili dal 16/09/26 al 14/10/26",
+      "page": 1
+    },
+    "duration_months": {
+      "value": 24,
+      "unit": "mesi",
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Vale per la luce (pag. 1); la stessa frase compare a pag. 2 per il gas."
+      },
+      "source_text": "Le presenti Condizioni Economiche sono valide per 24 mesi di fornitura.",
+      "page": 1
+    },
+    "renewal": {
+      "value": "proroga fino a nuova comunicazione di Plenitude, con preavviso minimo di novanta giorni",
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Valore in testo libero: lo schema non ha un vocabolario per il rinnovo."
+      },
+      "source_text": "s’intenderanno prorogate fino a nuova comunicazione da parte di Plenitude",
+      "page": 3
+    }
+  },
+  "electricity": {
+    "enabled": {
+      "value": true,
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": "Vendita di energia elettrica",
+      "page": 1
+    },
+    "price_type": {
+      "value": "indicizzato",
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": "PUN + 0,022 euro/kWh",
+      "page": 1
+    },
+    "fixed_price": {
+      "value": null,
+      "unit": null,
+      "status": "non_applicabile",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Offerta indicizzata. ATTENZIONE: il massimo del PUN 0,197999 €/kWh (netto perdite 0,179999) del periodo set 2025 - ago 2026 non e' un prezzo dell'offerta."
+      },
+      "source_text": null,
+      "page": null
+    },
+    "band_prices": {
+      "value": null,
+      "unit": null,
+      "status": "non_applicabile",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "L'offerta base non ha prezzi per fascia. Esiste l'Opzione Bioraria (F1/F23, codice proprio): il documento non da' prezzi separati per fascia."
+      },
+      "source_text": null,
+      "page": null
+    },
+    "index": {
+      "value": "PUN",
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Nella tabella dei corrispettivi l'indice e' scritto 'PUN'; nel testo 'PUN Index GME'. Media aritmetica mensile."
+      },
+      "source_text": "alla media aritmetica del PUN Index GME (prezzo unico nazionale dell’energia elettrica)",
+      "page": 1,
+      "variant": "index_gme",
+      "original_text": "PUN Index GME"
+    },
+    "spread": {
+      "value": 0.022,
+      "unit": "€/kWh",
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Contributo al Consumo comprensivo delle perdite di rete. Nel testo: 'al netto delle Perdite di Rete pari a 0,02 €/kWh': non e' il valore da usare come spread dell'offerta."
+      },
+      "source_text": "PUN + 0,022 euro/kWh",
+      "page": 1,
+      "original": {
+        "value": 0.022,
+        "unit": "euro/kWh"
+      }
+    },
+    "multiplier": {
+      "value": null,
+      "unit": null,
+      "status": "ambiguo",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Il Corrispettivo Luce Index e' applicato 'all'energia elettrica prelevata e alle relative perdite per il trasporto' (pag. 1): coefficiente implicito non scritto come moltiplicatore. DECISIONE DI MAX."
+      },
+      "source_text": null,
+      "page": null
+    },
+    "formula_text": {
+      "value": "PUN + 0,022 euro/kWh",
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": "PUN + 0,022 euro/kWh",
+      "page": 1
+    },
+    "fixed_fee": {
+      "value": 12,
+      "unit": "€/mese",
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Corrispettivo annuo Commercializzazione e Vendita, fatturato mensilmente. 144/12 = 12 €/mese. Il documento NON indica POD o PDR: per resta vuoto."
+      },
+      "source_text": "144 euro⁄anno",
+      "page": 1,
+      "original": {
+        "value": 144,
+        "unit": "euro/anno"
+      }
+    },
+    "other_recurring_fees": {
+      "status": "non_presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Corrispettivo CdispD definito da ARERA, senza valore nel documento. I corrispettivi una tantum (12 € se esiste gia' un contratto Plenitude, 35 € per voltura/attivazione, 6 € per diffida, pag. 3) non sono ricorrenti."
+      },
+      "items": []
+    }
+  },
+  "gas": {
+    "enabled": {
+      "value": true,
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": "Vendita di gas naturale",
+      "page": 2
+    },
+    "price_type": {
+      "value": "indicizzato",
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": "PSV + 0,15 euro/Smc",
+      "page": 2
+    },
+    "fixed_price": {
+      "value": null,
+      "unit": null,
+      "status": "non_applicabile",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Offerta indicizzata. ATTENZIONE: il massimo PSV 0,686448 €/Smc (ago 2026) non e' un prezzo dell'offerta."
+      },
+      "source_text": null,
+      "page": null
+    },
+    "band_prices": {
+      "value": null,
+      "unit": null,
+      "status": "non_applicabile",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Nessuna fascia per il gas."
+      },
+      "source_text": null,
+      "page": null
+    },
+    "index": {
+      "value": "PSV",
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Media aritmetica mensile delle quotazioni giornaliere Heren Price convertita in €/Smc, PCS 0,03852 GJ/Smc."
+      },
+      "source_text": "indice energetico “PSV Day Ahead Heren Mid”",
+      "page": 2,
+      "variant": "day_ahead",
+      "original_text": "PSV Day Ahead Heren Mid"
+    },
+    "spread": {
+      "value": 0.15,
+      "unit": "€/Smc",
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Contributo al Consumo, invariabile per la durata delle condizioni economiche."
+      },
+      "source_text": "PSV + 0,15 euro/Smc",
+      "page": 2,
+      "original": {
+        "value": 0.15,
+        "unit": "euro/Smc"
+      }
+    },
+    "multiplier": {
+      "value": null,
+      "unit": null,
+      "status": "non_presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Nessun moltiplicatore."
+      },
+      "source_text": null,
+      "page": null
+    },
+    "formula_text": {
+      "value": "PSV + 0,15 euro/Smc",
+      "unit": null,
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": null
+      },
+      "source_text": "PSV + 0,15 euro/Smc",
+      "page": 2
+    },
+    "fixed_fee": {
+      "value": 12,
+      "unit": "€/mese",
+      "status": "presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Corrispettivo annuo Commercializzazione e Vendita. 144/12 = 12 €/mese. Il documento NON indica POD o PDR: per resta vuoto."
+      },
+      "source_text": "144 euro⁄anno",
+      "page": 2,
+      "original": {
+        "value": 144,
+        "unit": "euro/anno"
+      }
+    },
+    "other_recurring_fees": {
+      "status": "non_presente",
+      "verification": {
+        "state": "non_verificato",
+        "by": null,
+        "at": null,
+        "note": "Nessun altro corrispettivo ricorrente del venditore per il gas. I corrispettivi una tantum di pag. 3 non sono ricorrenti."
+      },
+      "items": []
+    }
+  },
+  "discounts": {
+    "status": "presente",
+    "verification": {
+      "state": "non_verificato",
+      "by": null,
+      "at": null,
+      "note": "Lo Sconto Domiciliazione e' scritto sia nella sezione luce (pag. 1) sia in quella gas (pag. 2), ma in entrambe riduce 'le quote fisse della spesa per la Vendita di gas naturale': e' uno sconto sulla quota fissa gas, non sul prezzo dell'energia luce."
+    },
+    "items": [
+      {
+        "type": "sconto_domiciliazione",
+        "value": 12,
+        "unit": "€/anno",
+        "duration": "durata delle Condizioni Economiche (24 mesi)",
+        "commodity": "gas",
+        "affects_energy_price": false,
+        "condition": "Solo se l'addebito diretto in conto corrente SEPA risulta attivo; se viene disattivato lo sconto non e' applicato dalla data di disattivazione. Non spetta in caso di scioglimento del Contratto, anche per Cambio Prodotto.",
+        "source_text": "Plenitude riconosce lo Sconto Domiciliazione pari a 12 € all’anno, che sarà posto a riduzione delle quote fisse della spesa per la Vendita di gas naturale",
+        "page": 1
+      }
+    ]
+  },
+  "tolerances": {
+    "price": 1e-06,
+    "fee": 0.01,
+    "multiplier": 0.0001
+  },
+  "notes": "Trappole: (1) luce e gas nello stesso file, ciascuno con indice e spread propri (PUN+0,022 e PSV+0,15) e codici offerta diversi (regola 10); (2) sconto domiciliazione 12 €/anno scritto anche nella sezione luce ma riferito alle quote fisse gas (regola 11); (3) massimi dell'indice (0,197999 €/kWh e 0,686448 €/Smc) e 'Contributo al Consumo al netto delle perdite 0,02 €/kWh' non sono prezzi/spread dell'offerta; (4) 144 euro⁄anno usa il carattere '⁄' (barra frazione), non '/'; (5) 'FAC-SIMILE' e finestra di sottoscrizione 16/09/26 - 14/10/26."
+}

@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrf-eko/tests/schema/manifest.v1.schema.json",
+  "title": "MRF EKO - Registro documenti di test v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "documenti"],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "note": { "type": "string" },
+    "documenti": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "file", "sha256", "categoria", "fornitore_dichiarato", "tipo_pdf", "insieme", "fornitore_nuovo", "origine"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+          "file": { "type": "string", "pattern": "^documenti/[a-z0-9-]+\\.pdf$" },
+          "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+          "categoria": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "enum": ["luce", "gas", "dual", "fisso", "indicizzato", "misto", "complessa", "ocr"] }
+          },
+          "fornitore_dichiarato": { "type": "string", "description": "Solo metadato: il parser non lo legge mai." },
+          "fonte_url": { "type": ["string", "null"], "pattern": "^https://", "description": "URL ufficiale di download. null = DA INTEGRARE: lo fornisce Max, non si inventa." },
+          "data_download": { "type": ["string", "null"], "pattern": "^\\d{4}-\\d{2}-\\d{2}$", "description": "Data effettiva di download. null = DA INTEGRARE: la fornisce Max, non si inventa." },
+          "campi_da_integrare": { "type": "array", "items": { "enum": ["fonte_url", "data_download"] }, "description": "Campi lasciati null in attesa dei dati reali." },
+          "nome_file_originale": { "type": ["string", "null"], "description": "Nome con cui il file e' arrivato (solo tracciabilita')." },
+          "tipo_pdf": { "enum": ["nativo", "scansionato", "misto"] },
+          "pagine": { "type": ["integer", "null"], "minimum": 1 },
+          "insieme": {
+            "enum": ["sviluppo", "holdout"],
+            "description": "holdout = CTE mai usata durante lo sviluppo. Quando viene usata per correggere il parser passa a 'sviluppo' (data_passaggio_sviluppo)."
+          },
+          "fornitore_nuovo": {
+            "type": "boolean",
+            "description": "true se il fornitore non era presente in cte_offerte ne' in altri documenti di sviluppo al momento dell'aggiunta."
+          },
+          "origine": {
+            "enum": ["pubblica_fornitore", "pubblica_riscansionata"],
+            "description": "Mai documenti di clienti. 'pubblica_riscansionata' = CTE pubblica stampata e scansionata per il test OCR."
+          },
+          "data_passaggio_sviluppo": { "type": ["string", "null"], "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+          "note": { "type": ["string", "null"] }
+        }
+      }
+    }
+  }
+}

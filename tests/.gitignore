@@ -1,0 +1,4 @@
+runner/node_modules/
+runner/report/
+accessi/.env
+*.local.json

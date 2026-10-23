@@ -1,0 +1,98 @@
+{
+  "schema_version": "1.0",
+  "note": "Registro dei documenti di test. Solo CTE pubbliche ufficiali. Vedi tests/README.md. data_download indicata da Max (01/10/2026) per tutti i PDF di sviluppo ricevuti. Dove fonte_url e' null l'URL e' DA INTEGRARE da parte di Max: non va inventato.",
+  "documenti": [
+    {
+      "id": "luce-fisso-02",
+      "file": "documenti/luce-fisso-02.pdf",
+      "sha256": "856c255272a61013b0652e383851237f4cd90b7c223b57625c4828e3048c8378",
+      "categoria": [
+        "luce",
+        "fisso"
+      ],
+      "fornitore_dichiarato": "Enel Energia",
+      "fonte_url": null,
+      "data_download": "2026-10-01",
+      "campi_da_integrare": [
+        "fonte_url"
+      ],
+      "nome_file_originale": "enel-fix-web-luce-cte.pdf",
+      "tipo_pdf": "nativo",
+      "pagine": 4,
+      "insieme": "sviluppo",
+      "fornitore_nuovo": false,
+      "origine": "pubblica_fornitore",
+      "data_passaggio_sviluppo": null,
+      "note": "Enel Fix Web Luce. Il PDF dichiara validita' per adesioni entro il 01/10/2026. Trappola: sconto 7% condizionato al gas Enel, da non leggere come prezzo base."
+    },
+    {
+      "id": "dual-01",
+      "file": "documenti/dual-01.pdf",
+      "sha256": "ade493a0847e9314e736a0df964fc35edbe203b00cacb563ecb2aa9ade4e1a69",
+      "categoria": [
+        "dual",
+        "indicizzato"
+      ],
+      "fornitore_dichiarato": "WindTre Luce&Gas powered by Acea Energia",
+      "fonte_url": null,
+      "data_download": "2026-10-01",
+      "campi_da_integrare": [
+        "fonte_url"
+      ],
+      "nome_file_originale": "CONDIZIONI-ECONOMICHE-ECO-SMART-PRO.pdf",
+      "tipo_pdf": "nativo",
+      "pagine": 3,
+      "insieme": "sviluppo",
+      "fornitore_nuovo": false,
+      "origine": "pubblica_fornitore",
+      "data_passaggio_sviluppo": null,
+      "note": "Eco Smart Pro, uso non domestico. Luce e gas nello stesso file (pag. 1 luce, pag. 2 gas). Il documento e' scaduto (sottoscrivibile entro il 31/12/2025): irrilevante per il test."
+    },
+    {
+      "id": "dual-02",
+      "file": "documenti/dual-02.pdf",
+      "sha256": "ef4f4b49b1e1bc8b3597e2aa8d761921a31e82d2c00a4d189faa82bb76f838f4",
+      "categoria": [
+        "dual",
+        "indicizzato"
+      ],
+      "fornitore_dichiarato": "Eni Plenitude",
+      "fonte_url": null,
+      "data_download": "2026-10-01",
+      "campi_da_integrare": [
+        "fonte_url"
+      ],
+      "nome_file_originale": "CE_DUAL_BASE_LTCASAV-GTCASA.pdf",
+      "tipo_pdf": "nativo",
+      "pagine": 3,
+      "insieme": "sviluppo",
+      "fornitore_nuovo": false,
+      "origine": "pubblica_fornitore",
+      "data_passaggio_sviluppo": null,
+      "note": "Trend Casa, fac-simile (sottoscrivibile dal 16/09/26 al 14/10/26). Luce e gas nello stesso file. Il file e' arrivato due volte con hash identico."
+    },
+    {
+      "id": "luce-indicizzato-02",
+      "file": "documenti/luce-indicizzato-02.pdf",
+      "sha256": "48bf1af861d8c10f5c27df2140fc3890ea1ef93e06df118b5cda7f03bfada33f",
+      "categoria": [
+        "luce",
+        "indicizzato"
+      ],
+      "fornitore_dichiarato": "Sorgenia",
+      "fonte_url": null,
+      "data_download": "2026-10-01",
+      "campi_da_integrare": [
+        "fonte_url"
+      ],
+      "nome_file_originale": "NEXTENERGYSunlightDUAL_LUCE_080825.pdf",
+      "tipo_pdf": "nativo",
+      "pagine": 18,
+      "insieme": "sviluppo",
+      "fornitore_nuovo": false,
+      "origine": "pubblica_fornitore",
+      "data_passaggio_sviluppo": null,
+      "note": "Contratto Next Energy Sunlight/Luce, 18 pagine: parte economica solo luce (pag. 2-5), il resto e' rumore (condizioni generali, privacy, ripensamento). NON e' un DUAL: la copertina cita luce e gas ma il gas ha un altro documento. Valori compilati sul modulo staccati dalle etichette nel testo estratto (caso C8)."
+    }
+  ]
+}
